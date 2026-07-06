@@ -48,7 +48,6 @@ const { registerPageRoutes } = require('./lib/page-routes');
 const { registerSlackOAuthCallback } = require('./lib/slack-oauth');
 const { registerSlackDiagnostics } = require('./lib/slack-diagnostics');
 const workflowBuilder = require('./lib/workflow-builder');
-const adminMigrateRouter = require('./routes/admin-migrate');
 
 initBilling({ pool });
 doneRoutes.init({ getTeamTier, formatDate });
@@ -111,10 +110,14 @@ function registerSharedRoutes(app, slackApp) {
   registerPageRoutes(app);
   app.use('/streak', streakRoutes);
   app.use('/admin/activation', activationRoutes);
-  app.use('/admin/migrate', adminMigrateRouter);
+  if (process.env.ENABLE_ADMIN_MIGRATE === 'true') {
+    const adminMigrateRouter = require('./routes/admin-migrate');
+    app.use('/admin/migrate', adminMigrateRouter);
+  }
   app.use('/activate', activateRouter);
   app.use('/api/public-stats', publicStatsRouter);
   app.get('/api/digest/admin', async (req, res) => {
+    if (!isCronAuthorized(req, res)) return;
     const { runWorkspaceAdminDigest } = require('./lib/workspace-admin-digest');
     const result = await runWorkspaceAdminDigest();
     res.json(result);

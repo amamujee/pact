@@ -102,7 +102,7 @@ for the full reference with descriptions and where to get each value.
 - `STRIPE_WEBHOOK_SECRET`
 
 **Required for AI features:**
-- `POLSIA_API_KEY` (Polsia proxy) — replace with your own Anthropic key + update `lib/polsia-ai.js`
+- `ANTHROPIC_API_KEY` — direct Anthropic API key used by `lib/ai-client.js`
 
 **All variables are listed in `.env.example`** with source instructions.
 

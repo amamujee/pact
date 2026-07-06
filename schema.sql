@@ -1,4 +1,4 @@
--- Schema generated from Pact migrations (001-026)
+-- Schema generated from Pact migrations (001-031)
 -- Run `npm run migrate` instead of this file for new deployments.
 -- Use this file as a reference or for manual inspection.
 
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS users (
   password_hash            VARCHAR(255),
   created_at               TIMESTAMPTZ DEFAULT NOW(),
   updated_at               TIMESTAMPTZ DEFAULT NOW(),
-  -- Subscription fields (synced by Polsia when customer subscribes)
+  -- Subscription fields synced when a customer subscribes
   stripe_subscription_id   VARCHAR(255),
   subscription_status      VARCHAR(50),
   subscription_plan        VARCHAR(255),
@@ -139,6 +139,7 @@ ALTER TABLE pacts
 -- in peer DMs where the bot can't resolve the counterparty's Slack ID.
 ALTER TABLE pacts ALTER COLUMN counterparty_slack_id DROP NOT NULL;
 ALTER TABLE pacts ALTER COLUMN counterparty_name DROP NOT NULL;
+ALTER TABLE pacts ALTER COLUMN channel_id DROP NOT NULL;
 
 -- =============================================================================
 -- Migration: tracker_tables  (006_tracker_tables.js)
@@ -449,7 +450,8 @@ CREATE INDEX IF NOT EXISTS idx_pacts_recurrence_group
 -- Tracks when the "3+ days overdue" nudge was sent to the counterparty.
 -- Separate from overdue_nudge_sent_at (which tracks the promiser nudge).
 ALTER TABLE pacts
-  ADD COLUMN IF NOT EXISTS counterparty_nudged_at TIMESTAMPTZ DEFAULT NULL;
+  ADD COLUMN IF NOT EXISTS counterparty_nudged_at TIMESTAMPTZ DEFAULT NULL,
+  ADD COLUMN IF NOT EXISTS counterparty_team_id VARCHAR(255);
 
 -- =============================================================================
 -- Migration: reschedule_proposals  (024_reschedule_proposals.js)
@@ -556,3 +558,81 @@ CREATE TABLE IF NOT EXISTS activation_events (
 
 CREATE INDEX IF NOT EXISTS activation_events_team_occurred_idx
   ON activation_events (team_id, occurred_at DESC);
+
+-- =============================================================================
+-- Migration: workspace_invites  (030_workspace_invites.js)
+-- =============================================================================
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE TABLE IF NOT EXISTS workspace_invites (
+  id                       UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  inviter_user_id          VARCHAR(255) NOT NULL,
+  inviter_team_id          VARCHAR(255) NOT NULL,
+  token                    VARCHAR(255) NOT NULL UNIQUE,
+  invite_link              TEXT NOT NULL,
+  claimed_at               TIMESTAMPTZ,
+  claimed_team_id          VARCHAR(255),
+  claimed_user_id          VARCHAR(255),
+  pact_created_within_7d   BOOLEAN NOT NULL DEFAULT FALSE,
+  pro_grant_counted        BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at               TIMESTAMPTZ DEFAULT NOW(),
+  updated_at               TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS workspace_invites_inviter_idx
+  ON workspace_invites (inviter_user_id, inviter_team_id);
+
+CREATE INDEX IF NOT EXISTS workspace_invites_claimed_team_idx
+  ON workspace_invites (claimed_team_id)
+  WHERE claimed_team_id IS NOT NULL;
+
+CREATE TABLE IF NOT EXISTS invite_events (
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  token       VARCHAR(255) NOT NULL,
+  event_type  VARCHAR(64) NOT NULL,
+  metadata    JSONB DEFAULT '{}'::jsonb,
+  created_at  TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS invite_events_token_idx
+  ON invite_events (token);
+
+CREATE INDEX IF NOT EXISTS invite_events_type_created_idx
+  ON invite_events (event_type, created_at DESC);
+
+CREATE TABLE IF NOT EXISTS pro_grants (
+  id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  team_id      VARCHAR(255) NOT NULL,
+  granted_by   VARCHAR(64) NOT NULL,
+  granted_to   VARCHAR(255),
+  reason       TEXT,
+  days         INTEGER NOT NULL DEFAULT 30,
+  expires_at   TIMESTAMPTZ NOT NULL,
+  redeemed     BOOLEAN NOT NULL DEFAULT FALSE,
+  redeemed_at  TIMESTAMPTZ,
+  created_at   TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS pro_grants_team_active_idx
+  ON pro_grants (team_id, expires_at DESC);
+
+-- =============================================================================
+-- Migration: workspace_admin_digest  (031_workspace_admin_digest.js)
+-- =============================================================================
+
+CREATE TABLE IF NOT EXISTS workspace_admin_digest_prefs (
+  id            SERIAL PRIMARY KEY,
+  team_id       VARCHAR(255) NOT NULL UNIQUE,
+  admin_email   VARCHAR(255),
+  admin_name    VARCHAR(255),
+  enabled       BOOLEAN NOT NULL DEFAULT TRUE,
+  send_day      SMALLINT NOT NULL DEFAULT 1,
+  send_hour     SMALLINT NOT NULL DEFAULT 9,
+  last_sent_at  TIMESTAMPTZ,
+  created_at    TIMESTAMPTZ DEFAULT NOW(),
+  updated_at    TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS workspace_admin_digest_due_idx
+  ON workspace_admin_digest_prefs (enabled, send_day, send_hour, last_sent_at);

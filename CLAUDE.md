@@ -4,7 +4,7 @@
 Pact turns casual Slack promises into tracked commitments with automatic reminders, overdue nudges, and completion tracking. Users create pacts via `/pact`, emoji reactions, or DM — and close them with `/done`.
 
 ## Stack
-Node.js + Express + PostgreSQL (Neon) + Slack Bolt SDK, deployed on Render.
+Node.js + Express + PostgreSQL (Neon) + Slack Bolt SDK, deployed on Vercel.
 
 ## Directory map
 - `server.js` — wiring only (260 lines): imports, init, start()
@@ -22,7 +22,7 @@ Node.js + Express + PostgreSQL (Neon) + Slack Bolt SDK, deployed on Render.
 - `lib/contact-routes.js` — contact form rate limiting and submission routes
 - `lib/page-routes.js` — static page routes
 - `lib/streak-milestones.js` — milestone detection cron, celebration DM builder, /pact share card generation
-- `lib/workspace-admin-digest.js` — workspace admin weekly email digest (server startup trigger); standalone in `scripts/workspace-admin-digest.js` for polsia.toml [[crons]]
+- `lib/workspace-admin-digest.js` — workspace admin weekly email digest; standalone scheduler entry in `scripts/workspace-admin-digest.js`
 - `lib/activation-dm.js` — 24h partner-invite DM: cron (checkActivationDue), Block Kit builder, action handlers (activation_pact_create, activation_dismiss, activation_how_it_works, activation_pick_teammate)
 - `lib/welcome-dm.js` — immediate first-install welcome DM: trigger on app_home_opened, Block Kit content, action handlers (welcome_make_pact, welcome_dismiss, welcome_how_it_works); idempotent via welcome_dm_sent_at in installations
 - `lib/first-pact-dm.js` — first-pact celebration DM: fires on 0→1 pact transition, Block Kit content, "Make another pact" CTA; idempotent via activation_events (first_pact_celebrated event)
@@ -30,9 +30,9 @@ Node.js + Express + PostgreSQL (Neon) + Slack Bolt SDK, deployed on Render.
 - `lib/bulk-actions.js` — bulk complete + snooze handlers triggered from Home Tab checkboxes; reads view.state.values for checked pact IDs
 - `lib/reschedule-proposals.js` — counterparty-initiated reschedule proposal lifecycle: propose/accept/decline/counter handlers
 - `lib/fuzzy.js` — lightweight fuzzy matching (token-based, Levenshtein, subsequence)
-- `lib/polsia-ai.js` — Polsia AI proxy wrapper (chat() calls via @anthropic-ai/sdk)
+- `lib/ai-client.js` — direct Anthropic chat wrapper (chat() calls via @anthropic-ai/sdk)
 - `lib/ai-done.js` — AI context inference for /done: fetch recent messages, rank pacts, build suggestion blocks
-- `lib/ai-commitment.js` — AI commitment detection: regex pre-filter, Polsia AI analysis, ephemeral suggest-a-pact blocks, rate-limit + snooze helpers
+- `lib/ai-commitment.js` — AI commitment detection: regex pre-filter, Anthropic analysis, ephemeral suggest-a-pact blocks, rate-limit + snooze helpers
 - `lib/recurrence.js` — pure recurrence logic: nextDueDate(rule, fromDate), recurrenceLabel(rule)
 - `routes/done.js` — /done command handler: multi-complete, fuzzy matching, pact picker
 - `routes/digest.js` — weekly standup digest: scheduler, Block Kit builder, inline action handlers
@@ -84,5 +84,5 @@ Node.js + Express + PostgreSQL (Neon) + Slack Bolt SDK, deployed on Render.
 - **Linear / Notion / Asana** — optional tracker sync (Pro feature)
 
 ## Recent changes
-- 2026-06-11: Weekly workspace admin email digest — sends HTML + plain-text email to workspace admins (installer email) summarizing pacts created/completed/overdue for the week; `workspace_admin_digest_prefs` table (migration 031); `db/workspace-admin-digest.js` for stats queries; `lib/workspace-admin-digest.js` for server startup trigger; `scripts/workspace-admin-digest.js` for polsia.toml [[crons]] hourly run; `GET /api/digest/admin` manual trigger endpoint guarded by `POLSIA_IN_PROCESS_CRONS_ENABLED`.
+- 2026-06-11: Weekly workspace admin email digest — sends HTML + plain-text email to workspace admins (installer email) summarizing pacts created/completed/overdue for the week; `workspace_admin_digest_prefs` table (migration 031); `db/workspace-admin-digest.js` for stats queries; `lib/workspace-admin-digest.js` for server startup trigger; `scripts/workspace-admin-digest.js` for scheduler runs; `GET /api/digest/admin` manual trigger endpoint guarded by `CRON_SECRET`.
 - 2026-05-24: In-Slack referral incentive — `/pact invite` command shows invite link + "0/2 workspaces" progress toward 30-day Pro; App Home updated with Pro incentive card (progress bar, free users only); backend auto-grants Pro on 2nd qualifying install (distinct workspace + pact within 7d); `pro_grants` table (migration 030) + `pact_created_within_7d`/`pro_grant_counted` columns on `workspace_invites`; inviter gets DM celebration; admin funnel extended with invite_sent_count/invite_claimed_count/pro_granted_count.

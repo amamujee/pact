@@ -1,12 +1,13 @@
 /**
  * Database Migration Runner
  *
- * Runs on every deploy via `npm run build`.
+ * Run explicitly with `npm run migrate` after DATABASE_URL is configured.
  *
  * How it works:
  * 1. Creates core tables (users, _migrations) - always runs, idempotent
- * 2. Reads migrations from migrations/ folder
- * 3. Runs new migrations in order (tracked in _migrations table)
+ * 2. Applies schema.sql (idempotent full Pact schema)
+ * 3. Reads optional migrations from migrations/ folder
+ * 4. Runs new migrations in order (tracked in _migrations table)
  *
  * To create a new migration:
  *   Create a file in migrations/ with format: {timestamp}_{name}.js
@@ -25,7 +26,11 @@ const fs = require('fs');
 const path = require('path');
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DATABASE_URL?.includes('localhost') ? false : { rejectUnauthorized: false },
+  max: 1,
+  idleTimeoutMillis: 10000,
+  connectionTimeoutMillis: 10000
 });
 
 async function migrate() {
@@ -45,7 +50,11 @@ async function migrate() {
     // 2. Core tables (idempotent - safe to run every time)
     await runCoreMigrations(client);
 
-    // 3. Run migrations from migrations/ folder
+    // 3. Apply the checked-in full schema. This repo currently ships schema.sql
+    // rather than a migrations/ folder, so this is what creates Pact tables.
+    await runSchemaFile(client);
+
+    // 4. Run migrations from migrations/ folder
     await runFolderMigrations(client);
 
     console.log('Migrations complete.');
@@ -55,13 +64,22 @@ async function migrate() {
   }
 }
 
+async function runSchemaFile(client) {
+  const schemaPath = path.join(__dirname, 'schema.sql');
+  if (!fs.existsSync(schemaPath)) return;
+
+  console.log('Applying schema.sql...');
+  const schemaSql = fs.readFileSync(schemaPath, 'utf8');
+  await client.query(schemaSql);
+}
+
 /**
  * Core tables that every app needs.
  * These use CREATE IF NOT EXISTS so they're safe to run repeatedly.
  */
 async function runCoreMigrations(client) {
   // Users table with subscription support
-  // Used by Polsia for syncing end-user subscription status
+  // Used for syncing end-user subscription status
   await client.query(`
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,
@@ -70,7 +88,7 @@ async function runCoreMigrations(client) {
       password_hash VARCHAR(255),
       created_at TIMESTAMPTZ DEFAULT NOW(),
       updated_at TIMESTAMPTZ DEFAULT NOW(),
-      -- Subscription fields (synced by Polsia when customer subscribes)
+      -- Subscription fields synced when a customer subscribes
       stripe_subscription_id VARCHAR(255),
       subscription_status VARCHAR(50),
       subscription_plan VARCHAR(255),

@@ -3,7 +3,7 @@
 // Does NOT own: app logic, Slack handlers, billing, or user-facing routes.
 //
 // These routes are for one-time migration use only.
-// Access via ?secret=<ADMIN_SECRET> or X-Admin-Secret header.
+// Mount only with ENABLE_ADMIN_MIGRATE=true and access via ADMIN_SECRET.
 
 'use strict';
 
@@ -13,7 +13,7 @@ const router = express.Router();
 
 function requireAuth(req, res, next) {
   const secret = process.env.ADMIN_SECRET;
-  if (!secret) return next();
+  if (!secret) return res.status(403).json({ error: 'ADMIN_SECRET is required' });
   if (req.query.secret === secret || req.headers['x-admin-secret'] === secret) return next();
   res.status(401).json({ error: 'Unauthorized' });
 }

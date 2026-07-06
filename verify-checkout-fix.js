@@ -1,9 +1,9 @@
 /**
  * Verification script for the checkout flow fix.
  * Tests that:
- * 1. The STRIPE_LINKS.pro URL is the new link with correct success_url
+ * 1. The Stripe checkout link is configured from this deployment's environment
  * 2. The success page auto-activation works with just the cookie (no sessionId required)
- * 3. The homepage button doesn't have target="_blank"
+ * 3. The billing page upgrade link doesn't have target="_blank"
  * 4. The checkout.html skip link has skip_lookup=1
  */
 
@@ -32,42 +32,51 @@ function assert(condition, message) {
 console.log('\n=== Checkout Flow Verification ===\n');
 
 // Read files
-const serverJs = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
-const indexHtml = fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8');
+const serverJs = [
+  fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8'),
+  fs.readFileSync(path.join(__dirname, 'lib', 'billing-routes.js'), 'utf8'),
+].join('\n');
+const billingHtml = fs.readFileSync(path.join(__dirname, 'public', 'billing.html'), 'utf8');
 const checkoutHtml = fs.readFileSync(path.join(__dirname, 'public', 'checkout.html'), 'utf8');
 const successHtml = fs.readFileSync(path.join(__dirname, 'public', 'subscription-success.html'), 'utf8');
 
-console.log('1. STRIPE_LINKS.pro configuration');
-test('Uses new Payment Link (00w5kDdQCcav2Z3fWl2ZO04)', () => {
+console.log('1. Stripe checkout link configuration');
+test('Reads Pro Payment Link from env', () => {
   assert(
-    serverJs.includes("'https://buy.stripe.com/00w5kDdQCcav2Z3fWl2ZO04'"),
-    'STRIPE_LINKS.pro should use the new link with proper success_url redirect'
+    serverJs.includes('STRIPE_PRO_PAYMENT_LINK') && serverJs.includes('STRIPE_PAYMENT_LINK_PRO'),
+    'Checkout should read the Pro Payment Link from the environment'
   );
 });
 
-test('Old Payment Link is removed', () => {
+test('Does not hardcode Stripe Payment Links', () => {
   assert(
-    !serverJs.includes("'https://buy.stripe.com/7sYeVdfYK0rN437eSh2ZO03'"),
-    'Old link without session_id redirect should be gone'
+    !serverJs.includes('buy.stripe.com'),
+    'Stripe Payment Links should come from env, not from a hardcoded account'
   );
 });
 
-console.log('\n2. Homepage button');
-test('Button links to /api/checkout', () => {
+test('Checkout fails closed when unconfigured', () => {
   assert(
-    indexHtml.includes('href="/api/checkout"'),
-    'Upgrade button should link to /api/checkout'
+    serverJs.includes('Stripe checkout is not configured'),
+    'Checkout should return a configuration error if no Stripe link is set'
   );
 });
 
-test('Button does NOT have target="_blank"', () => {
-  // Find the <a> tag with pricing-cta-v2-paid class (button is on a separate line from the text)
-  const lines = indexHtml.split('\n');
-  const buttonLine = lines.find(l => l.includes('pricing-cta-v2-paid'));
-  assert(buttonLine, 'Could not find the Upgrade to Pro button anchor tag');
+console.log('\n2. Billing page upgrade link');
+test('Upgrade link goes to /api/checkout', () => {
+  assert(
+    billingHtml.includes('href="/api/checkout"'),
+    'Upgrade link should point to /api/checkout'
+  );
+});
+
+test('Upgrade link does NOT have target="_blank"', () => {
+  const lines = billingHtml.split('\n');
+  const buttonLine = lines.find(l => l.includes('href="/api/checkout"'));
+  assert(buttonLine, 'Could not find the Upgrade to Pro anchor tag');
   assert(
     !buttonLine.includes('target="_blank"'),
-    'Button should NOT open in a new tab'
+    'Upgrade link should NOT open in a new tab'
   );
 });
 

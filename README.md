@@ -28,7 +28,10 @@ Pact turns casual Slack promises into tracked commitments with automatic reminde
 - `SLACK_CLIENT_ID` / `SLACK_CLIENT_SECRET` - OAuth app credentials
 - `SLACK_APP_ID` - Slack app ID for App Home links
 - `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` - Stripe billing credentials
+- `STRIPE_PRO_PAYMENT_LINK` - your Stripe Payment Link for the Pro subscription
 - `CRON_SECRET` - bearer token for protected scheduler endpoints
+- `ANTHROPIC_API_KEY` - required for AI-assisted Pact features
+- `RESEND_API_KEY` / `EMAIL_FROM` - optional direct email sending via Resend
 - `APP_URL` / `APP_BASE_URL` - public app URL
 - `PORT` - Server port (default: 3000)
 
@@ -103,8 +106,27 @@ of Vercel Cron. Configure these GitHub repository secrets:
 - `PACT_BASE_URL` - deployed app URL, for example `https://makepact.co`
 - `CRON_SECRET` - same value as the app's `CRON_SECRET` environment variable
 
+The migration runner applies the full checked-in `schema.sql`; after migrating
+Neon, verify the live schema includes Pact's later tables and columns:
+
+```sql
+\d pacts
+\d workspace_invites
+\d workspace_admin_digest_prefs
+```
+
 Run database migrations explicitly after setting `DATABASE_URL`:
 
 ```bash
 npm run migrate
 ```
+
+Production handoff checklist:
+
+- Create a Slack app in your own Slack developer account, copy the manifest,
+  and point all request URLs at the Vercel deployment.
+- Turn off Slack Socket Mode. Do not copy `SLACK_APP_TOKEN` to Vercel.
+- Create your own Stripe product, price, Payment Link, and webhook endpoint.
+  Set the Payment Link as `STRIPE_PRO_PAYMENT_LINK`.
+- If you use email digests or contact capture, set `RESEND_API_KEY` and
+  `EMAIL_FROM`, or provide compatible `EMAIL_SEND_URL` settings.
