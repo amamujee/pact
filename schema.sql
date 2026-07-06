@@ -1,4 +1,4 @@
--- Schema generated from Pact migrations (001-031)
+-- Schema generated from Pact migrations (001-032)
 -- Run `npm run migrate` instead of this file for new deployments.
 -- Use this file as a reference or for manual inspection.
 
@@ -477,6 +477,20 @@ CREATE INDEX IF NOT EXISTS idx_reschedule_proposals_pact_id
 CREATE INDEX IF NOT EXISTS idx_reschedule_proposals_pending
   ON reschedule_proposals (pact_id, status)
   WHERE status = 'pending';
+
+-- =============================================================================
+-- Migration: pact_snooze_reschedule_state  (032_pact_snooze_reschedule_state.js)
+-- =============================================================================
+
+-- Compatibility columns for pact-level snooze/reschedule state expected by
+-- production schema audits. Current code stores active reschedule proposals in
+-- reschedule_proposals, but these columns are safe and idempotent for fresh DBs.
+ALTER TABLE pacts
+  ADD COLUMN IF NOT EXISTS snooze_until               TIMESTAMPTZ DEFAULT NULL,
+  ADD COLUMN IF NOT EXISTS reschedule_status          VARCHAR(16) DEFAULT NULL,
+  ADD COLUMN IF NOT EXISTS reschedule_proposed_by     VARCHAR(64) DEFAULT NULL,
+  ADD COLUMN IF NOT EXISTS reschedule_proposed_date   DATE DEFAULT NULL,
+  ADD COLUMN IF NOT EXISTS reschedule_reason          TEXT DEFAULT NULL;
 
 -- =============================================================================
 -- Migration: streak_milestones  (025_streak_milestones.js)
