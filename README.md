@@ -26,8 +26,10 @@ Pact turns casual Slack promises into tracked commitments with automatic reminde
 - `SLACK_BOT_TOKEN` - Slack bot token
 - `SLACK_SIGNING_SECRET` - Slack signing secret
 - `SLACK_CLIENT_ID` / `SLACK_CLIENT_SECRET` - OAuth app credentials
+- `SLACK_APP_ID` - Slack app ID for App Home links
 - `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` - Stripe billing credentials
 - `CRON_SECRET` - bearer token for protected scheduler endpoints
+- `APP_URL` / `APP_BASE_URL` - public app URL
 - `PORT` - Server port (default: 3000)
 
 ## Slack App Configuration
