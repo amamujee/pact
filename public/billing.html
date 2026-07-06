@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Billing — Pact</title>
+    <link rel="icon" type="image/svg+xml" href="/logo.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo-36.png">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --navy: #1B2A4A;
+            --accent: #F59E0B;
+            --accent-hover: #D97706;
+            --bg: #09090B;
+            --text: #E4E4E7;
+            --text-muted: #71717A;
+            --border: rgba(255,255,255,0.08);
+            --green: #10B981;
+            --green-light: #34D399;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .card {
+            background: #111113;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px 36px;
+            max-width: 480px;
+            width: 100%;
+        }
+        .wordmark {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: var(--text);
+            margin-bottom: 32px;
+            display: inline-block;
+        }
+        .wordmark span { color: var(--accent); }
+        h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+        .option-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .option-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+        .option-body { flex: 1; }
+        .option-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        .option-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        .option-action {
+            flex-shrink: 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 7px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: opacity 0.15s;
+        }
+        .btn:hover { opacity: 0.85; }
+        .btn-primary {
+            background: var(--accent);
+            color: #09090B;
+        }
+        .btn-ghost {
+            background: rgba(255,255,255,0.07);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-danger {
+            background: rgba(239,68,68,0.1);
+            color: #FCA5A5;
+            border: 1px solid rgba(239,68,68,0.2);
+        }
+        .footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="wordmark">Pact<span>.</span></div>
+        <h1>Manage your subscription</h1>
+        <p class="subtitle">Update your plan, payment method, or download invoices. Changes take effect at your next billing cycle.</p>
+
+        <div class="options">
+            <div class="option-card">
+                <div class="option-icon">📧</div>
+                <div class="option-body">
+                    <div class="option-title">Billing questions</div>
+                    <div class="option-desc">Need an invoice, have a billing question, or want to make a change? Our team handles it fast.</div>
+                </div>
+                <div class="option-action">
+                    <a href="mailto:hello@makepact.co?subject=Billing%20question" class="btn btn-primary">Email us</a>
+                </div>
+            </div>
+
+            <div class="option-card">
+                <div class="option-icon">⬆️</div>
+                <div class="option-body">
+                    <div class="option-title">Upgrade to Pro</div>
+                    <div class="option-desc">$10/month flat. Unlimited pacts + Linear, Notion, Asana sync.</div>
+                </div>
+                <div class="option-action">
+                    <a href="/api/checkout" class="btn btn-ghost">Upgrade ↗</a>
+                </div>
+            </div>
+
+            <div class="option-card">
+                <div class="option-icon">🚪</div>
+                <div class="option-body">
+                    <div class="option-title">Cancel subscription</div>
+                    <div class="option-desc">Email us to cancel. Your workspace stays on Pro until end of the billing period.</div>
+                </div>
+                <div class="option-action">
+                    <a href="mailto:hello@makepact.co?subject=Cancel%20my%20Pact%20Pro%20subscription" class="btn btn-danger">Cancel</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Questions? <a href="mailto:hello@makepact.co">hello@makepact.co</a> · <a href="https://makepact.co">makepact.co</a>
+        </div>
+    </div>
+</body>
+</html>

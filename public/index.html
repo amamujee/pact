@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pact — Turn Your Team's Commitments Into Commitments You Actually Keep</title>
+    <meta name="description" content="Pact tracks every commitment your team makes — sends reminders, flags overdue items, and closes the loop when it's done. No chasing, no wondering, just accountability.">
+    <meta name="keywords" content="slack bot, team accountability, commitment tracking, workplace commitments, slack productivity, team management">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#09090B">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Pact — Turn Your Team's Commitments Into Commitments You Actually Keep">
+    <meta property="og:description" content="Pact tracks every commitment your team makes — sends reminders, flags overdue items, and closes the loop when it's done. No chasing, no wondering, just accountability.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://makepact.co">
+    <meta property="og:site_name" content="Pact">
+    <meta property="og:image" content="https://makepact.co/og-hero.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Pact — Shared commitments. Both people accountable.">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Pact — Turn Your Team's Commitments Into Commitments You Actually Keep">
+    <meta name="twitter:description" content="Pact tracks every commitment your team makes — sends reminders, flags overdue items, and closes the loop when it's done. No chasing, no wondering, just accountability.">
+    <meta name="twitter:image" content="https://makepact.co/og-hero.png">
+    <meta name="twitter:image:alt" content="Pact — Shared commitments. Both people accountable.">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://makepact.co">
+
+    <!-- AI agent plain-text summary (llms.txt convention) -->
+    <link rel="alternate" type="text/plain" title="LLMs.txt — plain-text product summary" href="/llms.txt">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/logo.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo-36.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="/logo-128.png">
+    <link rel="apple-touch-icon" sizes="256x256" href="/logo-256.png">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Pact",
+        "url": "https://makepact.co",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Slack",
+        "description": "Pact is a Slack bot that turns casual workplace commitments into tracked, two-way records between two people. Both sides see it, both get reminded, nothing gets dropped.",
+        "offers": [
+          {
+            "@type": "Offer",
+            "name": "Free",
+            "price": "0",
+            "priceCurrency": "USD",
+            "description": "/pact, /pacts and /done commands, 🤝 emoji creation, automatic reminders, daily digest, Home Tab dashboard, and commitment streaks."
+          },
+          {
+            "@type": "Offer",
+            "name": "Pro",
+            "price": "10",
+            "priceCurrency": "USD",
+            "description": "Unlimited active pacts plus AI-powered /done, commitment detection in channels, Workflow Builder steps, and Linear / Notion / Asana sync. $10/month flat, no per-seat pricing."
+          }
+        ],
+        "provider": {
+          "@type": "Organization",
+          "name": "Pact",
+          "url": "https://makepact.co",
+          "email": "hello@makepact.co"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Pact",
+        "url": "https://makepact.co",
+        "email": "hello@makepact.co",
+        "description": "Pact makes workplace commitments stick by tracking them inside Slack — with bilateral visibility, automatic reminders, and overdue nudges."
+      }
+    ]
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-dark: #09090B;
+            --text-light: #F4F4F5;
+            --text-muted: #A1A1AA;
+            --accent: #F59E0B;
+            --accent-hover: #D97706;
+            --green: #10B981;
+            --border-dark: rgba(255,255,255,0.06);
+            --navy: #1B2A4A;
+            --gold: #D4A574;
+            --gold-hover: #C4956A;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+        @media (min-width: 768px) { .container { padding: 0 48px; } }
+
+        /* ── Scroll Reveal ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+
+        /* ══════════════════════════════════════════
+           NAVIGATION
+        ══════════════════════════════════════════ */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 16px 0;
+            transition: background 0.3s, backdrop-filter 0.3s, border-color 0.3s;
+        }
+        .navbar.scrolled {
+            background: rgba(9, 9, 11, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-dark);
+        }
+        .navbar-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-light);
+            letter-spacing: -0.03em;
+            text-decoration: none;
+        }
+        .logo img { width: 28px; height: 28px; flex-shrink: 0; }
+        .logo-accent { color: var(--accent); }
+
+        .nav-cta {
+            display: inline-block;
+            transition: transform 0.2s, opacity 0.2s;
+            border-radius: 8px;
+            line-height: 0;
+        }
+        .nav-cta:hover { transform: translateY(-1px); opacity: 0.88; }
+        .nav-cta img { height: 36px; width: auto; display: block; }
+
+        /* ══════════════════════════════════════════
+           SECTION 1: HERO
+        ══════════════════════════════════════════ */
+        .hero {
+            position: relative;
+            padding: 100px 0 72px;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245, 158, 11, 0.09) 0%, transparent 65%),
+                radial-gradient(ellipse 50% 80% at 80% 50%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+            background-size: 64px 64px;
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 52px;
+            align-items: center;
+        }
+        @media (min-width: 900px) {
+            .hero-inner { grid-template-columns: 1fr 1fr; gap: 64px; }
+        }
+
+        /* Left: copy */
+        .hero-copy { display: flex; flex-direction: column; align-items: flex-start; }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px 6px 8px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+        .hero-badge-dot {
+            width: 6px; height: 6px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .hero-copy h1 {
+            font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.08;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+        .hero-copy h1 .accent-word {
+            background: linear-gradient(135deg, var(--accent) 0%, #FBBF24 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 32px;
+            max-width: 420px;
+        }
+
+        .hero-slack-btn {
+            display: inline-block;
+            transition: transform 0.2s, opacity 0.2s;
+            border-radius: 8px;
+            line-height: 0;
+            margin-bottom: 16px;
+        }
+        .hero-slack-btn:hover { transform: translateY(-2px); opacity: 0.92; }
+        .hero-slack-btn img { height: 60px; width: auto; display: block; }
+
+        .hero-secondary-link {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            letter-spacing: -0.01em;
+        }
+        .hero-secondary-link:hover { color: var(--text-light); }
+
+
+        /* Right: animated demo window */
+        .hero-visual { position: relative; }
+
+        /* Slack window shell */
+        .demo-window {
+            background: #1A1D2E;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.07),
+                0 32px 80px rgba(0,0,0,0.5),
+                0 0 120px rgba(245,158,11,0.07);
+            max-width: 480px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .demo-titlebar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 18px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .demo-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .demo-dot-r { background: #FF5F57; }
+        .demo-dot-y { background: #FFBD2E; }
+        .demo-dot-g { background: #28CA42; }
+        .demo-title-text {
+            margin-left: 8px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.35);
+        }
+        .demo-layout {
+            display: flex;
+            height: 380px;
+        }
+        .demo-sidebar {
+            width: 56px;
+            background: #1B1E30;
+            border-right: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 0;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .demo-sidebar-icon {
+            width: 32px; height: 32px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.3);
+        }
+        .demo-sidebar-icon.active { background: rgba(245,158,11,0.15); color: var(--accent); }
+        .demo-chat { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        .demo-chat-header {
+            padding: 10px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .demo-chat-avatar {
+            width: 22px; height: 22px;
+            border-radius: 4px;
+            background: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .demo-chat-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .demo-chat-name { font-size: 0.82rem; font-weight: 700; color: #E4E4E7; }
+        .demo-chat-sub { font-size: 0.68rem; color: #52525B; margin-left: auto; }
+        .demo-messages {
+            flex: 1;
+            padding: 12px 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        .demo-msg {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+        .demo-msg.visible { opacity: 1; transform: translateY(0); }
+        .dm-av {
+            width: 28px; height: 28px;
+            border-radius: 7px;
+            flex-shrink: 0;
+            overflow: hidden;
+            background: #6366F1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1px;
+        }
+        .dm-av img { width: 100%; height: 100%; object-fit: cover; }
+        .dm-body { flex: 1; min-width: 0; }
+        .dm-name {
+            font-size: 0.74rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+        .dm-time { font-size: 0.64rem; color: #52525B; font-weight: 400; }
+        .dm-text { font-size: 0.8rem; color: #C4C4C8; line-height: 1.5; }
+        .dm-code {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.78rem;
+            background: rgba(245,158,11,0.1);
+            color: var(--accent);
+            padding: 1px 5px;
+            border-radius: 3px;
+        }
+        .dm-card {
+            margin-top: 4px;
+            background: rgba(245,158,11,0.06);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            padding: 12px 14px;
+        }
+        .dm-card-title { font-size: 0.78rem; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+        .dm-card-body { font-size: 0.74rem; color: #A1A1AA; line-height: 1.7; }
+        .dm-card-body strong { color: #D4D4D8; }
+        .dm-list-card {
+            margin-top: 4px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+        .dm-list-title {
+            font-size: 0.72rem; font-weight: 700;
+            color: #71717A; text-transform: uppercase;
+            letter-spacing: 0.8px; margin-bottom: 8px;
+        }
+        .dm-list-row {
+            font-size: 0.76rem; color: #A1A1AA;
+            padding: 3px 0;
+            display: flex; align-items: flex-start; gap: 8px; line-height: 1.4;
+        }
+        .dm-list-num { color: var(--accent); font-weight: 700; font-size: 0.7rem; flex-shrink: 0; margin-top: 1px; }
+        .dm-list-due { color: #EF4444; font-size: 0.7rem; margin-left: auto; flex-shrink: 0; }
+        .dm-done-card {
+            margin-top: 4px;
+            background: rgba(16,185,129,0.06);
+            border-left: 3px solid var(--green);
+            border-radius: 0 8px 8px 0;
+            padding: 12px 14px;
+        }
+        .dm-done-title { font-size: 0.78rem; font-weight: 700; color: var(--green); margin-bottom: 4px; }
+        .dm-done-body { font-size: 0.74rem; color: #A1A1AA; line-height: 1.6; }
+        .demo-input-bar {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 10px 14px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .demo-input-field {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 6px;
+            padding: 7px 12px;
+            font-size: 0.78rem;
+            color: #E4E4E7;
+            font-family: inherit;
+            min-height: 32px;
+            display: flex; align-items: center;
+            white-space: nowrap; overflow: hidden;
+        }
+        .demo-cursor {
+            display: inline-block;
+            width: 1px; height: 13px;
+            background: var(--accent);
+            margin-left: 1px;
+            vertical-align: middle;
+            animation: blink-cursor 0.8s step-end infinite;
+        }
+        @keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        @media (max-width: 899px) {
+            .hero { padding: 80px 0 52px; }
+            .demo-window { max-width: 100%; }
+            .demo-layout { height: 320px; }
+            .demo-sidebar { display: none; }
+        }
+
+        /* ══════════════════════════════════════════
+           SECTION 2: HOW IT WORKS
+        ══════════════════════════════════════════ */
+        .how-section {
+            padding: 80px 0;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .how-section-header {
+            text-align: center;
+            margin-bottom: 52px;
+        }
+        .how-section-header .eyebrow {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 12px;
+            display: block;
+        }
+        .how-section-header h2 {
+            font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            color: var(--text-light);
+        }
+
+        .how-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2px;
+        }
+        @media (min-width: 640px) {
+            .how-cards { grid-template-columns: repeat(3, 1fr); gap: 2px; }
+        }
+
+        .how-card {
+            padding: 36px 28px;
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            transition: background 0.25s, border-color 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+        .how-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+        .how-card:hover {
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(245,158,11,0.2);
+        }
+        .how-card:hover::before { opacity: 1; }
+
+        .how-card-emoji {
+            font-size: 2.2rem;
+            line-height: 1;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .how-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+        .how-card-cmds {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+        }
+        .how-card-cmds span {
+            display: inline-block;
+            background: rgba(245,158,11,0.1);
+            color: var(--accent);
+            padding: 2px 7px;
+            border-radius: 4px;
+            margin: 2px 2px 2px 0;
+            font-size: 0.75rem;
+        }
+        .how-card p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        /* ══════════════════════════════════════════
+           SECTION 3: THE NUMBER
+        ══════════════════════════════════════════ */
+        .number-section {
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .number-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(16, 185, 129, 0.06) 0%, transparent 65%);
+            pointer-events: none;
+        }
+        .number-inner {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+        .number-big {
+            font-size: clamp(5rem, 14vw, 10rem);
+            font-weight: 800;
+            letter-spacing: -0.06em;
+            line-height: 1;
+            color: var(--green);
+            margin-bottom: 20px;
+            display: block;
+        }
+        .number-claim {
+            font-size: clamp(1.2rem, 2.5vw, 1.75rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-light);
+            line-height: 1.3;
+            margin-bottom: 16px;
+        }
+        .number-context {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* ── Live stats section ── */
+        .stats-section {
+            padding: 80px 0;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .stats-inner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 40px;
+        }
+        .stat-val {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            line-height: 1;
+            color: var(--green);
+            display: block;
+        }
+        .stat-label {
+            font-size: clamp(0.85rem, 1.5vw, 1rem);
+            color: var(--text-muted);
+            margin-top: 8px;
+            font-weight: 400;
+        }
+        .stat-divider {
+            font-size: 2rem;
+            color: rgba(255,255,255,0.2);
+            font-weight: 300;
+            line-height: 1;
+            padding-bottom: 24px;
+        }
+
+        /* ══════════════════════════════════════════
+           SECTION 4: FOOTER CTA
+        ══════════════════════════════════════════ */
+        .footer-cta {
+            padding: 100px 0 60px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            position: relative;
+            overflow: hidden;
+        }
+        .footer-cta::before {
+            content: '';
+            position: absolute;
+            top: -80px; left: 50%;
+            transform: translateX(-50%);
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 65%);
+            pointer-events: none;
+        }
+        .footer-cta-inner {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+        .footer-cta-inner h2 {
+            font-size: clamp(1.75rem, 4vw, 2.75rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            color: var(--text-light);
+            margin-bottom: 32px;
+        }
+        .footer-cta-btn {
+            display: inline-block;
+            transition: transform 0.2s, opacity 0.2s;
+            border-radius: 8px;
+            line-height: 0;
+            margin-bottom: 24px;
+        }
+        .footer-cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+        .footer-cta-btn img { height: 60px; width: auto; display: block; margin: 0 auto; }
+
+        .footer-pro-upsell {
+            display: inline-block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 48px;
+            line-height: 1.5;
+        }
+        .footer-pro-upsell strong { color: var(--gold); }
+
+        /* Footer bar */
+        .footer-bar {
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding: 28px 0;
+        }
+        .footer-bar-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .footer-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-light);
+            letter-spacing: -0.03em;
+            text-decoration: none;
+        }
+        .footer-logo img { width: 20px; height: 20px; flex-shrink: 0; }
+        .footer-logo .logo-accent { color: var(--accent); }
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            font-size: 0.82rem;
+            color: #52525B;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover { color: var(--text-light); }
+        .footer-links a.email-link { color: var(--accent); }
+        .footer-links a.email-link:hover { color: var(--accent-hover); }
+
+        @media (max-width: 600px) {
+            .footer-bar-inner { flex-direction: column; text-align: center; }
+            .footer-links { justify-content: center; }
+        }
+
+        /* ══════════════════════════════════════════
+           SECTION 3: FEATURES GRID
+        ══════════════════════════════════════════ */
+        .features-section {
+            padding: 80px 0;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .features-section-header {
+            text-align: center;
+            margin-bottom: 52px;
+        }
+        .features-section-header .eyebrow {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 12px;
+            display: block;
+        }
+        .features-section-header h2 {
+            font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            color: var(--text-light);
+        }
+        .features-section-header p {
+            margin-top: 12px;
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .features-groups {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+        @media (min-width: 640px) {
+            .features-groups { grid-template-columns: repeat(2, 1fr); gap: 32px 48px; }
+        }
+        @media (min-width: 960px) {
+            .features-groups { grid-template-columns: repeat(4, 1fr); gap: 28px; }
+        }
+
+        .feature-group {}
+        .feature-group-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .feature-group-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(245,158,11,0.2);
+        }
+
+        .feature-items { display: flex; flex-direction: column; gap: 14px; }
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .feature-icon {
+            font-size: 1.1rem;
+            line-height: 1;
+            flex-shrink: 0;
+            margin-top: 1px;
+            width: 22px;
+            text-align: center;
+        }
+        .feature-text {}
+        .feature-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-light);
+            letter-spacing: -0.01em;
+            margin-bottom: 2px;
+        }
+        .feature-desc {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        .feature-pro-badge {
+            display: inline-block;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--gold);
+            background: rgba(212,165,116,0.12);
+            border: 1px solid rgba(212,165,116,0.25);
+            border-radius: 3px;
+            padding: 1px 5px;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        /* ══════════════════════════════════════════
+           SECTION 4: PRICING
+        ══════════════════════════════════════════ */
+        .pricing-section {
+            padding: 80px 0;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .pricing-section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .pricing-section-header .eyebrow {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 12px;
+            display: block;
+        }
+        .pricing-section-header h2 {
+            font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            color: var(--text-light);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        @media (min-width: 600px) {
+            .pricing-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .pricing-card {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 16px;
+            padding: 32px 28px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.25s;
+        }
+        .pricing-card.pro {
+            border-color: rgba(212,165,116,0.3);
+            background: rgba(212,165,116,0.04);
+        }
+        .pricing-card.pro::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold), transparent);
+        }
+        .pricing-tier {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .pricing-tier.free { color: var(--text-muted); }
+        .pricing-tier.pro-label { color: var(--gold); }
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: var(--text-light);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .pricing-price-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+        .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .pricing-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+        .pricing-check {
+            flex-shrink: 0;
+            font-size: 0.85rem;
+            margin-top: 0px;
+        }
+        .pricing-check.on { color: var(--green); }
+        .pricing-check.pro-only { color: var(--gold); }
+
+        .pricing-cta-row {
+            text-align: center;
+            margin-top: 32px;
+        }
+        .pricing-cta-note {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .pricing-cta-note a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .pricing-cta-note a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <!-- ═══ NAVIGATION ═══ -->
+    <nav class="navbar" id="navbar" aria-label="Main navigation">
+        <div class="container navbar-inner">
+            <a href="/" class="logo">
+                <img src="/logo.svg" alt="" width="28" height="28" aria-hidden="true">
+                Pact<span class="logo-accent">.</span>
+            </a>
+            <a href="https://slack.com/oauth/v2/authorize?client_id=507133550992.10982980524448&amp;scope=commands,chat:write,im:write,im:read,im:history,users:read,reactions:read,channels:history,groups:history,mpim:history&amp;redirect_uri=https%3A%2F%2Fmakepact.co%2Fslack%2Foauth%2Fcallback&amp;user_scope=" class="nav-cta" aria-label="Add Pact to Slack">
+                <img src="https://platform.slack-edge.com/img/add_to_slack.png"
+                     srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"
+                     alt="Add to Slack" width="139" height="40">
+            </a>
+        </div>
+    </nav>
+
+    <main id="main-content" aria-label="Main content">
+
+    <!-- ═══ SECTION 1: HERO ═══ -->
+    <section class="hero" id="hero" aria-label="Hero">
+        <div class="container hero-inner">
+
+            <!-- Left: copy + CTA -->
+            <div class="hero-copy">
+                <div class="hero-badge">
+                    <span class="hero-badge-dot"></span>
+                    Free · No credit card · 2-minute install
+                </div>
+                <h1>Turn your team's commitments<br><span class="accent-word">into commitments you actually keep.</span></h1>
+                <p class="hero-sub">Pact tracks every commitment your team makes — sends reminders, flags overdue items, and closes the loop when it's done. No chasing. No wondering.</p>
+
+                <a href="https://slack.com/oauth/v2/authorize?client_id=507133550992.10982980524448&amp;scope=commands,chat:write,im:write,im:read,im:history,users:read,reactions:read,channels:history,groups:history,mpim:history&amp;redirect_uri=https%3A%2F%2Fmakepact.co%2Fslack%2Foauth%2Fcallback&amp;user_scope=" class="hero-slack-btn" aria-label="Add Pact to Slack">
+                    <img src="https://platform.slack-edge.com/img/add_to_slack.png"
+                         srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"
+                         alt="Add to Slack" width="139" height="40">
+                </a>
+                <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:8px">Use <span style="font-family:monospace;color:var(--accent);background:rgba(245,158,11,0.1);padding:1px 6px;border-radius:4px">/pact</span> · <span style="font-family:monospace;color:var(--accent);background:rgba(245,158,11,0.1);padding:1px 6px;border-radius:4px">🤝</span> reaction · <span style="font-family:monospace;color:var(--accent);background:rgba(245,158,11,0.1);padding:1px 6px;border-radius:4px">/done</span></p>
+                <a href="#how-it-works" class="hero-secondary-link">See how it works ↓</a>
+            </div>
+
+            <!-- Right: animated demo -->
+            <div class="hero-visual">
+                <div class="demo-window" aria-label="Animated Pact demo in Slack" role="img">
+                    <div class="demo-titlebar">
+                        <div class="demo-dot demo-dot-r"></div>
+                        <div class="demo-dot demo-dot-y"></div>
+                        <div class="demo-dot demo-dot-g"></div>
+                        <span class="demo-title-text">Pact — Direct Message</span>
+                    </div>
+                    <div class="demo-layout">
+                        <div class="demo-sidebar" aria-hidden="true">
+                            <div class="demo-sidebar-icon" style="font-size:1rem">🏠</div>
+                            <div class="demo-sidebar-icon active">💬</div>
+                            <div class="demo-sidebar-icon">⚡</div>
+                            <div class="demo-sidebar-icon">🔔</div>
+                        </div>
+                        <div class="demo-chat">
+                            <div class="demo-chat-header">
+                                <div class="demo-chat-avatar"><img src="/logo-36.png" alt="Pact" width="22" height="22"></div>
+                                <span class="demo-chat-name">Pact</span>
+                                <span class="demo-chat-sub">App</span>
+                            </div>
+                            <div class="demo-messages" id="demoMessages"></div>
+                            <div class="demo-input-bar">
+                                <div class="demo-input-field" id="demoInput">
+                                    <span id="demoInputText"></span><span class="demo-cursor" id="demoCursor"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ═══ SECTION 2: HOW IT WORKS ═══ -->
+    <section class="how-section" id="how-it-works" aria-label="How Pact works">
+        <div class="container">
+            <div class="how-section-header reveal">
+                <span class="eyebrow">How it works</span>
+                <h2>Three steps. Whole lifecycle handled.</h2>
+            </div>
+            <div class="how-cards">
+                <div class="how-card reveal reveal-delay-1">
+                    <span class="how-card-emoji">🤝</span>
+                    <h3>Make a commitment</h3>
+                    <div class="how-card-cmds">
+                        <span>/pact</span>
+                        <span>🤝 emoji</span>
+                        <span>message shortcut</span>
+                    </div>
+                    <p>One command or one emoji reaction. Both sides get a confirmation instantly — no follow-up required.</p>
+                </div>
+                <div class="how-card reveal reveal-delay-2">
+                    <span class="how-card-emoji">🔔</span>
+                    <h3>Stay honest</h3>
+                    <div class="how-card-cmds">
+                        <span>DM reminders</span>
+                        <span>daily digest</span>
+                    </div>
+                    <p>Reminders fire in the 24-hour window around the due date. A 9am digest covers everything still open. Nothing slips.</p>
+                </div>
+                <div class="how-card reveal">
+                    <span class="how-card-emoji">✅</span>
+                    <h3>Close the loop</h3>
+                    <div class="how-card-cmds">
+                        <span>/done</span>
+                        <span>✅ emoji</span>
+                        <span>thread reply</span>
+                    </div>
+                    <p>Mark it complete. Both people see the 🎉. Accountability closed — no chasing, no wondering.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION 3: FEATURES ═══ -->
+    <section class="features-section" id="features" aria-label="All features">
+        <div class="container">
+            <div class="features-section-header reveal">
+                <span class="eyebrow">What you get</span>
+                <h2>Everything Slack commitments need.</h2>
+                <p>From creation to close — the full commitment lifecycle, handled inside Slack.</p>
+            </div>
+            <div class="features-groups reveal">
+
+                <div class="feature-group">
+                    <div class="feature-group-label">Create</div>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <div class="feature-icon">⚡</div>
+                            <div class="feature-text">
+                                <div class="feature-name">/pact command</div>
+                                <div class="feature-desc">Type what, who, and when — pact created in one step.</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🤝</div>
+                            <div class="feature-text">
+                                <div class="feature-name">Emoji reaction</div>
+                                <div class="feature-desc">React to any message with 🤝 to turn it into a pact instantly.</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✉️</div>
+                            <div class="feature-text">
+                                <div class="feature-name">Message shortcut</div>
+                                <div class="feature-desc">Right-click any message → "Create a pact" from the context menu.</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🤖</div>
+                            <div class="feature-text">
+                                <div class="feature-name">AI detection<span class="feature-pro-badge">Pro</span></div>
+                                <div class="feature-desc">AI spots commitments in conversation and suggests creating a pact.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-group">
+                    <div class="feature-group-label">Track</div>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <div class="feature-icon">🏠</div>
+                            <div class="feature-text">
+                                <div class="feature-name">Home Tab dashboard</div>
+                                <div class="feature-desc">Your open pacts, overdue items, and streak — all in one view.</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📋</div>
+                            <div class="feature-text">
+                                <div class="feature-name">Daily &amp; weekly digests</div>
+                                <div class="feature-desc">Morning summary of everything open, due soon, or overdue.</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🔥</div>
+                            <div class="feature-text">
+                                <div class="feature-name">Commitment streaks</div>
+                                <div class="feature-desc">Track your on-time completion rate. Milestones at 7, 30, 100 days.</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🔄</div>
+                            <div class="feature-text">
+                                <div class="feature-name">Recurring pacts</div>
+                                <div class="feature-desc">Set daily, weekly, or custom cadences. Auto-creates next instance on close.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-group">
+                    <div class="feature-group-label">Complete</div>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <div class="feature-icon">✅</div>
+                            <div class="feature-text">
+                                <div class="feature-name">/done command</div>
+                                <div class="feature-desc">Fuzzy matches pact description — no need to remember the ID.</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✅</div>
+                            <div class="feature-text">
+                                <div class="feature-name">Emoji &amp; thread reply</div>
+                                <div class="feature-desc">React ✅ or reply "done" in the thread — both close the pact.</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">☑️</div>
+                            <div class="feature-text">
+                                <div class="feature-name">Bulk complete</div>
+                                <div class="feature-desc">Check multiple pacts in Home Tab and close them all at once.</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">⚙️</div>
+                            <div class="feature-text">
+                                <div class="feature-name">Workflow Builder steps<span class="feature-pro-badge">Pro</span></div>
+                                <div class="feature-desc">Trigger pact creation from any Slack workflow automation.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-group">
+                    <div class="feature-group-label">Accountability</div>
+                    <div class="feature-items">
+                        <div class="feature-item">
+                            <div class="feature-icon">🔔</div>
+                            <div class="feature-text">
+                                <div class="feature-name">Smart reminders</div>
+                                <div class="feature-desc">DM reminders in the 24h window before due date. Both parties.</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">⏰</div>
+                            <div class="feature-text">
+                                <div class="feature-name">Overdue nudges</div>
+                                <div class="feature-desc">Gentle nudges to both parties when a commitment is past due.</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📅</div>
+                            <div class="feature-text">
+                                <div class="feature-name">Reschedule proposals</div>
+                                <div class="feature-desc">Either party can propose a new date — the other accepts or counters.</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">😴</div>
+                            <div class="feature-text">
+                                <div class="feature-name">Snooze &amp; mute</div>
+                                <div class="feature-desc">Snooze a reminder or mute AI suggestions per channel.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION 4: PRICING ═══ -->
+    <section class="pricing-section" id="pricing" aria-label="Pricing">
+        <div class="container">
+            <div class="pricing-section-header reveal">
+                <span class="eyebrow">Pricing</span>
+                <h2>Free vs Pro</h2>
+            </div>
+            <div class="pricing-grid reveal">
+
+                <div class="pricing-card free">
+                    <div class="pricing-tier free">Free</div>
+                    <div class="pricing-price">$0</div>
+                    <div class="pricing-price-sub">Forever, no credit card</div>
+                    <ul class="pricing-features">
+                        <li><span class="pricing-check on">✓</span> /pact, /pacts, /done commands</li>
+                        <li><span class="pricing-check on">✓</span> 🤝 emoji &amp; message shortcut creation</li>
+                        <li><span class="pricing-check on">✓</span> DM reminders for both parties</li>
+                        <li><span class="pricing-check on">✓</span> Daily &amp; weekly digest</li>
+                        <li><span class="pricing-check on">✓</span> Home Tab dashboard</li>
+                        <li><span class="pricing-check on">✓</span> Commitment streaks &amp; milestones</li>
+                        <li><span class="pricing-check on">✓</span> Recurring pacts</li>
+                        <li><span class="pricing-check on">✓</span> Two-way reschedule proposals</li>
+                        <li><span class="pricing-check on">✓</span> 100 active pacts per workspace</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-card pro">
+                    <div class="pricing-tier pro-label">Pro</div>
+                    <div class="pricing-price">$10</div>
+                    <div class="pricing-price-sub">per month, whole workspace</div>
+                    <ul class="pricing-features">
+                        <li><span class="pricing-check on">✓</span> Everything in Free</li>
+                        <li><span class="pricing-check on">✓</span> Unlimited active pacts</li>
+                        <li><span class="pricing-check pro-only">★</span> AI commitment detection</li>
+                        <li><span class="pricing-check pro-only">★</span> Auto-suggest pacts from chat</li>
+                        <li><span class="pricing-check pro-only">★</span> Workflow Builder steps</li>
+                        <li><span class="pricing-check pro-only">★</span> Linear / Notion / Asana sync</li>
+                        <li><span class="pricing-check pro-only">★</span> Priority support</li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="pricing-cta-row reveal">
+                <p class="pricing-cta-note">Start free — upgrade with <code style="font-size:0.8rem;background:rgba(255,255,255,0.07);padding:1px 6px;border-radius:3px">/pact upgrade</code> any time.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION 5: STATS ═══ -->
+    <section class="stats-section" id="stats" aria-label="Accountability impact">
+        <div class="container">
+            <div class="stats-inner reveal">
+                <div class="stat-card">
+                    <span class="stat-val" style="font-size:2rem;letter-spacing:-0.02em;line-height:1">doubles the number<br>of commitments met</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ SECTION 4: FOOTER CTA ═══ -->
+    <section class="footer-cta" id="get-started" aria-label="Get started">
+        <div class="container">
+            <div class="footer-cta-inner reveal">
+                <h2>Your team already makes commitments.<br><span style="color:var(--accent)">Time to keep them.</span></h2>
+                <a href="https://slack.com/oauth/v2/authorize?client_id=507133550992.10982980524448&amp;scope=commands,chat:write,im:write,im:read,im:history,users:read,reactions:read,channels:history,groups:history,mpim:history&amp;redirect_uri=https%3A%2F%2Fmakepact.co%2Fslack%2Foauth%2Fcallback&amp;user_scope=" class="footer-cta-btn" aria-label="Add Pact to Slack">
+                    <img src="https://platform.slack-edge.com/img/add_to_slack.png"
+                         srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"
+                         alt="Add to Slack" width="139" height="40">
+                </a>
+                <div class="footer-pro-upsell">
+                    <a href="#pricing" style="color:inherit;text-decoration:none"><strong>Pro:</strong> AI detects commitments and suggests pacts automatically. <strong style="color:var(--gold)">$10/mo →</strong></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer bar -->
+        <div class="footer-bar">
+            <div class="container footer-bar-inner">
+                <a href="/" class="footer-logo">
+                    <img src="/logo.svg" alt="" width="20" height="20" aria-hidden="true">
+                    Pact<span class="logo-accent">.</span>
+                </a>
+                <div class="footer-links">
+                    <a href="/privacy">Privacy</a>
+                    <a href="/terms">Terms</a>
+                    <a href="/support">Support</a>
+                    <a href="mailto:hello@makepact.co" class="email-link">hello@makepact.co</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </main>
+
+    <!-- ═══ SCRIPTS ═══ -->
+    <script>
+    // Navbar scroll effect
+    (function() {
+        var navbar = document.getElementById('navbar');
+        var scrolled = false;
+        function checkScroll() {
+            var s = window.scrollY > 40;
+            if (s !== scrolled) { scrolled = s; navbar.classList.toggle('scrolled', scrolled); }
+        }
+        window.addEventListener('scroll', checkScroll, { passive: true });
+        checkScroll();
+    })();
+
+    // Scroll reveal
+    (function() {
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+    })();
+
+    // Pact Event Tracking
+    (function() {
+        function getVisitorId() {
+            var vid = localStorage.getItem('pact_vid');
+            if (!vid) {
+                vid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    var r = Math.random() * 16 | 0;
+                    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                });
+                localStorage.setItem('pact_vid', vid);
+            }
+            return vid;
+        }
+        window.trackEvent = function(eventType, metadata) {
+            try {
+                var body = JSON.stringify({ event_type: eventType, metadata: metadata || {}, session_id: getVisitorId() });
+                if (navigator.sendBeacon) {
+                    navigator.sendBeacon('/api/events', new Blob([body], { type: 'application/json' }));
+                } else {
+                    fetch('/api/events', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: body });
+                }
+            } catch(e) {}
+        };
+        document.querySelectorAll('.hero-slack-btn, .footer-cta-btn, .nav-cta').forEach(function(el) {
+            el.addEventListener('click', function() {
+                var section = el.closest('section');
+                trackEvent('cta_click', { section: section ? section.id : 'nav' });
+            });
+        });
+        var sectionObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting && !entry.target.dataset.viewed) {
+                    entry.target.dataset.viewed = '1';
+                    trackEvent('section_view', { section: entry.target.id || 'unknown' });
+                }
+            });
+        }, { threshold: 0.3 });
+        document.querySelectorAll('section[id]').forEach(function(el) { sectionObserver.observe(el); });
+    })();
+
+    // ── Demo Animation ──────────────────────────────────────────
+    (function() {
+        var messagesEl = document.getElementById('demoMessages');
+        var inputTextEl = document.getElementById('demoInputText');
+        if (!messagesEl || !inputTextEl) return;
+
+        function sleep(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
+
+        function typeIn(text, speed) {
+            speed = speed || 60;
+            inputTextEl.textContent = '';
+            return new Promise(function(resolve) {
+                var i = 0;
+                function next() {
+                    if (i < text.length) {
+                        inputTextEl.textContent += text[i++];
+                        setTimeout(next, speed + Math.random() * 30 - 15);
+                    } else { resolve(); }
+                }
+                setTimeout(next, 120);
+            });
+        }
+
+        function clearInput() { inputTextEl.textContent = ''; }
+
+        function appendMsg(html, delay) {
+            delay = delay || 0;
+            return new Promise(function(resolve) {
+                setTimeout(function() {
+                    var el = document.createElement('div');
+                    el.className = 'demo-msg';
+                    el.innerHTML = html;
+                    messagesEl.appendChild(el);
+                    messagesEl.scrollTop = messagesEl.scrollHeight;
+                    requestAnimationFrame(function() {
+                        requestAnimationFrame(function() { el.classList.add('visible'); resolve(el); });
+                    });
+                }, delay);
+            });
+        }
+
+        var T = {
+            userMsg: function(text) {
+                return '<div class="dm-av"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=28&h=28&fit=crop&crop=face" alt="Alex" width="28" height="28"></div>'
+                     + '<div class="dm-body"><div class="dm-name" style="color:#818CF8">Alex <span class="dm-time">just now</span></div>'
+                     + '<div class="dm-text">' + text + '</div></div>';
+            },
+            pactCreate: function() {
+                return '<div class="dm-av" style="background:#FFFFFF;border-radius:4px"><img src="/logo-36.png" alt="Pact" width="28" height="28"></div>'
+                     + '<div class="dm-body"><div class="dm-name" style="color:#D4A547">Pact <span class="dm-time">just now</span></div>'
+                     + '<div class="dm-card"><div class="dm-card-title">🤝 Pact #42 created</div>'
+                     + '<div class="dm-card-body"><strong>What:</strong> Review the deck<br><strong>Due:</strong> Fri at 5:00 PM<br><strong>Between:</strong> Alex &amp; Sam<br>'
+                     + '<span style="color:#22C55E;font-size:0.7rem;font-weight:600">✓ Both Alex &amp; Sam notified.</span></div></div></div>';
+            },
+            pactsList: function() {
+                return '<div class="dm-av" style="background:#FFFFFF;border-radius:4px"><img src="/logo-36.png" alt="Pact" width="28" height="28"></div>'
+                     + '<div class="dm-body"><div class="dm-name" style="color:#D4A547">Pact <span class="dm-time">just now</span></div>'
+                     + '<div class="dm-list-card"><div class="dm-list-title">Your open pacts</div>'
+                     + '<div class="dm-list-row"><span style="font-size:0.75rem">🟢</span><span class="dm-list-num">#42</span><span>Review the deck → Sam</span><span class="dm-list-due">today</span></div>'
+                     + '<div class="dm-list-row"><span style="font-size:0.75rem">🟢</span><span class="dm-list-num">#39</span><span>Ship the API fix → Jordan</span><span class="dm-list-due" style="color:#A1A1AA">Apr 28</span></div>'
+                     + '</div></div>';
+            },
+            pactDone: function() {
+                return '<div class="dm-av" style="background:#FFFFFF;border-radius:4px"><img src="/logo-36.png" alt="Pact" width="28" height="28"></div>'
+                     + '<div class="dm-body"><div class="dm-name" style="color:#D4A547">Pact <span class="dm-time">just now</span></div>'
+                     + '<div class="dm-done-card"><div class="dm-done-title">🎉 Pact #42 complete!</div>'
+                     + '<div class="dm-done-body">Review the deck — closed.<br><span style="color:#52525B;font-size:0.7rem">Sam has been notified. Nice work! 🙌</span></div></div></div>';
+            }
+        };
+
+        async function runDemo() {
+            while (true) {
+                messagesEl.innerHTML = '';
+                // Phase 1: /pact
+                await typeIn('/pact @sam review the deck by Friday 5pm', 55);
+                await sleep(350);
+                await appendMsg(T.userMsg('<span class="dm-code">/pact</span> @sam review the deck by Friday 5pm'));
+                clearInput();
+                await sleep(550);
+                await appendMsg(T.pactCreate());
+                await sleep(2800);
+                // Phase 2: /pacts
+                await typeIn('/pacts', 70);
+                await sleep(350);
+                await appendMsg(T.userMsg('<span class="dm-code">/pacts</span>'));
+                clearInput();
+                await sleep(500);
+                await appendMsg(T.pactsList());
+                await sleep(2600);
+                // Phase 3: /done
+                await typeIn('/done 42', 75);
+                await sleep(350);
+                await appendMsg(T.userMsg('<span class="dm-code">/done</span> 42'));
+                clearInput();
+                await sleep(500);
+                await appendMsg(T.pactDone());
+                await sleep(3000);
+                await sleep(800);
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', runDemo);
+        } else {
+            runDemo();
+        }
+    })();
+
+    // Handle ?open_activation=true from /activate click-tracking redirect.
+    // Full pact creation happens in Slack (modal opens there), but this shows
+    // the user their click was received and gives them a next-step nudge.
+    (function() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('open_activation') === 'true') {
+            // Clean the URL without page reload
+            history.replaceState({}, '', window.location.pathname);
+            // Show a toast-style banner for returning Slack users
+            const banner = document.createElement('div');
+            banner.style = 'position:fixed;bottom:24px;right:24px;z-index:9999;background:#1a1a2e;border:1px solid #f59e0b;border-radius:10px;padding:16px 20px;color:#fff;font-family:-apple-system,sans-serif;max-width:320px;box-shadow:0 4px 24px rgba(0,0,0,0.5)';
+            banner.innerHTML = '<div style="font-weight:600;font-size:14px;margin-bottom:6px">🤝 Pacts start in Slack</div><div style="font-size:13px;color:#aaa;line-height:1.5">Your workspace is set up. Open Slack, find the <strong>Make Pact</strong> bot DM, and click <em>🤝 Make this Pact</em> to create your first commitment.</div>';
+            document.body.appendChild(banner);
+            setTimeout(() => banner.remove(), 8000);
+        }
+    })();
+
+        </script>
+
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service — Pact</title>
+    <meta name="description" content="Terms of Service for Pact, the Slack accountability bot. Understand your rights and responsibilities when using Pact.">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Terms of Service — Pact">
+    <meta property="og:description" content="Terms of Service for Pact. Understand your rights and responsibilities when using the Slack accountability bot.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://makepact.co/terms">
+    <meta property="og:site_name" content="Pact">
+    <meta property="og:image" content="https://makepact.co/og-hero.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Terms of Service — Pact">
+    <meta name="twitter:description" content="Terms of Service for Pact. Understand your rights and responsibilities.">
+    <meta name="twitter:image" content="https://makepact.co/og-hero.png">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://makepact.co/terms">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤝</text></svg>">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-dark: #09090B;
+            --bg-surface: #111113;
+            --bg-card: #18181B;
+            --text-light: #F4F4F5;
+            --text-secondary: #A1A1AA;
+            --text-muted: #71717A;
+            --accent: #F59E0B;
+            --border-dark: rgba(255, 255, 255, 0.06);
+            --border-subtle: rgba(255, 255, 255, 0.04);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ── Navigation ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(9, 9, 11, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-dark);
+            padding: 16px 0;
+        }
+
+        .nav-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-light);
+            text-decoration: none;
+            letter-spacing: -0.03em;
+        }
+
+        .logo-accent { color: var(--accent); }
+
+        .nav-back {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-back:hover { color: var(--text-light); }
+
+        .nav-back svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* ── Main Content ── */
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 64px 24px 96px;
+        }
+
+        .page-header {
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border-dark);
+        }
+
+        .page-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .page-header h1 {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        .page-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* ── Section styles ── */
+        .policy-section {
+            margin-bottom: 48px;
+        }
+
+        .policy-section h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            color: var(--text-light);
+            padding-top: 8px;
+        }
+
+        .policy-section p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            line-height: 1.75;
+        }
+
+        .policy-section p:last-child { margin-bottom: 0; }
+
+        .policy-section ul {
+            list-style: none;
+            margin: 0 0 16px;
+            padding: 0;
+        }
+
+        .policy-section ul li {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.75;
+            padding: 6px 0 6px 20px;
+            position: relative;
+        }
+
+        .policy-section ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 15px;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+
+        .policy-section a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .policy-section a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── Highlight box ── */
+        .highlight-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dark);
+            border-left: 3px solid var(--accent);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 32px;
+        }
+
+        .highlight-box p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* ── Divider ── */
+        .section-divider {
+            border: none;
+            border-top: 1px solid var(--border-dark);
+            margin: 0 0 48px;
+        }
+
+        /* ── Footer ── */
+        footer {
+            padding: 40px 0;
+            background: var(--bg-dark);
+            border-top: 1px solid var(--border-dark);
+        }
+
+        .footer-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-light);
+            letter-spacing: -0.03em;
+            text-decoration: none;
+        }
+
+        .footer-logo .logo-accent { color: var(--accent); }
+
+        .footer-tagline {
+            font-size: 0.82rem;
+            color: #52525B;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            font-size: 0.82rem;
+            color: #71717A;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--text-light); }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            main { padding: 48px 20px 72px; }
+            .footer-inner { flex-direction: column; text-align: center; }
+            .footer-brand { flex-direction: column; gap: 8px; }
+            .footer-links { gap: 16px; flex-wrap: wrap; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav aria-label="Site navigation">
+        <div class="nav-inner">
+            <a href="/" class="logo">Pact<span class="logo-accent">.</span></a>
+            <a href="/" class="nav-back">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Back to home
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="page-header">
+            <p class="page-label">Legal</p>
+            <h1>Terms of Service</h1>
+            <p class="page-meta">Last updated: May 7, 2026</p>
+        </div>
+
+        <div class="highlight-box">
+            <p>The short version: Use Pact to track real commitments. Don't abuse the service. If you pay for Pro, you get the features listed. We can suspend accounts that violate these terms. Questions? Email <a href="mailto:hello@makepact.co">hello@makepact.co</a>.</p>
+        </div>
+
+        <div class="policy-section">
+            <h2>1. Agreement to Terms</h2>
+            <p>By installing Pact in your Slack workspace or accessing makepact.co, you agree to be bound by these Terms of Service ("Terms"). If you are using Pact on behalf of an organization, you represent that you have authority to bind that organization to these Terms.</p>
+            <p>If you do not agree to these Terms, do not install or use Pact.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>2. Service Description</h2>
+            <p>Pact is a Slack application that enables teams to create, track, and fulfill mutual commitments. Pact is operated by Polsia and accessible at makepact.co and through the Slack App Directory.</p>
+            <p>The service includes:</p>
+            <ul>
+                <li>Creating pacts (mutual commitments) between Slack users with due dates</li>
+                <li>Automated reminders for upcoming and overdue pacts</li>
+                <li>Tools to list, complete, extend, and edit active pacts</li>
+                <li>Pro tier features including tracker integrations (Linear, Notion, Asana) and higher usage limits</li>
+            </ul>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>3. Eligibility</h2>
+            <p>You must be at least 13 years old to use Pact. By using Pact, you represent that you meet this requirement. Pact is designed for use in professional and team contexts within Slack workspaces.</p>
+            <p>You are responsible for ensuring that your use of Pact complies with your organization's policies and any applicable Slack workspace rules.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>4. Your Responsibilities</h2>
+            <p>As a user of Pact, you agree to:</p>
+            <ul>
+                <li>Use Pact only for lawful purposes and in accordance with these Terms</li>
+                <li>Provide accurate information when interacting with Pact commands</li>
+                <li>Not use Pact to harass, threaten, or harm other users</li>
+                <li>Not attempt to reverse-engineer, decompile, or otherwise misuse the Pact service</li>
+                <li>Not use Pact to send spam or create commitments that are abusive or fraudulent</li>
+                <li>Comply with Slack's own <a href="https://slack.com/intl/en-us/terms-of-service" target="_blank" rel="noopener noreferrer">Terms of Service</a> and <a href="https://slack.com/intl/en-us/acceptable-use-policy" target="_blank" rel="noopener noreferrer">Acceptable Use Policy</a></li>
+            </ul>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>5. Subscription and Billing</h2>
+            <p>Pact offers a free tier and a Pro subscription at $10/month per workspace.</p>
+
+            <p><strong style="color: var(--text-light);">Free tier</strong> includes limited pact creation and core commands for your workspace.</p>
+
+            <p><strong style="color: var(--text-light);">Pro tier</strong> unlocks unlimited pacts, tracker integrations, and priority support. Billing is a flat monthly fee per workspace — not per seat.</p>
+
+            <p>Subscription terms:</p>
+            <ul>
+                <li>Subscriptions are billed monthly and renew automatically</li>
+                <li>You may cancel at any time; access continues until the end of the current billing period</li>
+                <li>Refunds are offered within 30 days of purchase if you are not satisfied — contact <a href="mailto:hello@makepact.co">hello@makepact.co</a></li>
+                <li>Prices may change with 30 days' notice; continued use after a price change constitutes acceptance</li>
+                <li>Payments are processed by Stripe and subject to <a href="https://stripe.com/legal/ssa" target="_blank" rel="noopener noreferrer">Stripe's terms</a></li>
+            </ul>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>6. Acceptable Use</h2>
+            <p>You may not use Pact to:</p>
+            <ul>
+                <li>Violate any applicable law or regulation</li>
+                <li>Infringe the intellectual property rights of any third party</li>
+                <li>Transmit malicious code, viruses, or any harmful software</li>
+                <li>Attempt unauthorized access to Pact's infrastructure, systems, or other users' data</li>
+                <li>Resell, sublicense, or create derivative services based on Pact without written permission</li>
+                <li>Use automated scripts or bots to interact with Pact outside of its intended Slack interface</li>
+            </ul>
+            <p>We reserve the right to suspend or terminate access for violations of this section without notice.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>7. Intellectual Property</h2>
+            <p>Pact and all content, features, and functionality (including but not limited to the software, design, text, and graphics at makepact.co) are owned by Polsia and protected by applicable intellectual property laws.</p>
+            <p>You retain ownership of the content you create using Pact — your commitment text and pact data belong to you. By using Pact, you grant us a limited license to store and process that data solely to provide the service.</p>
+            <p>Nothing in these Terms transfers any intellectual property rights to you beyond what is necessary to use the service.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>8. Disclaimer of Warranties</h2>
+            <p>Pact is provided "as is" and "as available" without warranties of any kind, either express or implied. To the fullest extent permitted by law, Polsia disclaims all warranties, including but not limited to:</p>
+            <ul>
+                <li>Implied warranties of merchantability, fitness for a particular purpose, and non-infringement</li>
+                <li>That the service will be uninterrupted, error-free, or secure</li>
+                <li>That any defects will be corrected</li>
+                <li>That the service is free of viruses or other harmful components</li>
+            </ul>
+            <p>Your use of Pact is at your sole risk. Pact is a Slack application and depends on Slack's continued operation — we make no guarantees about third-party platform availability.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>9. Limitation of Liability</h2>
+            <p>To the maximum extent permitted by applicable law, Polsia and its operators, employees, and affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages — including but not limited to lost profits, lost data, or business interruption — arising from your use of or inability to use Pact.</p>
+            <p>In no event shall Polsia's total liability to you for all claims arising from or relating to these Terms or your use of Pact exceed the amount you paid for the service in the twelve months preceding the claim (or $10 if you have not paid anything).</p>
+            <p>Some jurisdictions do not allow the exclusion or limitation of certain warranties or liabilities, so some of the above limitations may not apply to you.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>10. Indemnification</h2>
+            <p>You agree to defend, indemnify, and hold harmless Polsia and its affiliates from and against any claims, damages, losses, liabilities, and expenses (including reasonable attorneys' fees) arising from:</p>
+            <ul>
+                <li>Your violation of these Terms</li>
+                <li>Your use of the Pact service in a manner not authorized by these Terms</li>
+                <li>Your violation of any applicable law or the rights of any third party</li>
+            </ul>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>11. Termination</h2>
+            <p>You may stop using Pact at any time by uninstalling it from your Slack workspace. Active Pro subscriptions should be cancelled separately to stop future charges.</p>
+            <p>We may suspend or terminate your access to Pact at our discretion if we determine you have violated these Terms, with or without notice. Upon termination, your right to use the service ceases immediately.</p>
+            <p>Sections 7 (Intellectual Property), 8 (Disclaimer of Warranties), 9 (Limitation of Liability), 10 (Indemnification), and 13 (Governing Law) survive termination.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>12. Changes to These Terms</h2>
+            <p>We may update these Terms from time to time. When we do, we'll update the "Last updated" date at the top of this page. For material changes, we'll notify workspace admins via Slack message where reasonably practical.</p>
+            <p>Continued use of Pact after changes are posted constitutes your acceptance of the updated Terms.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>13. Governing Law</h2>
+            <p>These Terms are governed by the laws of the United States, without regard to conflict of law principles. Any disputes arising from these Terms or your use of Pact shall be resolved through good-faith negotiation first. If unresolved, disputes shall be subject to binding arbitration in accordance with the American Arbitration Association rules.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>14. Contact</h2>
+            <p>Questions about these Terms? Contact us:</p>
+            <ul>
+                <li><strong style="color: var(--text-light);">Email:</strong> <a href="mailto:hello@makepact.co">hello@makepact.co</a></li>
+                <li><strong style="color: var(--text-light);">Website:</strong> <a href="https://makepact.co">makepact.co</a></li>
+            </ul>
+            <p>We aim to respond to all inquiries within 5 business days.</p>
+        </div>
+    </main>
+
+    <footer aria-label="Site footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <a href="/" class="footer-logo">Pact<span class="logo-accent">.</span></a>
+                <span class="footer-tagline">makepact.co — Commitments that stick</span>
+            </div>
+            <div class="footer-links">
+                <a href="mailto:hello@makepact.co">Contact</a>
+                <a href="/">Home</a>
+                <a href="/privacy">Privacy</a>
+                <a href="/terms" aria-current="page">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

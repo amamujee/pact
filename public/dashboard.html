@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pact — Analytics Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deep: #08090d;
+      --bg-base: #0e1018;
+      --bg-raised: #151821;
+      --bg-card: #181c28;
+      --border: #1e2333;
+      --border-hover: #2a3050;
+      --text-primary: #eaecf2;
+      --text-secondary: #7a82a0;
+      --text-muted: #4a5070;
+      --accent: #c8a44e;
+      --accent-dim: rgba(200, 164, 78, 0.15);
+      --green: #34d399;
+      --green-dim: rgba(52, 211, 153, 0.12);
+      --yellow: #fbbf24;
+      --yellow-dim: rgba(251, 191, 36, 0.12);
+      --red: #f87171;
+      --red-dim: rgba(248, 113, 113, 0.12);
+      --blue: #60a5fa;
+      --blue-dim: rgba(96, 165, 250, 0.12);
+      --purple: #a78bfa;
+      --purple-dim: rgba(167, 139, 250, 0.12);
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page-wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 3rem;
+    }
+
+    /* ─── Header ─── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .header h1 .dot {
+      color: var(--accent);
+    }
+
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .updated-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-family: 'Space Mono', monospace;
+    }
+
+    .refresh-btn {
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.72rem;
+      font-family: 'Space Mono', monospace;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .refresh-btn:hover {
+      background: var(--bg-raised);
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+    }
+
+    /* ─── Glance Row ─── */
+    .glance-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .glance-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.15rem;
+      transition: border-color 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glance-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+    }
+
+    .glance-item.gl-gold::before { background: var(--accent); }
+    .glance-item.gl-blue::before { background: var(--blue); }
+    .glance-item.gl-green::before { background: var(--green); }
+    .glance-item.gl-purple::before { background: var(--purple); }
+    .glance-item.gl-yellow::before { background: var(--yellow); }
+
+    .glance-item:hover { border-color: var(--border-hover); }
+
+    .glance-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+    }
+
+    .glance-value {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .glance-sub {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    /* ─── Sections ─── */
+    .section {
+      margin-bottom: 2.25rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+    }
+
+    .section-icon.gold { background: var(--accent-dim); }
+    .section-icon.green { background: var(--green-dim); }
+    .section-icon.red { background: var(--red-dim); }
+    .section-icon.blue { background: var(--blue-dim); }
+
+    .section-title {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    /* ─── Cards Grid ─── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .card-grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.15rem 1.25rem;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover { border-color: var(--border-hover); }
+
+    .card-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .card-value {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .card-value.sm { font-size: 1.3rem; }
+
+    .card-sub {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    .tag-ok { color: var(--green); }
+    .tag-warn { color: var(--yellow); }
+    .tag-bad { color: var(--red); }
+    .tag-info { color: var(--blue); }
+
+    /* ─── Funnel ─── */
+    .funnel-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .funnel-step {
+      display: grid;
+      grid-template-columns: 160px 1fr 70px 80px;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .funnel-step:last-child { border-bottom: none; }
+
+    .funnel-step-name {
+      font-size: 0.82rem;
+      color: var(--text-primary);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .funnel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .funnel-dot.c-blue { background: var(--blue); }
+    .funnel-dot.c-green { background: var(--green); }
+    .funnel-dot.c-yellow { background: var(--yellow); }
+    .funnel-dot.c-purple { background: var(--purple); }
+
+    .funnel-bar-track {
+      height: 10px;
+      background: var(--bg-deep);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .funnel-bar-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      min-width: 3px;
+    }
+
+    .funnel-bar-fill.b-blue { background: linear-gradient(90deg, var(--blue), #93c5fd); }
+    .funnel-bar-fill.b-green { background: linear-gradient(90deg, var(--green), #6ee7b7); }
+    .funnel-bar-fill.b-yellow { background: linear-gradient(90deg, var(--yellow), #fde68a); }
+    .funnel-bar-fill.b-purple { background: linear-gradient(90deg, var(--purple), #c4b5fd); }
+
+    .funnel-count {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      text-align: right;
+    }
+
+    .funnel-pct {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      text-align: right;
+    }
+
+    .funnel-pct-label {
+      display: block;
+      font-size: 0.55rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 1px;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .funnel-drop-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 3px 24px;
+      background: var(--red-dim);
+      font-size: 0.65rem;
+      color: var(--red);
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 0.02em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .funnel-meta {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+
+    /* ─── Trend Table ─── */
+    .trend-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+
+    .trend-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+    }
+
+    .trend-table th {
+      color: var(--text-muted);
+      font-weight: 500;
+      text-align: left;
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .trend-table td {
+      padding: 0.6rem 1rem;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+    }
+
+    .trend-table tr:last-child td { border-bottom: none; }
+    .trend-table .day-col { font-family: 'Space Grotesk', sans-serif; color: var(--text-secondary); }
+    .trend-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+
+    /* ─── Stalled Table ─── */
+    .stalled-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .stalled-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+    }
+
+    .stalled-table th {
+      color: var(--text-muted);
+      font-weight: 500;
+      text-align: left;
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .stalled-table td {
+      padding: 0.6rem 1rem;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stalled-table tr:last-child td { border-bottom: none; }
+    .stalled-hours { font-family: 'Space Mono', monospace; font-weight: 600; }
+    .stalled-hours.danger { color: var(--red); }
+    .stalled-hours.warn { color: var(--yellow); }
+
+    .empty-state {
+      padding: 1.25rem 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+
+    /* ─── System Health ─── */
+    .health-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .health-card.health-ok { border-color: var(--green); border-width: 1px; }
+    .health-card.health-warn { border-color: var(--yellow); border-width: 1px; }
+    .health-card.health-bad { border-color: var(--red); border-width: 2px; }
+
+    .health-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .health-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .health-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .health-dot.ok { background: var(--green); box-shadow: 0 0 8px var(--green-dim); }
+    .health-dot.warn { background: var(--yellow); box-shadow: 0 0 8px var(--yellow-dim); }
+    .health-dot.bad { background: var(--red); box-shadow: 0 0 8px var(--red-dim); animation: pulse-red 2s infinite; }
+
+    @keyframes pulse-red {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .health-status-text {
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .health-counts {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .health-count-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .health-count-value {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .err-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.72rem;
+      margin-top: 0.75rem;
+    }
+
+    .err-table th {
+      text-align: left;
+      padding: 0.45rem 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .err-table td {
+      padding: 0.4rem 0.75rem;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .err-table tr:last-child td { border-bottom: none; }
+
+    /* ─── Footer ─── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding-top: 1.25rem;
+      margin-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      font-family: 'Space Mono', monospace;
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+      background: var(--green-dim);
+      color: var(--green);
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .live-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse-green 2s infinite;
+    }
+
+    @keyframes pulse-green {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* ─── Utility ─── */
+    .loading {
+      text-align: center;
+      padding: 5rem;
+      color: var(--text-muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+    }
+
+    .error-state {
+      text-align: center;
+      padding: 4rem;
+      color: var(--red);
+      font-size: 0.9rem;
+      background: var(--red-dim);
+      border: 1px solid var(--red);
+      border-radius: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .page-wrap { padding: 1.5rem 1rem; }
+      .glance-row { grid-template-columns: repeat(2, 1fr); }
+      .card-grid { grid-template-columns: 1fr 1fr; }
+      .card-grid-3 { grid-template-columns: 1fr; }
+      .funnel-step { grid-template-columns: 120px 1fr 50px 60px; gap: 8px; padding: 12px 16px; }
+      .funnel-meta { grid-template-columns: 1fr; }
+      .health-counts { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .glance-row { grid-template-columns: 1fr; }
+      .header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrap">
+  <div class="header">
+    <div>
+      <h1>Pact <span class="dot">.</span> analytics</h1>
+      <div class="updated-label" id="updated-at"></div>
+    </div>
+    <div class="header-meta">
+      <button class="refresh-btn" onclick="loadAll()">refresh</button>
+    </div>
+  </div>
+
+  <div id="loading" class="loading">loading metrics ...</div>
+  <div id="error" class="error-state" style="display:none;"></div>
+  <div id="content" style="display:none;">
+
+    <!-- ═══ At a Glance ═══ -->
+    <div class="glance-row">
+      <div class="glance-item gl-gold">
+        <div class="glance-label">Pacts Created</div>
+        <div class="glance-value" id="g-created">—</div>
+        <div class="glance-sub"><span id="g-created-7d">—</span> this week</div>
+      </div>
+      <div class="glance-item gl-green">
+        <div class="glance-label">Completed</div>
+        <div class="glance-value" id="g-completed">—</div>
+        <div class="glance-sub"><span id="g-completed-7d">—</span> this week</div>
+      </div>
+      <div class="glance-item gl-blue">
+        <div class="glance-label">Installs</div>
+        <div class="glance-value" id="g-installs">—</div>
+        <div class="glance-sub" id="g-installs-sub"></div>
+      </div>
+      <div class="glance-item gl-purple">
+        <div class="glance-label">Active Users 7d</div>
+        <div class="glance-value" id="g-users">—</div>
+        <div class="glance-sub">distinct creators + completers</div>
+      </div>
+      <div class="glance-item gl-yellow">
+        <div class="glance-label">MRR</div>
+        <div class="glance-value" id="g-mrr">—</div>
+        <div class="glance-sub"><span id="g-pro-count">—</span> pro subscribers</div>
+      </div>
+    </div>
+
+    <!-- ═══ Conversion Funnel ═══ -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon gold">⬇</div>
+        <div class="section-title">Conversion Funnel</div>
+      </div>
+      <div id="funnel-container"></div>
+      <div class="funnel-meta" id="funnel-meta"></div>
+    </div>
+
+    <!-- ═══ North Star ═══ -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon gold">★</div>
+        <div class="section-title">North Star</div>
+      </div>
+      <div class="card-grid card-grid-3">
+        <div class="card">
+          <div class="card-label">Pacts Created (All Time)</div>
+          <div class="card-value" id="ns-created">—</div>
+          <div class="card-sub">7d: <span id="ns-created-7d">—</span> · 30d: <span id="ns-created-30d">—</span></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Pacts Completed (All Time)</div>
+          <div class="card-value" id="ns-completed">—</div>
+          <div class="card-sub">7d: <span id="ns-completed-7d">—</span> · 30d: <span id="ns-completed-30d">—</span></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Completion Rate</div>
+          <div class="card-value" id="ns-rate">—</div>
+          <div class="card-sub" id="ns-rate-sub"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ Drop-off Signals ═══ -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon red">!</div>
+        <div class="section-title">Drop-off Signals</div>
+      </div>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-label">Installed, Never Created</div>
+          <div class="card-value sm" id="do-installed">—</div>
+          <div class="card-sub"><span id="do-installed-pct" class="tag-bad">—</span> of installs</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Created, Never Completed</div>
+          <div class="card-value sm" id="do-never-completed">—</div>
+          <div class="card-sub" id="do-never-completed-sub"></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Overdue Pacts</div>
+          <div class="card-value sm" id="do-overdue">—</div>
+          <div class="card-sub" id="do-overdue-sub"></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Active Pacts</div>
+          <div class="card-value sm" id="do-active">—</div>
+          <div class="card-sub">currently in progress</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 7-Day Trend ═══ -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon blue">~</div>
+        <div class="section-title">7-Day Funnel Trend</div>
+      </div>
+      <div id="trend-container"></div>
+    </div>
+
+    <!-- ═══ Stalled Installs ═══ -->
+    <div class="section" id="stalled-section" style="display:none;">
+      <div class="section-header">
+        <div class="section-icon red">⏳</div>
+        <div class="section-title">Stalled Installs <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted);font-size:0.65rem;">(48h+ ago, no pact)</span></div>
+      </div>
+      <div id="stalled-container"></div>
+    </div>
+
+    <!-- ═══ System Health ═══ -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon green">♥</div>
+        <div class="section-title">System Health</div>
+      </div>
+      <div id="health-container">
+        <div class="health-card">
+          <div class="health-header">
+            <div class="health-status">
+              <div class="health-dot" id="health-dot"></div>
+              <div class="health-status-text" id="health-text">Loading...</div>
+            </div>
+          </div>
+          <div class="health-counts">
+            <div>
+              <div class="health-count-label">Errors (24h)</div>
+              <div class="health-count-value" id="err-total">—</div>
+            </div>
+            <div>
+              <div class="health-count-label">Distinct Types</div>
+              <div class="health-count-value" id="err-distinct">—</div>
+            </div>
+          </div>
+          <div id="err-table-wrap" style="display:none;">
+            <table class="err-table">
+              <thead>
+                <tr>
+                  <th>Error Key</th>
+                  <th style="text-align:right;width:55px;">Count</th>
+                  <th style="text-align:right;width:80px;">Last Seen</th>
+                  <th style="text-align:right;width:60px;">Alerted</th>
+                </tr>
+              </thead>
+              <tbody id="err-rows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div>Pact · <span id="generated-at"></span></div>
+    <div class="live-badge">live · auto-refresh 60s</div>
+  </div>
+</div>
+
+<script>
+  function escapeHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function fmtDuration(minutes) {
+    if (minutes === null || minutes === undefined) return '—';
+    if (minutes < 60) return minutes + 'm';
+    if (minutes < 1440) return Math.round(minutes / 60) + 'h';
+    return Math.round(minutes / 1440) + 'd';
+  }
+
+  // ─── Funnel rendering with step-over-step percentages ───
+  function renderFunnel(m) {
+    const cf = m.conversion_funnel;
+    if (!cf) {
+      document.getElementById('funnel-container').innerHTML = '<div class="empty-state">No funnel data yet.</div>';
+      return;
+    }
+
+    const steps = [
+      { name: 'Installs', count: cf.installs, dotClass: 'c-blue', barClass: 'b-blue', pctColor: 'var(--blue)' },
+      { name: 'Activated (≥1 pact)', count: cf.activated, dotClass: 'c-green', barClass: 'b-green', pctColor: 'var(--green)' },
+      { name: 'First Completion', count: cf.first_completers, dotClass: 'c-yellow', barClass: 'b-yellow', pctColor: 'var(--yellow)' },
+    ];
+
+    // Add Pro step if we have subscriber data
+    if (m.pro_subscribers !== undefined) {
+      steps.push({ name: 'Pro Upgrade', count: m.pro_subscribers, dotClass: 'c-purple', barClass: 'b-purple', pctColor: 'var(--purple)' });
+    }
+
+    const maxCount = steps[0].count || 1;
+    let html = '<div class="funnel-container">';
+
+    steps.forEach((step, i) => {
+      // Bar width: relative to the first step (total installs)
+      const barPct = maxCount > 0 ? Math.max(2, Math.round((step.count / maxCount) * 100)) : 2;
+
+      // Step-over-step conversion rate
+      let stepPct, pctLabel;
+      if (i === 0) {
+        stepPct = '100%';
+        pctLabel = 'baseline';
+      } else {
+        const prev = steps[i - 1].count;
+        if (prev > 0) {
+          stepPct = Math.round((step.count / prev) * 100) + '%';
+        } else {
+          stepPct = '—';
+        }
+        pctLabel = 'of prev step';
+      }
+
+      // Drop-off row between steps
+      if (i > 0) {
+        const prev = steps[i - 1].count;
+        const dropped = prev - step.count;
+        if (prev > 0 && dropped > 0) {
+          const dropPct = Math.round((dropped / prev) * 100);
+          html += '<div class="funnel-drop-row">▼ ' + dropPct + '% drop-off (' + dropped + ' lost)</div>';
+        }
+      }
+
+      html += '<div class="funnel-step">' +
+        '<div class="funnel-step-name"><span class="funnel-dot ' + step.dotClass + '"></span>' + step.name + '</div>' +
+        '<div class="funnel-bar-track"><div class="funnel-bar-fill ' + step.barClass + '" style="width:' + barPct + '%"></div></div>' +
+        '<div class="funnel-count">' + step.count + '</div>' +
+        '<div class="funnel-pct" style="color:' + step.pctColor + '">' + stepPct + '<span class="funnel-pct-label">' + pctLabel + '</span></div>' +
+      '</div>';
+    });
+
+    html += '</div>';
+    document.getElementById('funnel-container').innerHTML = html;
+
+    // Funnel meta cards
+    const medianPact = fmtDuration(cf.median_minutes_to_first_pact);
+    const medianCompletion = fmtDuration(cf.median_minutes_to_first_completion);
+    document.getElementById('funnel-meta').innerHTML =
+      '<div class="card"><div class="card-label">Median → First Pact</div><div class="card-value sm">' + medianPact + '</div><div class="card-sub">from install to first pact created</div></div>' +
+      '<div class="card"><div class="card-label">Median → First Completion</div><div class="card-value sm">' + medianCompletion + '</div><div class="card-sub">from install to first pact done</div></div>';
+  }
+
+  // ─── Trend table ───
+  function renderTrend(m) {
+    const trend = m.funnel_trend_7d;
+    if (!trend || trend.length === 0) {
+      document.getElementById('trend-container').innerHTML = '<div class="empty-state">No trend data yet.</div>';
+      return;
+    }
+
+    const rows = trend.map(function(d) {
+      const dayLabel = new Date(d.day + 'T12:00:00Z').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+      return '<tr>' +
+        '<td class="day-col">' + dayLabel + '</td>' +
+        '<td class="num" style="color:var(--blue)">' + (d.installs || 0) + '</td>' +
+        '<td class="num" style="color:var(--green)">' + (d.activations || 0) + '</td>' +
+        '<td class="num" style="color:var(--yellow)">' + (d.completions || 0) + '</td>' +
+      '</tr>';
+    }).join('');
+
+    document.getElementById('trend-container').innerHTML =
+      '<div class="trend-wrap"><table class="trend-table"><thead><tr>' +
+      '<th>Day</th>' +
+      '<th class="num">Installs</th>' +
+      '<th class="num">Activations</th>' +
+      '<th class="num">Completions</th>' +
+      '</tr></thead><tbody>' + rows + '</tbody></table></div>';
+  }
+
+  // ─── Stalled installs ───
+  function renderStalled(m) {
+    const list = m.stalled_installs;
+    const section = document.getElementById('stalled-section');
+
+    if (!list || list.length === 0) {
+      section.style.display = 'none';
+      return;
+    }
+
+    section.style.display = 'block';
+    const rows = list.map(function(s) {
+      const installedDate = new Date(s.installed_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+      const hClass = s.hours_since_install >= 168 ? 'danger' : s.hours_since_install >= 72 ? 'warn' : '';
+      return '<tr>' +
+        '<td>' + escapeHtml(s.team_name || s.team_id) + '</td>' +
+        '<td>' + installedDate + '</td>' +
+        '<td class="stalled-hours ' + hClass + '">' + s.hours_since_install + 'h ago</td>' +
+      '</tr>';
+    }).join('');
+
+    document.getElementById('stalled-container').innerHTML =
+      '<div class="stalled-wrap"><table class="stalled-table"><thead><tr>' +
+      '<th>Workspace</th><th>Installed</th><th>Stalled For</th>' +
+      '</tr></thead><tbody>' + rows + '</tbody></table></div>' +
+      '<div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.5rem;font-family:Space Mono,monospace;">' +
+      list.length + ' workspace' + (list.length !== 1 ? 's' : '') + ' installed but never started</div>';
+  }
+
+  // ─── System Health ───
+  async function loadErrors() {
+    try {
+      const res = await fetch('/health/errors');
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const e = await res.json();
+
+      const card = document.querySelector('.health-card');
+      const dot = document.getElementById('health-dot');
+      const text = document.getElementById('health-text');
+
+      document.getElementById('err-total').textContent = e.total_errors;
+      document.getElementById('err-distinct').textContent = e.distinct_errors;
+
+      card.classList.remove('health-ok', 'health-warn', 'health-bad');
+      dot.classList.remove('ok', 'warn', 'bad');
+
+      if (e.total_errors === 0) {
+        card.classList.add('health-ok');
+        dot.classList.add('ok');
+        text.textContent = 'All systems clear';
+        text.style.color = 'var(--green)';
+      } else if (e.alerted_errors > 0) {
+        card.classList.add('health-bad');
+        dot.classList.add('bad');
+        text.textContent = e.alerted_errors + ' alerted error type' + (e.alerted_errors !== 1 ? 's' : '');
+        text.style.color = 'var(--red)';
+      } else {
+        card.classList.add('health-warn');
+        dot.classList.add('warn');
+        text.textContent = e.distinct_errors + ' error type' + (e.distinct_errors !== 1 ? 's' : '') + ' (below threshold)';
+        text.style.color = 'var(--yellow)';
+      }
+
+      const tableWrap = document.getElementById('err-table-wrap');
+      const rowsEl = document.getElementById('err-rows');
+
+      if (e.errors && e.errors.length > 0) {
+        tableWrap.style.display = 'block';
+        rowsEl.innerHTML = e.errors.slice(0, 10).map(function(err) {
+          const lastSeen = new Date(err.last_seen_at);
+          const ago = Math.round((Date.now() - lastSeen.getTime()) / 60000);
+          const agoStr = ago < 60 ? ago + 'm ago' : Math.round(ago / 60) + 'h ago';
+          const alertedStr = err.alerted_at ? '<span style="color:var(--red)">yes</span>' : '—';
+          return '<tr>' +
+            '<td style="max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHtml(err.key) + '</td>' +
+            '<td style="text-align:right;">' + err.count + '</td>' +
+            '<td style="text-align:right;color:var(--text-muted);">' + agoStr + '</td>' +
+            '<td style="text-align:right;">' + alertedStr + '</td>' +
+          '</tr>';
+        }).join('');
+      } else {
+        tableWrap.style.display = 'none';
+      }
+    } catch (err) {
+      document.getElementById('health-text').textContent = 'Failed to load health data';
+      document.getElementById('health-text').style.color = 'var(--text-muted)';
+    }
+  }
+
+  // ─── Main load ───
+  async function loadMetrics() {
+    const errEl = document.getElementById('error');
+    const loadEl = document.getElementById('loading');
+    const contentEl = document.getElementById('content');
+
+    errEl.style.display = 'none';
+
+    try {
+      const res = await fetch('/api/metrics');
+      if (!res.ok) throw new Error('Failed to load /api/metrics (HTTP ' + res.status + ')');
+      const m = await res.json();
+
+      loadEl.style.display = 'none';
+      contentEl.style.display = 'block';
+
+      // ── At a Glance ──
+      document.getElementById('g-created').textContent = m.pacts_created.total;
+      document.getElementById('g-created-7d').textContent = m.pacts_created.trailing_7d;
+      document.getElementById('g-completed').textContent = m.pacts_completed.total;
+      document.getElementById('g-completed-7d').textContent = m.pacts_completed.trailing_7d;
+      document.getElementById('g-installs').textContent = m.total_installations;
+      document.getElementById('g-installs-sub').textContent = m.activated_orgs + ' activated';
+      document.getElementById('g-users').textContent = m.active_users_7d;
+      document.getElementById('g-mrr').textContent = '$' + m.mrr;
+      document.getElementById('g-pro-count').textContent = m.pro_subscribers;
+
+      // ── North Star ──
+      document.getElementById('ns-created').textContent = m.pacts_created.total;
+      document.getElementById('ns-created-7d').textContent = m.pacts_created.trailing_7d;
+      document.getElementById('ns-created-30d').textContent = m.pacts_created.trailing_30d;
+      document.getElementById('ns-completed').textContent = m.pacts_completed.total;
+      document.getElementById('ns-completed-7d').textContent = m.pacts_completed.trailing_7d;
+      document.getElementById('ns-completed-30d').textContent = m.pacts_completed.trailing_30d;
+
+      const rate = m.completion_rate;
+      document.getElementById('ns-rate').textContent = rate + '%';
+      const rateSub = document.getElementById('ns-rate-sub');
+      if (rate >= 50) {
+        rateSub.innerHTML = '<span class="tag-ok">Healthy</span>';
+      } else if (rate >= 20) {
+        rateSub.innerHTML = '<span class="tag-warn">Room to improve</span>';
+      } else if (m.pacts_created.total > 0) {
+        rateSub.innerHTML = '<span class="tag-bad">Low completion rate</span>';
+      } else {
+        rateSub.textContent = 'No pacts created yet';
+      }
+
+      // ── Drop-offs ──
+      document.getElementById('do-installed').textContent = m.installed_never_created_pact.count;
+      document.getElementById('do-installed-pct').textContent = m.installed_never_created_pact.pct + '%';
+      document.getElementById('do-never-completed').textContent = m.created_never_completed.count;
+
+      const ncSub = document.getElementById('do-never-completed-sub');
+      if (m.activated_orgs > 0) {
+        ncSub.innerHTML = '<span class="tag-warn">' + m.created_never_completed.pct + '%</span> of activated orgs';
+      } else {
+        ncSub.textContent = '';
+      }
+
+      document.getElementById('do-overdue').textContent = m.overdue_pacts_count;
+      const overdueSub = document.getElementById('do-overdue-sub');
+      if (m.overdue_pacts.pct > 30) {
+        overdueSub.innerHTML = '<span class="tag-bad">' + m.overdue_pacts.pct + '% overdue — high</span>';
+      } else if (m.overdue_pacts.pct > 0) {
+        overdueSub.innerHTML = '<span class="tag-warn">' + m.overdue_pacts.pct + '% overdue</span>';
+      } else {
+        overdueSub.textContent = '0% overdue';
+      }
+
+      document.getElementById('do-active').textContent = m.active_pacts;
+
+      // ── Funnel (step-over-step) ──
+      renderFunnel(m);
+
+      // ── Trend ──
+      renderTrend(m);
+
+      // ── Stalled ──
+      renderStalled(m);
+
+      // ── Footer ──
+      const ts = new Date(m.generated_at);
+      document.getElementById('updated-at').textContent = 'updated ' + ts.toLocaleTimeString();
+      document.getElementById('generated-at').textContent = ts.toLocaleString();
+
+    } catch (err) {
+      loadEl.style.display = 'none';
+      errEl.style.display = 'block';
+      errEl.textContent = 'Error: ' + err.message;
+    }
+  }
+
+  function loadAll() {
+    loadMetrics();
+    loadErrors();
+  }
+
+  loadAll();
+  setInterval(loadAll, 60 * 1000);
+</script>
+
+</body>
+</html>

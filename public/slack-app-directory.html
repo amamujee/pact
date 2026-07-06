@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pact — App Directory</title>
+    <meta name="description" content="Pact turns casual Slack promises into tracked commitments with automatic reminders, overdue nudges, and completion tracking. Available on the Slack App Directory.">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#09090B">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Pact — Slack App Directory">
+    <meta property="og:description" content="Pact turns casual Slack promises into tracked commitments. Both people see it. Both get reminded. Nothing slips through.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://makepact.co/slack-app-directory">
+    <meta property="og:site_name" content="Pact">
+    <meta property="og:image" content="https://makepact.co/og-hero.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Pact — Slack App Directory">
+    <meta name="twitter:description" content="Track commitments, send reminders, close the loop. Inside Slack.">
+    <meta name="twitter:image" content="https://makepact.co/og-hero.png">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://makepact.co/slack-app-directory">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/logo.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo-36.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-dark: #09090B;
+            --bg-surface: #111113;
+            --bg-card: #18181B;
+            --text-light: #F4F4F5;
+            --text-secondary: #A1A1AA;
+            --text-muted: #71717A;
+            --accent: #F59E0B;
+            --accent-hover: #D97706;
+            --green: #10B981;
+            --gold: #D4A574;
+            --border-dark: rgba(255, 255, 255, 0.06);
+            --border-subtle: rgba(255, 255, 255, 0.04);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ── Navigation ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(9, 9, 11, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-dark);
+            padding: 16px 0;
+        }
+
+        .nav-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-light);
+            text-decoration: none;
+            letter-spacing: -0.03em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo img { width: 24px; height: 24px; }
+        .logo-accent { color: var(--accent); }
+
+        .nav-badge {
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-badge::before {
+            content: '';
+            width: 6px; height: 6px;
+            background: var(--green);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* ── Main Layout ── */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        main { padding: 48px 0 80px; }
+
+        /* ── App Header (like Slack App Directory) ── */
+        .app-header {
+            display: flex;
+            gap: 28px;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border-dark);
+        }
+
+        .app-icon-wrap { flex-shrink: 0; }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 18px;
+            object-fit: cover;
+            display: block;
+            background: var(--bg-card);
+        }
+
+        .app-icon-fallback {
+            width: 80px;
+            height: 80px;
+            border-radius: 18px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .app-meta { flex: 1; }
+
+        .app-category {
+            font-size: 0.68rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .app-name {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 6px;
+        }
+
+        .app-tagline {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .app-install-btn {
+            display: inline-block;
+            transition: transform 0.2s, opacity 0.2s;
+            border-radius: 6px;
+            line-height: 0;
+        }
+
+        .app-install-btn:hover { transform: translateY(-1px); opacity: 0.88; }
+        .app-install-btn img { height: 44px; width: auto; display: block; }
+
+        /* ── Stats Row ── */
+        .stats-row {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border-dark);
+        }
+
+        .stat-item { display: flex; flex-direction: column; gap: 2px; }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text-light);
+            line-height: 1;
+        }
+        .stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
+
+        /* ── Section Styles ── */
+        .section { margin-bottom: 40px; }
+
+        .section-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-dark);
+        }
+
+        /* ── About / Description ── */
+        .description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .description p { margin-bottom: 16px; }
+        .description p:last-child { margin-bottom: 0; }
+        .description strong { color: var(--text-light); }
+
+        /* ── Features ── */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        @media (min-width: 560px) {
+            .features-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .feature-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dark);
+            border-radius: 10px;
+            padding: 18px 20px;
+        }
+
+        .feature-icon { font-size: 1.4rem; line-height: 1; margin-bottom: 10px; display: block; }
+
+        .feature-name {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 4px;
+            letter-spacing: -0.01em;
+        }
+
+        .feature-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* ── Pricing ── */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 520px) {
+            .pricing-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dark);
+            border-radius: 12px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card.pro {
+            border-color: rgba(212, 165, 116, 0.3);
+            background: rgba(212, 165, 116, 0.04);
+        }
+
+        .pricing-card.pro::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold), transparent);
+        }
+
+        .pricing-tier {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .pricing-tier.free { color: var(--text-muted); }
+        .pricing-tier.pro-label { color: var(--gold); }
+
+        .pricing-price {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: var(--text-light);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .pricing-price-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .pricing-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .pricing-check { color: var(--green); font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
+        .pricing-check.pro { color: var(--gold); }
+
+        /* ── Permissions / Scopes ── */
+        .permissions-table {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dark);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .permissions-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .permissions-table th {
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-dark);
+            background: rgba(255,255,255,0.02);
+        }
+
+        .permissions-table td {
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-subtle);
+            vertical-align: top;
+        }
+
+        .permissions-table tr:last-child td { border-bottom: none; }
+
+        .scope-badge {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .scope-reason { line-height: 1.5; }
+
+        /* ── Support / Contact ── */
+        .support-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 560px) {
+            .support-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .support-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dark);
+            border-radius: 10px;
+            padding: 20px 24px;
+        }
+
+        .support-card-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .support-card-link {
+            font-size: 0.9rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .support-card-link:hover { text-decoration: underline; }
+
+        .support-card-text {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* ── Screenshots ── */
+        .screenshots-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 560px) {
+            .screenshots-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .screenshot-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dark);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .screenshot-img {
+            width: 100%;
+            aspect-ratio: 16/10;
+            object-fit: cover;
+            display: block;
+            background: #1A1D2E;
+        }
+
+        .screenshot-caption {
+            padding: 12px 16px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-align: center;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .screenshot-placeholder {
+            width: 100%;
+            aspect-ratio: 16/10;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            padding: 16px;
+        }
+
+        .screenshot-placeholder-icon { font-size: 1.5rem; line-height: 1; }
+
+        .screenshot-caption-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 10px 16px;
+            background: rgba(255,255,255,0.02);
+        }
+
+        /* ── FAQ / Additional Info ── */
+        .info-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 560px) {
+            .info-cards { grid-template-columns: 1fr 1fr; }
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dark);
+            border-radius: 10px;
+            padding: 20px 24px;
+        }
+
+        .info-card-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .info-card-body {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+
+        /* ── Footer ── */
+        footer {
+            border-top: 1px solid var(--border-dark);
+            padding: 32px 0;
+        }
+
+        .footer-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .footer-logo {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-light);
+            letter-spacing: -0.03em;
+            text-decoration: none;
+        }
+
+        .footer-logo .logo-accent { color: var(--accent); }
+
+        .footer-tagline {
+            font-size: 0.78rem;
+            color: #52525B;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            font-size: 0.78rem;
+            color: #52525B;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--text-light); }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            .app-header { flex-direction: column; gap: 20px; }
+            .stats-row { gap: 20px; }
+            .footer-inner { flex-direction: column; text-align: center; }
+            .footer-brand { flex-direction: column; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav aria-label="Site navigation">
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <img src="/logo.svg" alt="" width="24" height="24" aria-hidden="true">
+                Pact<span class="logo-accent">.</span>
+            </a>
+            <span class="nav-badge">Slack App Directory</span>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+
+            <!-- App Header -->
+            <div class="app-header">
+                <div class="app-icon-wrap">
+                    <div class="app-icon-fallback" role="img" aria-label="Pact app icon">
+                        <img src="/logo.svg" alt="Pact" width="80" height="80" style="border-radius:18px">
+                    </div>
+                </div>
+                <div class="app-meta">
+                    <p class="app-category">Productivity</p>
+                    <h1 class="app-name">Pact</h1>
+                    <p class="app-tagline">Turn casual Slack promises into tracked commitments. Both people see it. Both get reminded. Nothing slips through.</p>
+                    <a href="https://slack.com/oauth/v2/authorize?client_id=507133550992.10982980524448&scope=commands,chat:write,im:write,im:read,im:history,users:read,reactions:read,channels:history,groups:history,mpim:history&redirect_uri=https%3A%2F%2Fmakepact.co%2Fslack%2Foauth%2Fcallback&user_scope="
+                       class="app-install-btn"
+                       aria-label="Add Pact to Slack">
+                        <img src="https://platform.slack-edge.com/img/add_to_slack.png"
+                             srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"
+                             alt="Add to Slack" width="139" height="40">
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="stats-row">
+                <div class="stat-item">
+                    <span class="stat-value">Free</span>
+                    <span class="stat-label">Pricing</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">No</span>
+                    <span class="stat-label">Credit Card</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">~2 min</span>
+                    <span class="stat-label">Setup</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">1</span>
+                    <span class="stat-label">Workspace</span>
+                </div>
+            </div>
+
+            <!-- About -->
+            <div class="section">
+                <h2 class="section-title">About</h2>
+                <div class="description">
+                    <p><strong>Pact</strong> turns your team's casual Slack promises into accountable, tracked commitments. When someone says "I'll get that to you Friday," Pact makes sure Friday actually happens.</p>
+                    <p>Create a pact with one command — <code>/pact</code>, a 🤝 emoji reaction, or right-click → "Create a pact" — and both parties get a confirmation instantly. From there, Pact handles the lifecycle automatically: reminders in the 24 hours before due date, overdue nudges, and a 🎉 when it's done.</p>
+                    <p>No spreadsheets. No follow-up threads. No wondering if it happened.</p>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="section">
+                <h2 class="section-title">Features</h2>
+                <div class="features-grid">
+
+                    <div class="feature-item">
+                        <span class="feature-icon">⚡</span>
+                        <div class="feature-name">Multiple creation methods</div>
+                        <div class="feature-desc">/pact command, 🤝 emoji reaction, or right-click any message to create a pact. Works for DMs, channels, and threads.</div>
+                    </div>
+
+                    <div class="feature-item">
+                        <span class="feature-icon">🔔</span>
+                        <div class="feature-name">Smart reminders</div>
+                        <div class="feature-desc">Both parties get a DM reminder 24 hours before the due date. No manual chasing required.</div>
+                    </div>
+
+                    <div class="feature-item">
+                        <span class="feature-icon">⏰</span>
+                        <div class="feature-name">Overdue nudges</div>
+                        <div class="feature-desc">If a commitment goes past due, Pact nudges both people to reschedule or close it out.</div>
+                    </div>
+
+                    <div class="feature-item">
+                        <span class="feature-icon">✅</span>
+                        <div class="feature-name">/done command</div>
+                        <div class="feature-desc">Close pacts with /done, the ✅ emoji, or a "done" reply in the thread. Fuzzy matching handles typos.</div>
+                    </div>
+
+                    <div class="feature-item">
+                        <span class="feature-icon">🏠</span>
+                        <div class="feature-name">Home Tab dashboard</div>
+                        <div class="feature-desc">Active pacts, overdue items, streak count, and quick-create — all in one view inside Slack.</div>
+                    </div>
+
+                    <div class="feature-item">
+                        <span class="feature-icon">📋</span>
+                        <div class="feature-name">Daily &amp; weekly digests</div>
+                        <div class="feature-desc">Morning summary of everything open, due soon, or overdue. Configurable per user.</div>
+                    </div>
+
+                    <div class="feature-item">
+                        <span class="feature-icon">🔄</span>
+                        <div class="feature-name">Recurring pacts</div>
+                        <div class="feature-desc">Set daily, weekly, or custom cadences. The next instance auto-creates when you close the current one.</div>
+                    </div>
+
+                    <div class="feature-item">
+                        <span class="feature-icon">🔥</span>
+                        <div class="feature-name">Commitment streaks</div>
+                        <div class="feature-desc">Track your on-time completion rate. Milestones at 7, 30, and 100 consecutive days. Share your card.</div>
+                    </div>
+
+                    <div class="feature-item">
+                        <span class="feature-icon">📅</span>
+                        <div class="feature-name">Reschedule proposals</div>
+                        <div class="feature-desc">Either party can propose a new date — the other accepts, declines, or counters.</div>
+                    </div>
+
+                    <div class="feature-item">
+                        <span class="feature-icon">🤖</span>
+                        <div class="feature-name">AI commitment detection <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--gold);background:rgba(212,165,116,0.12);border:1px solid rgba(212,165,116,0.25);border-radius:3px;padding:1px 5px;margin-left:4px;vertical-align:middle">Pro</span></div>
+                        <div class="feature-desc">AI spots casual commitments in channels and suggests creating a formal pact. Snooze per channel.</div>
+                    </div>
+
+                    <div class="feature-item">
+                        <span class="feature-icon">⚙️</span>
+                        <div class="feature-name">Workflow Builder steps <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--gold);background:rgba(212,165,116,0.12);border:1px solid rgba(212,165,116,0.25);border-radius:3px;padding:1px 5px;margin-left:4px;vertical-align:middle">Pro</span></div>
+                        <div class="feature-desc">Trigger pact creation from any Slack workflow automation — pipelines, standups, deployments.</div>
+                    </div>
+
+                    <div class="feature-item">
+                        <span class="feature-icon">🔗</span>
+                        <div class="feature-name">Tracker sync <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--gold);background:rgba(212,165,116,0.12);border:1px solid rgba(212,165,116,0.25);border-radius:3px;padding:1px 5px;margin-left:4px;vertical-align:middle">Pro</span></div>
+                        <div class="feature-desc">Sync completed pacts to Linear, Notion, or Asana automatically.</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Pricing -->
+            <div class="section">
+                <h2 class="section-title">Pricing</h2>
+                <div class="pricing-grid">
+                    <div class="pricing-card free">
+                        <div class="pricing-tier free">Free</div>
+                        <div class="pricing-price">$0</div>
+                        <div class="pricing-price-sub">Forever, no credit card</div>
+                        <ul class="pricing-features">
+                            <li><span class="pricing-check">✓</span> /pact, /pacts, /done commands</li>
+                            <li><span class="pricing-check">✓</span> 🤝 emoji &amp; message shortcut</li>
+                            <li><span class="pricing-check">✓</span> DM reminders for both parties</li>
+                            <li><span class="pricing-check">✓</span> Daily &amp; weekly digest</li>
+                            <li><span class="pricing-check">✓</span> Home Tab dashboard</li>
+                            <li><span class="pricing-check">✓</span> Commitment streaks &amp; milestones</li>
+                            <li><span class="pricing-check">✓</span> 100 active pacts per workspace</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-card pro">
+                        <div class="pricing-tier pro-label">Pro</div>
+                        <div class="pricing-price">$10</div>
+                        <div class="pricing-price-sub">per month, whole workspace</div>
+                        <ul class="pricing-features">
+                            <li><span class="pricing-check">✓</span> Everything in Free</li>
+                            <li><span class="pricing-check">✓</span> Unlimited active pacts</li>
+                            <li><span class="pricing-check pro">★</span> AI commitment detection</li>
+                            <li><span class="pricing-check pro">★</span> Workflow Builder steps</li>
+                            <li><span class="pricing-check pro">★</span> Linear / Notion / Asana sync</li>
+                            <li><span class="pricing-check pro">★</span> Priority support</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screenshots -->
+            <div class="section">
+                <h2 class="section-title">Screenshots</h2>
+                <div class="screenshots-grid">
+
+                    <div class="screenshot-item">
+                        <div class="screenshot-placeholder" aria-label="Screenshot: Pact creation modal">
+                            <span class="screenshot-placeholder-icon">🤝</span>
+                            <span style="font-size:0.75rem;font-weight:600;color:var(--text-muted)">Pact creation modal</span>
+                        </div>
+                        <div class="screenshot-caption-label">Create a pact — what, who, when</div>
+                    </div>
+
+                    <div class="screenshot-item">
+                        <div class="screenshot-placeholder" aria-label="Screenshot: Home Tab dashboard">
+                            <span class="screenshot-placeholder-icon">🏠</span>
+                            <span style="font-size:0.75rem;font-weight:600;color:var(--text-muted)">Home Tab dashboard</span>
+                        </div>
+                        <div class="screenshot-caption-label">Active pacts, streak, quick-create</div>
+                    </div>
+
+                    <div class="screenshot-item">
+                        <div class="screenshot-placeholder" aria-label="Screenshot: Commitment streak card">
+                            <span class="screenshot-placeholder-icon">🔥</span>
+                            <span style="font-size:0.75rem;font-weight:600;color:var(--text-muted)">Streak share card</span>
+                        </div>
+                        <div class="screenshot-caption-label">Share your milestone — 7 / 30 / 100 days</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Permissions -->
+            <div class="section">
+                <h2 class="section-title">Permissions</h2>
+                <div class="permissions-table" role="table" aria-label="Slack app permissions">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Scope</th>
+                                <th scope="col">Why we need it</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="scope-badge">commands</span></td>
+                                <td class="scope-reason">Respond to <code>/pact</code>, <code>/done</code>, <code>/pacts</code>, and other slash commands entered by users.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="scope-badge">chat:write</span></td>
+                                <td class="scope-reason">Post pact creation confirmations, reminders, and completion celebrations in channels and DMs.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="scope-badge">im:write</span></td>
+                                <td class="scope-reason">Open a direct message with a user when they install the app for the first time (welcome DM).</td>
+                            </tr>
+                            <tr>
+                                <td><span class="scope-badge">im:read</span></td>
+                                <td class="scope-reason">Read the content of DMs to identify emoji reactions (✅ / 🤝) that close or create pacts.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="scope-badge">im:history</span></td>
+                                <td class="scope-reason">Look back through DM history to find existing pacts when a user types <code>/done</code>.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="scope-badge">users:read</span></td>
+                                <td class="scope-reason">Look up user names and timezones to personalize reminder messages and digests.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="scope-badge">reactions:read</span></td>
+                                <td class="scope-reason">Detect 🤝 reactions on messages (pact creation) and ✅ reactions (completion) in channels and DMs.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="scope-badge">channels:history</span></td>
+                                <td class="scope-reason">Scan channel messages for pact creation via right-click "Create a pact" shortcut and AI commitment detection (Pro).</td>
+                            </tr>
+                            <tr>
+                                <td><span class="scope-badge">groups:history</span></td>
+                                <td class="scope-reason">Same as channels — support for private Slack channels when Pact is used there.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="scope-badge">mpim:history</span></td>
+                                <td class="scope-reason">Support pact creation and tracking in multi-person DMs where commitments are made.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Support -->
+            <div class="section">
+                <h2 class="section-title">Support</h2>
+                <div class="support-grid">
+
+                    <div class="support-card">
+                        <p class="support-card-label">Website</p>
+                        <a href="https://makepact.co" class="support-card-link">makepact.co</a>
+                    </div>
+
+                    <div class="support-card">
+                        <p class="support-card-label">Support email</p>
+                        <a href="mailto:hello@makepact.co" class="support-card-link">hello@makepact.co</a>
+                        <p class="support-card-text" style="margin-top:8px">We typically respond within 24 hours.</p>
+                    </div>
+
+                    <div class="support-card">
+                        <p class="support-card-label">Privacy Policy</p>
+                        <a href="/privacy" class="support-card-link">makepact.co/privacy</a>
+                    </div>
+
+                    <div class="support-card">
+                        <p class="support-card-label">Terms of Service</p>
+                        <a href="/terms" class="support-card-link">makepact.co/terms</a>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Additional Info -->
+            <div class="section">
+                <h2 class="section-title">Additional Info</h2>
+                <div class="info-cards">
+
+                    <div class="info-card">
+                        <p class="info-card-title">Works with</p>
+                        <p class="info-card-body">All Slack workspaces. Pro features (AI detection, Workflow Builder, tracker sync) require a Pro subscription.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <p class="info-card-title">Data handling</p>
+                        <p class="info-card-body">Pact stores pact text, due dates, user IDs, and Slack workspace IDs. Slack message content is read to detect emoji reactions and create pacts — it is not stored long-term beyond what's needed for pact tracking.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <p class="info-card-title">Install limit</p>
+                        <p class="info-card-body">One Pact installation per Slack workspace. For multi-workspace management, use the Billing Portal from within Slack (<code>/pact billing</code>).</p>
+                    </div>
+
+                    <div class="info-card">
+                        <p class="info-card-title">Version</p>
+                        <p class="info-card-body">Always up to date. Pact is deployed continuously via Polsia — you're always running the latest version.</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer aria-label="Site footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <a href="/" class="footer-logo">Pact<span class="logo-accent">.</span></a>
+                <span class="footer-tagline">makepact.co</span>
+            </div>
+            <div class="footer-links">
+                <a href="/privacy">Privacy</a>
+                <a href="/terms">Terms</a>
+                <a href="/support">Support</a>
+                <a href="/slack-app-directory">App Directory</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upgrade to Pro — Pact</title>
+    <link rel="icon" type="image/svg+xml" href="/logo.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo-36.png">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --navy: #1B2A4A;
+            --accent: #F59E0B;
+            --accent-hover: #D97706;
+            --bg: #09090B;
+            --text: #E4E4E7;
+            --text-muted: #71717A;
+            --border: rgba(255,255,255,0.08);
+            --green: #10B981;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 48px 40px;
+            max-width: 480px;
+            width: 100%;
+        }
+        .logo-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 32px;
+        }
+        .logo-row img { width: 32px; height: 32px; }
+        .logo-row span {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text);
+        }
+        .logo-row .accent { color: var(--accent); }
+        h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+            text-align: center;
+            color: var(--text);
+        }
+        .subtitle {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 28px;
+            text-align: center;
+        }
+        .plan-badge {
+            display: inline-block;
+            background: rgba(245,158,11,0.12);
+            border: 1px solid rgba(245,158,11,0.3);
+            color: var(--accent);
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .badge-row { text-align: center; }
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus {
+            border-color: var(--accent);
+        }
+        input[type="text"]::placeholder {
+            color: var(--text-muted);
+        }
+        .field-hint {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+        .btn-primary {
+            display: block;
+            width: 100%;
+            padding: 14px 20px;
+            margin-top: 24px;
+            background: var(--accent);
+            color: #000;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-align: center;
+        }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .error-msg {
+            display: none;
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.3);
+            color: #F87171;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-top: 16px;
+            text-align: center;
+        }
+        .match-info {
+            display: none;
+            background: rgba(16,185,129,0.08);
+            border: 1px solid rgba(16,185,129,0.25);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: var(--green);
+            text-align: center;
+        }
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+        .skip-link {
+            display: block;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .skip-link:hover { color: var(--text); }
+        .help-text {
+            margin-top: 20px;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            display: none;
+        }
+        .help-toggle {
+            display: block;
+            text-align: center;
+            color: var(--accent);
+            font-size: 0.8rem;
+            margin-top: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+        .help-toggle:hover { text-decoration: underline; }
+        @media (max-width: 520px) {
+            .card { padding: 32px 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo-row">
+            <img src="/logo-36.png" alt="Pact" />
+            <span>Pact <span class="accent">Pro</span></span>
+        </div>
+
+        <div class="badge-row">
+            <div class="plan-badge">$10 / month</div>
+        </div>
+
+        <h1>Which workspace are you upgrading?</h1>
+        <p class="subtitle" id="subtitle">Enter your Slack workspace name so we can link your Pro subscription.</p>
+
+        <div>
+            <label for="workspaceInput">Slack workspace name</label>
+            <input type="text" id="workspaceInput" placeholder="e.g. My Company" autocomplete="off" spellcheck="false" />
+            <div class="field-hint">This is the name shown at the top of your Slack sidebar.</div>
+        </div>
+
+        <div class="match-info" id="matchInfo"></div>
+        <div class="error-msg" id="errorMsg"></div>
+
+        <button class="btn-primary" id="continueBtn" onclick="lookupAndRedirect()">
+            Continue to checkout →
+        </button>
+
+        <button class="help-toggle" id="helpToggle" onclick="toggleHelp()">Can't find your workspace name?</button>
+        <div class="help-text" id="helpText">
+            <strong>Option 1:</strong> Open Slack, look at the top-left of the sidebar — that's your workspace name.<br><br>
+            <strong>Option 2:</strong> If you know your Slack workspace ID (starts with <code style="color:var(--accent)">T</code>), enter it directly above.<br><br>
+            <strong>Option 3:</strong> <a href="/api/checkout?skip_lookup=1" style="color:var(--accent)">Skip this step</a> — you'll enter your details after payment instead.
+        </div>
+
+        <div class="divider">or</div>
+        <a href="/api/checkout?skip_lookup=1" class="skip-link">
+            Skip — I'll activate manually after payment
+        </a>
+    </div>
+
+    <script>
+        const input = document.getElementById('workspaceInput');
+        const btn = document.getElementById('continueBtn');
+        const errorMsg = document.getElementById('errorMsg');
+        const matchInfo = document.getElementById('matchInfo');
+
+        let matchedTeamId = null;
+        let debounceTimer = null;
+
+        input.addEventListener('input', function() {
+            matchedTeamId = null;
+            matchInfo.style.display = 'none';
+            errorMsg.style.display = 'none';
+            btn.textContent = 'Continue to checkout \u2192';
+
+            const val = this.value.trim();
+            if (!val || val.length < 2) return;
+
+            // If user typed a team_id directly, accept it
+            if (val.startsWith('T') && val.length >= 6 && /^T[A-Z0-9]+$/.test(val)) {
+                matchedTeamId = val;
+                matchInfo.innerHTML = '\u2714 Workspace ID detected: <strong>' + escapeHtml(val) + '</strong>';
+                matchInfo.style.display = 'block';
+                return;
+            }
+
+            // Debounced lookup by name
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => lookupByName(val), 400);
+        });
+
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                lookupAndRedirect();
+            }
+        });
+
+        async function lookupByName(name) {
+            try {
+                const res = await fetch('/api/checkout/lookup?q=' + encodeURIComponent(name));
+                if (!res.ok) {
+                    matchInfo.style.display = 'none';
+                    return;
+                }
+                const data = await res.json();
+                if (data.team_id) {
+                    matchedTeamId = data.team_id;
+                    matchInfo.innerHTML = '\u2714 Found: <strong>' + escapeHtml(data.team_name) + '</strong>';
+                    matchInfo.style.display = 'block';
+                    errorMsg.style.display = 'none';
+                }
+            } catch (_) { /* silent — user can still proceed */ }
+        }
+
+        async function lookupAndRedirect() {
+            const val = input.value.trim();
+            if (!val) {
+                showError('Please enter your Slack workspace name.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Looking up workspace\u2026';
+            errorMsg.style.display = 'none';
+
+            // If we already matched, redirect immediately
+            if (matchedTeamId) {
+                window.location.href = '/api/checkout?team_id=' + encodeURIComponent(matchedTeamId);
+                return;
+            }
+
+            // Try a final lookup
+            try {
+                const res = await fetch('/api/checkout/lookup?q=' + encodeURIComponent(val));
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.team_id) {
+                        window.location.href = '/api/checkout?team_id=' + encodeURIComponent(data.team_id);
+                        return;
+                    }
+                }
+            } catch (_) { /* fall through */ }
+
+            showError('No workspace found matching "' + escapeHtml(val) + '". Make sure Pact is installed in your Slack workspace first.');
+            btn.disabled = false;
+            btn.textContent = 'Continue to checkout \u2192';
+        }
+
+        function toggleHelp() {
+            const el = document.getElementById('helpText');
+            const toggle = document.getElementById('helpToggle');
+            if (el.style.display === 'block') {
+                el.style.display = 'none';
+                toggle.textContent = "Can't find your workspace name?";
+            } else {
+                el.style.display = 'block';
+                toggle.textContent = 'Hide help';
+            }
+        }
+
+        function showError(msg) {
+            errorMsg.textContent = msg;
+            errorMsg.style.display = 'block';
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

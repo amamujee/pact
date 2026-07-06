@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Activated — Pact</title>
+    <link rel="icon" type="image/svg+xml" href="/logo.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo-36.png">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --navy: #1B2A4A;
+            --accent: #F59E0B;
+            --accent-hover: #D97706;
+            --bg: #09090B;
+            --text: #E4E4E7;
+            --text-muted: #71717A;
+            --border: rgba(255,255,255,0.08);
+            --green: #10B981;
+            --green-light: #34D399;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 48px 40px;
+            max-width: 540px;
+            width: 100%;
+            text-align: center;
+        }
+        .logo-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 32px;
+        }
+        .logo-row img { width: 32px; height: 32px; }
+        .logo-row span {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text);
+        }
+        .logo-row .accent { color: var(--accent); }
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(16,185,129,0.12);
+            border: 2px solid rgba(16,185,129,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 1.8rem;
+        }
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+        .subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+        .plan-badge {
+            display: inline-block;
+            background: rgba(245,158,11,0.12);
+            border: 1px solid rgba(245,158,11,0.3);
+            color: var(--accent);
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 28px;
+        }
+
+        /* Detected workspace callout */
+        .workspace-detected {
+            background: rgba(16,185,129,0.06);
+            border: 1px solid rgba(16,185,129,0.2);
+            border-radius: 10px;
+            padding: 14px 18px;
+            text-align: left;
+            margin-bottom: 24px;
+            display: none;
+        }
+        .workspace-detected-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--green-light);
+            margin-bottom: 4px;
+        }
+        .workspace-detected-id {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.95rem;
+            color: var(--text);
+            font-weight: 600;
+        }
+        .workspace-detected-sub {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .form-section {
+            text-align: left;
+        }
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 8px;
+        }
+        .form-input:focus {
+            border-color: var(--accent);
+        }
+        .form-hint {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .form-hint code {
+            background: rgba(255,255,255,0.08);
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-family: 'SF Mono', monospace;
+            font-size: 0.85em;
+            color: var(--accent);
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 14px 24px;
+            background: var(--accent);
+            color: #09090B;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.2s, transform 0.15s;
+            letter-spacing: -0.01em;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .msg {
+            margin-top: 16px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            display: none;
+        }
+        .msg.success {
+            background: rgba(16,185,129,0.08);
+            border: 1px solid rgba(16,185,129,0.2);
+            color: #34D399;
+        }
+        .msg.error {
+            background: rgba(239,68,68,0.08);
+            border: 1px solid rgba(239,68,68,0.2);
+            color: #F87171;
+        }
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 28px 0;
+        }
+
+        /* Workspace ID fallback toggle */
+        .fallback-toggle {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .fallback-toggle button {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 0.82rem;
+            cursor: pointer;
+            font-family: inherit;
+            text-decoration: underline;
+            padding: 0;
+        }
+        .fallback-toggle button:hover { color: var(--accent-hover); }
+
+        /* Collapsible workspace ID section */
+        .workspace-id-section {
+            display: none;
+            text-align: left;
+        }
+
+        /* Help block */
+        .help-block {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px 18px;
+            text-align: left;
+            margin-bottom: 24px;
+        }
+        .help-block-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+        .help-block-body {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .help-block-body code {
+            background: rgba(255,255,255,0.08);
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-family: 'SF Mono', monospace;
+            font-size: 0.85em;
+            color: var(--accent);
+        }
+        .url-example {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 8px;
+            font-family: 'SF Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            word-break: break-all;
+            line-height: 1.5;
+        }
+        .url-example .highlight { color: var(--accent); font-weight: 700; }
+
+        .alt-section {
+            text-align: center;
+        }
+        .alt-section p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .alt-section a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.82rem;
+        }
+        .alt-section a:hover { text-decoration: underline; }
+        .slack-steps {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-top: 12px;
+            text-align: left;
+        }
+        .slack-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 6px 0;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        .slack-step-num {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(245,158,11,0.15);
+            color: var(--accent);
+            font-size: 0.7rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        #activatedState { display: none; }
+        .activated-msg {
+            text-align: center;
+        }
+        .activated-msg h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #34D399;
+        }
+        .activated-msg p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 24px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+        @media (max-width: 560px) {
+            .card { padding: 32px 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo-row">
+            <img src="/logo.svg" alt="Pact">
+            <span>Pact<span class="accent">.</span></span>
+        </div>
+
+        <!-- Payment success / pending activation state -->
+        <div id="pendingState">
+            <div class="success-icon">🎉</div>
+            <h1>Payment successful!</h1>
+            <p class="subtitle" id="planSubtitle">Your Pro subscription is ready. We're activating it now&hellip;</p>
+            <div class="plan-badge" id="planBadge">Pro Plan</div>
+
+            <!-- Detected workspace callout (shown when cookie is found) -->
+            <div class="workspace-detected" id="workspaceDetected">
+                <div class="workspace-detected-label">✓ Workspace detected</div>
+                <div class="workspace-detected-id" id="workspaceDetectedId"></div>
+                <div class="workspace-detected-sub">Activating automatically&hellip;</div>
+            </div>
+
+            <!-- Manual activation form (shown when auto-activation fails) -->
+            <div class="form-section" id="manualForm" style="display:none;">
+
+                <!-- Primary: email-based link -->
+                <div id="emailSection">
+                    <label class="form-label" for="emailInput">Billing email</label>
+                    <input
+                        type="email"
+                        id="emailInput"
+                        class="form-input"
+                        placeholder="you@company.com"
+                        autocomplete="email"
+                    >
+                    <p class="form-hint" style="margin-bottom:20px">
+                        Enter the email you used at checkout. We'll send your receipt and link your Pro subscription.
+                    </p>
+                </div>
+
+                <!-- Workspace ID field (hidden by default, shown as fallback) -->
+                <div class="workspace-id-section" id="workspaceIdSection">
+                    <label class="form-label" for="teamIdInput">Slack Workspace ID</label>
+                    <input
+                        type="text"
+                        id="teamIdInput"
+                        class="form-input"
+                        placeholder="e.g. T01ABC23DEF"
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+                    <p class="form-hint">
+                        Starts with <code>T</code>. Find it in the Slack URL or type <code>/pact</code> in Slack.
+                    </p>
+                </div>
+
+                <div class="fallback-toggle" id="fallbackToggle">
+                    Don't have your email? <button type="button" onclick="showWorkspaceIdField()">Enter workspace ID instead</button>
+                </div>
+
+                <!-- Workspace ID Help block -->
+                <div class="help-block" id="workspaceHelpBlock" style="display:none;">
+                    <div class="help-block-title">Where to find your Workspace ID</div>
+                    <div class="help-block-body">
+                        A Slack Workspace ID starts with <code>T</code> (e.g. <code>T12345678</code>). The fastest way: open Slack in a browser, click any channel, and look at the URL.
+                        <div class="url-example">
+                            app.slack.com/client/<span class="highlight">T01ABC23DEF</span>/C99XYZ
+                        </div>
+                        The segment starting with <code>T</code> is your workspace ID. You can also type <code>/pact</code> in Slack — it appears in the confirmation.
+                    </div>
+                </div>
+
+                <button class="btn-primary" id="activateBtn" onclick="activateSubscription()">
+                    Activate subscription
+                </button>
+                <div class="msg success" id="successMsg"></div>
+                <div class="msg error" id="errorMsg"></div>
+            </div>
+
+            <hr class="divider">
+            <div class="alt-section">
+                <p>Already installed Pact in Slack? You can also activate from within Slack:</p>
+                <div class="slack-steps">
+                    <div class="slack-step">
+                        <span class="slack-step-num">1</span>
+                        <span>Open a DM with Pact in Slack</span>
+                    </div>
+                    <div class="slack-step">
+                        <span class="slack-step-num">2</span>
+                        <span>Type <code style="background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:3px;color:#F59E0B;font-family:'SF Mono',monospace;">/pact upgrade</code> and follow the prompts</span>
+                    </div>
+                    <div class="slack-step">
+                        <span class="slack-step-num">3</span>
+                        <span>Your plan activates immediately</span>
+                    </div>
+                </div>
+                <p style="margin-top:16px">
+                    Questions? <a href="mailto:hello@makepact.co">hello@makepact.co</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Activated state -->
+        <div id="activatedState">
+            <div class="success-icon" style="background:rgba(245,158,11,0.12);border-color:rgba(245,158,11,0.3);font-size:1.8rem">⚡</div>
+            <div class="activated-msg">
+                <h2 id="activatedTitle">You're all set!</h2>
+                <p id="activatedBody">Your workspace is now on Pro. Pact limits have been upgraded — go make some pacts.</p>
+                <a href="https://makepact.co" class="back-link">← Back to makepact.co</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Parse URL params
+        const params = new URLSearchParams(window.location.search);
+        const plan = 'pro';
+        const sessionId = params.get('checkout_session_id') || params.get('session_id') || '';
+
+        // Stripe session data (populated by checkAutoActivation, used by manual form too)
+        let _sessionInfo = { email: null, team_id: null, team_name: null, user_id: null };
+
+        // Read / clear cookie helpers
+        function readCookie(name) {
+          const match = document.cookie.split('; ').find(r => r.startsWith(name + '='));
+          return match ? decodeURIComponent(match.split('=').slice(1).join('=')) : '';
+        }
+        function clearCookie(name) {
+          document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+        }
+
+        // Show workspace detected callout (before activation resolves)
+        function showWorkspaceDetected(teamId) {
+          const el = document.getElementById('workspaceDetected');
+          document.getElementById('workspaceDetectedId').textContent = teamId;
+          el.style.display = 'block';
+          document.getElementById('planSubtitle').textContent = 'Your Pro subscription is ready. Activating now\u2026';
+        }
+
+        function showActivated(teamName) {
+          document.getElementById('pendingState').style.display = 'none';
+          document.getElementById('activatedState').style.display = 'block';
+          document.getElementById('activatedTitle').textContent = 'Pro plan activated!';
+          document.getElementById('activatedBody').textContent =
+            'Pro activated for ' + (teamName || 'your workspace') + '. Unlimited pacts + tracker integrations are ready. Go back to Slack and start building.';
+        }
+
+        // Show the manual form with email as default (workspace ID hidden)
+        function showManualForm() {
+          document.getElementById('workspaceDetected').style.display = 'none';
+          document.getElementById('planSubtitle').textContent =
+            'Your Pro subscription is ready. Enter your details below to complete activation.';
+          document.getElementById('manualForm').style.display = 'block';
+        }
+
+        // Toggle to show workspace ID field (fallback)
+        function showWorkspaceIdField() {
+          document.getElementById('workspaceIdSection').style.display = 'block';
+          document.getElementById('workspaceHelpBlock').style.display = 'block';
+          document.getElementById('fallbackToggle').style.display = 'none';
+        }
+
+        // Primary path: auto-activate using session data + cookie context
+        async function checkAutoActivation() {
+
+          // 1. Check if webhook already fired (requires sessionId)
+          if (sessionId) {
+            try {
+              const statusRes = await fetch('/api/billing/session-status?session_id=' + encodeURIComponent(sessionId));
+              if (statusRes.ok) {
+                const statusData = await statusRes.json();
+                if (statusData.activated) {
+                  clearCookie('pact_checkout_ctx');
+                  showActivated(statusData.team_name);
+                  return;
+                }
+              }
+            } catch (_) { /* fall through */ }
+
+            // 2. Fetch Stripe session details (email + workspace from client_reference_id)
+            try {
+              const infoRes = await fetch('/api/billing/session-info?session_id=' + encodeURIComponent(sessionId));
+              if (infoRes.ok) {
+                const info = await infoRes.json();
+                _sessionInfo.email = info.email || null;
+                _sessionInfo.team_id = info.team_id || null;
+                _sessionInfo.team_name = info.team_name || null;
+                _sessionInfo.user_id = info.user_id || null;
+
+                // If already activated (race: webhook completed between our two calls)
+                if (info.activated) {
+                  clearCookie('pact_checkout_ctx');
+                  showActivated(_sessionInfo.team_name);
+                  return;
+                }
+              }
+            } catch (_) { /* fall through */ }
+          }
+
+          // 3. Merge cookie context with Stripe session data
+          const checkoutCtx = readCookie('pact_checkout_ctx');
+          let cookieTeamId = null;
+          let cookieUserId = null;
+          if (checkoutCtx) {
+            const parts = checkoutCtx.split('__');
+            cookieTeamId = parts[0] || null;
+            cookieUserId = parts[1] || null;
+          }
+
+          // Best available team_id: cookie first (set right before redirect), then Stripe session
+          const bestTeamId = (cookieTeamId && cookieTeamId.startsWith('T') ? cookieTeamId : null)
+                          || (_sessionInfo.team_id && _sessionInfo.team_id.startsWith('T') ? _sessionInfo.team_id : null);
+          const bestUserId = cookieUserId || _sessionInfo.user_id;
+
+          // 4. Auto-activate if we have a workspace
+          if (bestTeamId) {
+            showWorkspaceDetected(_sessionInfo.team_name || bestTeamId);
+            try {
+              const activateRes = await fetch('/api/subscription/activate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  team_id: bestTeamId,
+                  plan: 'pro',
+                  session_id: sessionId || undefined,
+                  email: _sessionInfo.email || undefined,
+                  user_id: bestUserId || undefined,
+                }),
+              });
+              if (activateRes.ok || activateRes.status === 409) {
+                const data = activateRes.ok ? await activateRes.json() : { team_name: _sessionInfo.team_name };
+                clearCookie('pact_checkout_ctx');
+                showActivated(data.team_name || _sessionInfo.team_name || bestTeamId);
+                return;
+              }
+            } catch (_) { /* fall through to manual form */ }
+          }
+
+          // 5. Fall through — show manual form, pre-fill email from Stripe if available
+          showManualForm();
+          if (_sessionInfo.email) {
+            document.getElementById('emailInput').value = _sessionInfo.email;
+          }
+        }
+        checkAutoActivation();
+
+        async function activateSubscription() {
+            const teamIdEl = document.getElementById('teamIdInput');
+            const email = document.getElementById('emailInput').value.trim();
+            const teamId = teamIdEl ? teamIdEl.value.trim() : '';
+            const btn = document.getElementById('activateBtn');
+            const errorMsg = document.getElementById('errorMsg');
+
+            // Require email; workspace ID only required if the field is visible
+            const workspaceFieldVisible = document.getElementById('workspaceIdSection').style.display !== 'none';
+
+            if (!email || !email.includes('@')) {
+                showError('Please enter a valid email address.');
+                return;
+            }
+            if (workspaceFieldVisible && (!teamId || !teamId.startsWith('T'))) {
+                showError('Please enter a valid Slack workspace ID (starts with T).');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Activating...';
+            errorMsg.style.display = 'none';
+
+            // Recover workspace context from cookie or Stripe session
+            const ctx = readCookie('pact_checkout_ctx');
+            const cookieTeamId = ctx ? ctx.split('__')[0] : '';
+            const userId = ctx ? ctx.split('__')[1] : (_sessionInfo.user_id || undefined);
+            const resolvedTeamId = teamId || cookieTeamId || _sessionInfo.team_id || '';
+
+            if (!resolvedTeamId || !resolvedTeamId.startsWith('T')) {
+                showError('We couldn\'t detect your workspace. Please enter your Slack workspace ID.');
+                showWorkspaceIdField();
+                btn.disabled = false;
+                btn.textContent = 'Activate subscription';
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/subscription/activate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      team_id: resolvedTeamId,
+                      plan,
+                      session_id: sessionId,
+                      email,
+                      user_id: userId || undefined,
+                    })
+                });
+                const data = await res.json();
+
+                if (!res.ok && res.status !== 409) {
+                    showError(data.error || 'Activation failed. Please try again or email hello@makepact.co');
+                    btn.disabled = false;
+                    btn.textContent = 'Activate subscription';
+                    return;
+                }
+
+                clearCookie('pact_checkout_ctx');
+                showActivated(data.team_name || resolvedTeamId);
+
+            } catch (err) {
+                showError('Network error. Please try again.');
+                btn.disabled = false;
+                btn.textContent = 'Activate subscription';
+            }
+        }
+
+        function showError(msg) {
+            const errorMsg = document.getElementById('errorMsg');
+            errorMsg.textContent = msg;
+            errorMsg.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

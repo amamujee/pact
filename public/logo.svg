@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" role="img" aria-label="Pact logo — two linked rings representing sealed commitments">
+  <!-- Gold ring (left) — mutual agreement -->
+  <circle cx="35" cy="50" r="27" stroke="#E6B87A" stroke-width="8"/>
+  <!-- Navy ring (right) — sealed commitment -->
+  <circle cx="65" cy="50" r="27" stroke="#0F172E" stroke-width="8"/>
+  <!-- Checkmark: white halo for cross-background visibility, navy fill -->
+  <path d="M 43 51 L 49 57.5 L 59 43" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 43 51 L 49 57.5 L 59 43" stroke="#0F172E" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

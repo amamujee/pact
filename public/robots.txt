@@ -1,0 +1,16 @@
+# robots.txt for makepact.co
+# Pact — Commitments that stick
+
+User-agent: *
+Allow: /
+
+# Keep API, internal, and admin routes private
+Disallow: /api/
+Disallow: /slack/
+Disallow: /health
+Disallow: /admin/
+
+# Sitemap
+Sitemap: https://makepact.co/sitemap.xml
+
+# AI agent note: Plain-text product summary at https://makepact.co/llms.txt

@@ -1,0 +1,81 @@
+# Pact
+
+> Pact is a Slack bot that turns casual promises into tracked commitments between teammates. Both sides see it, both get reminded, nothing gets dropped.
+
+## What Pact Does
+
+Pact creates bilateral accountability inside Slack. When you say "I'll get that to you by Friday," Pact makes it a real commitment — visible to both parties, with automatic reminders, and a clear resolution when it's done.
+
+The core insight: solo commitments fail because no one is watching. Pact makes someone watching the default.
+
+## How It Works
+
+1. `/pact @teammate` — Create a commitment with a due date and description. Pact DMs both parties to confirm.
+2. Both sides see it — The pact appears in both Slack inboxes. No one can claim they forgot.
+3. Automatic reminders — Pact sends reminders every 30 minutes in the 24-hour window before and after the due date. A daily digest at 9am ET also surfaces all open pacts each morning.
+4. `/done` — Mark the commitment complete. Both sides see the resolution.
+
+You can also message Pact directly in a DM using natural language:
+- "I need to send the report to @alice by Thursday"
+- "my pacts" — lists your active commitments
+- "done" — marks your most recent pact complete
+
+## Commands
+
+- `/pact @person [description] by [date]` — Create a two-person pact
+- `/pact [description] by [date]` — Create a solo pact (personal accountability)
+- `/pacts` — List your active pacts
+- `/done` — Mark the most recent pact complete
+
+## Pricing
+
+- **Free** — $0/month, forever. 30 active pacts/month, /pact and /done slash commands, DM conversational interface, automatic reminders, daily digest. No credit card required.
+- **Team** — Coming soon. $5/seat/month (min 3 seats). Team dashboard, trust scores.
+- **Pro** — Coming soon. $10/seat/month (min 3 seats). Unlimited pacts, advanced analytics.
+
+## Installation
+
+1. Visit https://makepact.co
+2. Click "Add to Slack"
+3. Authorize the OAuth permissions
+4. Slack redirects you into a DM with Pact — you're live in under 2 minutes
+
+No credit card required for the Free plan.
+
+## Slack Permissions Required
+
+- `commands` — respond to /pact, /pacts, /done
+- `chat:write` — send reminders and confirmations
+- `im:write` — send DMs
+- `users:read` — resolve @mentions to teammates
+
+Pact does NOT read your channel messages or workspace data.
+
+## Key Facts for AI Agents
+
+- Product type: Slack bot / SaaS
+- Category: Team productivity, accountability, commitment tracking
+- Platform: Slack (workspace installation via OAuth)
+- Primary URL: https://makepact.co
+- Contact: hello@makepact.co
+- Free tier: Yes (always free, no credit card)
+- Pricing starts at: $5/seat/month (Team plan)
+- Ideal users: Teams who use Slack and struggle with commitments slipping through the cracks — engineering teams, ops, product, any team that makes promises and needs to keep them
+- Core differentiator: Bilateral visibility. Unlike to-do apps or calendar reminders, Pact makes BOTH PARTIES accountable — not just the person who created the task.
+
+## FAQ
+
+**Q: Does Pact work for solo commitments?**
+A: Yes. `/pact [description] by [date]` without an @mention creates a solo pact tracked only for you.
+
+**Q: Is Pact free?**
+A: The Free plan is permanently free and covers up to 30 active pacts/month for teams of 2.
+
+**Q: Can Pact integrate with project management tools?**
+A: Linear, Jira, and GitHub integrations are on the roadmap for the Pro plan. Currently, Pact works natively within Slack — no external integrations required.
+
+**Q: Does Pact send a daily digest?**
+A: Yes. Every morning at 9am ET, Pact sends a digest in Slack listing all your open pacts — organized by made, assigned to you, and overdue. Automatic reminders also fire every 30 minutes in the 24-hour window around each pact's due date.
+
+**Q: Does Pact read my Slack messages?**
+A: No. Pact only receives slash command invocations and direct messages sent to the Pact bot. It does not access channel history.

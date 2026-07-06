@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy — Pact</title>
+    <meta name="description" content="Privacy Policy for Pact, the Slack accountability bot. Learn how we collect, use, and protect your data.">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Privacy Policy — Pact">
+    <meta property="og:description" content="Privacy Policy for Pact, the Slack accountability bot. Learn how we collect, use, and protect your data.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://makepact.co/privacy">
+    <meta property="og:site_name" content="Pact">
+    <meta property="og:image" content="https://makepact.co/og-hero.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Privacy Policy — Pact">
+    <meta name="twitter:description" content="Privacy Policy for Pact. Learn how we collect, use, and protect your data.">
+    <meta name="twitter:image" content="https://makepact.co/og-hero.png">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://makepact.co/privacy">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤝</text></svg>">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-dark: #09090B;
+            --bg-surface: #111113;
+            --bg-card: #18181B;
+            --text-light: #F4F4F5;
+            --text-secondary: #A1A1AA;
+            --text-muted: #71717A;
+            --accent: #F59E0B;
+            --border-dark: rgba(255, 255, 255, 0.06);
+            --border-subtle: rgba(255, 255, 255, 0.04);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ── Navigation ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(9, 9, 11, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-dark);
+            padding: 16px 0;
+        }
+
+        .nav-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-light);
+            text-decoration: none;
+            letter-spacing: -0.03em;
+        }
+
+        .logo-accent { color: var(--accent); }
+
+        .nav-back {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-back:hover { color: var(--text-light); }
+
+        .nav-back svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* ── Main Content ── */
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 64px 24px 96px;
+        }
+
+        .page-header {
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border-dark);
+        }
+
+        .page-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .page-header h1 {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        .page-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* ── Section styles ── */
+        .policy-section {
+            margin-bottom: 48px;
+        }
+
+        .policy-section h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            color: var(--text-light);
+            padding-top: 8px;
+        }
+
+        .policy-section p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            line-height: 1.75;
+        }
+
+        .policy-section p:last-child { margin-bottom: 0; }
+
+        .policy-section ul {
+            list-style: none;
+            margin: 0 0 16px;
+            padding: 0;
+        }
+
+        .policy-section ul li {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.75;
+            padding: 6px 0 6px 20px;
+            position: relative;
+        }
+
+        .policy-section ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 15px;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+
+        .policy-section a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .policy-section a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── Highlight box ── */
+        .highlight-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dark);
+            border-left: 3px solid var(--accent);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 32px;
+        }
+
+        .highlight-box p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* ── Divider ── */
+        .section-divider {
+            border: none;
+            border-top: 1px solid var(--border-dark);
+            margin: 0 0 48px;
+        }
+
+        /* ── Footer ── */
+        footer {
+            padding: 40px 0;
+            background: var(--bg-dark);
+            border-top: 1px solid var(--border-dark);
+        }
+
+        .footer-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-light);
+            letter-spacing: -0.03em;
+            text-decoration: none;
+        }
+
+        .footer-logo .logo-accent { color: var(--accent); }
+
+        .footer-tagline {
+            font-size: 0.82rem;
+            color: #52525B;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            font-size: 0.82rem;
+            color: #71717A;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--text-light); }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            main { padding: 48px 20px 72px; }
+            .footer-inner { flex-direction: column; text-align: center; }
+            .footer-brand { flex-direction: column; gap: 8px; }
+            .footer-links { gap: 16px; flex-wrap: wrap; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav aria-label="Site navigation">
+        <div class="nav-inner">
+            <a href="/" class="logo">Pact<span class="logo-accent">.</span></a>
+            <a href="/" class="nav-back">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Back to home
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="page-header">
+            <p class="page-label">Legal</p>
+            <h1>Privacy Policy</h1>
+            <p class="page-meta">Last updated: May 13, 2026</p>
+        </div>
+
+        <div class="highlight-box">
+            <p>The short version: Pact stores the minimum data needed to track commitments in Slack. We don't sell your data, we don't share it with third parties (other than Slack, which is how the app works), and you can request deletion at any time.</p>
+        </div>
+
+        <div class="policy-section">
+            <h2>1. Who We Are</h2>
+            <p>Pact ("Pact," "we," "us," or "our") is a Slack application that helps teams create and track commitments. Pact is operated by Polsia. You can reach us at <a href="mailto:hello@makepact.co">hello@makepact.co</a>.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>2. Data We Collect</h2>
+            <p>When you install and use Pact, we collect the following data:</p>
+
+            <p><strong style="color: var(--text-light);">From your Slack workspace:</strong></p>
+            <ul>
+                <li>Slack workspace name and team ID</li>
+                <li>Slack user IDs of the people involved in a pact (the person who created it and their counterpart)</li>
+                <li>Display names of users involved in pacts (for readable notifications)</li>
+                <li>Bot access token for your workspace (stored encrypted, used to send messages and reminders on your behalf)</li>
+            </ul>
+
+            <p><strong style="color: var(--text-light);">From pact creation:</strong></p>
+            <ul>
+                <li>The commitment text you provide (e.g., "Review the design doc by Friday")</li>
+                <li>The due date associated with the commitment</li>
+                <li>The Slack channel ID where the pact was created</li>
+                <li>Timestamps: when the pact was created, when it was completed, and when reminders were last sent</li>
+            </ul>
+
+            <p><strong style="color: var(--text-light);">From website visits:</strong></p>
+            <ul>
+                <li>Page path, referrer URL, and UTM campaign parameters (for understanding how people find Pact)</li>
+                <li>A hashed, anonymized version of your IP address (we hash it immediately — the original IP is never stored)</li>
+                <li>User agent string</li>
+            </ul>
+
+            <p>We do <strong style="color: var(--text-light);">not</strong> collect: email addresses, phone numbers, payment information, or any message content from your Slack workspace beyond what you explicitly type into a Pact command.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>3. How We Use Your Data</h2>
+            <p>We use the data we collect solely to operate and improve Pact:</p>
+            <ul>
+                <li>To create and store pact records so both parties can see their commitments</li>
+                <li>To send reminder notifications to the relevant Slack users before and after due dates</li>
+                <li>To allow users to list and complete their active pacts</li>
+                <li>To understand aggregate usage patterns and improve the product</li>
+                <li>Pro workspaces: to pass message snippets to our AI provider (OpenAI) for commitment detection and <code>/done</code> context inference — no message content is stored by Pact after inference completes</li>
+            </ul>
+            <p>We do not use your data for advertising. We do not sell your data to any third party.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>4. Data Storage and Security</h2>
+            <p>Your data is stored in a PostgreSQL database hosted on Neon (a managed cloud database provider). Data is encrypted at rest using AES-256 encryption and in transit using TLS 1.2 or higher.</p>
+            <p>Slack bot tokens — which grant Pact permission to post messages in your workspace — are stored encrypted in our database. We follow Slack's security best practices for token handling.</p>
+            <p>Our application infrastructure runs on Render, a cloud hosting provider. Their infrastructure operates within secure data centers with industry-standard physical and logical security controls.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>5. Data Retention</h2>
+            <p>We retain pact data (active and completed commitments) for as long as your workspace has Pact installed. If you uninstall Pact from your Slack workspace, you may request deletion of all associated data.</p>
+            <p>Website analytics data (anonymized pageviews and events) is retained for up to 90 days.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>6. Third-Party Services</h2>
+            <p>Pact integrates with the following third-party services (sub-processors):</p>
+            <ul>
+                <li><strong style="color: var(--text-light);">Slack API</strong> — Pact is built on Slack. Your use of Pact is also governed by <a href="https://slack.com/trust/privacy/privacy-policy" target="_blank" rel="noopener noreferrer">Slack's Privacy Policy</a>.</li>
+                <li><strong style="color: var(--text-light);">Neon</strong> — Our managed PostgreSQL database provider. All pact data is stored in US-based (AWS us-east-1) data centers, encrypted at rest.</li>
+                <li><strong style="color: var(--text-light);">Render</strong> — Our application hosting provider. Processes application logs and environment variables (tokens are encrypted before storage). Data centers in US (Oregon).</li>
+                <li><strong style="color: var(--text-light);">Stripe</strong> — Payment processing for Pro subscriptions. Receives workspace billing email and subscription status. See <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer">Stripe's Privacy Policy</a>.</li>
+                <li><strong style="color: var(--text-light);">OpenAI</strong> (Pro workspaces only) — Powers AI commitment detection and <code>/done</code> context inference. Message snippets are sent to OpenAI's API for inference and are not stored by Pact afterward. See <a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener noreferrer">OpenAI's Privacy Policy</a>.</li>
+                <li><strong style="color: var(--text-light);">Postmark</strong> — Transactional email delivery (billing receipts). Receives the workspace admin's email address. See <a href="https://postmarkapp.com/privacy-policy" target="_blank" rel="noopener noreferrer">Postmark's Privacy Policy</a>.</li>
+                <li><strong style="color: var(--text-light);">Google Fonts</strong> — Used for typography on our marketing website. Google may log font requests; see <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a>.</li>
+            </ul>
+            <p>We do not use advertising networks, third-party analytics platforms (such as Google Analytics), or any marketing tracking services.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>7. Your Rights</h2>
+            <p>You have the right to:</p>
+            <ul>
+                <li><strong style="color: var(--text-light);">Access</strong> — Request a copy of the data Pact holds about you</li>
+                <li><strong style="color: var(--text-light);">Deletion</strong> — Request that we delete all data associated with your Slack user ID or workspace</li>
+                <li><strong style="color: var(--text-light);">Correction</strong> — Request correction of any inaccurate data</li>
+                <li><strong style="color: var(--text-light);">Portability</strong> — Request your pact data in a structured, machine-readable format</li>
+                <li><strong style="color: var(--text-light);">Objection</strong> — Object to any processing of your data</li>
+            </ul>
+            <p>To exercise any of these rights, email us at <a href="mailto:hello@makepact.co">hello@makepact.co</a>. We will respond within 30 days. For workspace-level data deletion, the workspace admin should uninstall Pact from Slack and contact us to complete the data removal.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>8. Cookies and Tracking</h2>
+            <p>Our marketing website (makepact.co) does not use cookies for tracking or advertising. We collect anonymized, server-side analytics to understand which pages are visited and how users arrive at our site. No persistent identifiers or tracking pixels are used.</p>
+            <p>The Pact Slack bot does not use cookies.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>9. Children's Privacy</h2>
+            <p>Pact is not directed at children under the age of 13. We do not knowingly collect personal data from children. If you believe we have inadvertently collected data from a child, please contact us and we will delete it promptly.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>10. Changes to This Policy</h2>
+            <p>We may update this Privacy Policy from time to time. When we do, we'll update the "Last updated" date at the top of this page. For material changes, we'll notify workspace admins via Slack message. Continued use of Pact after changes constitutes acceptance of the updated policy.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>11. Contact</h2>
+            <p>Questions, requests, or concerns about this Privacy Policy? Contact us:</p>
+            <ul>
+                <li><strong style="color: var(--text-light);">Email:</strong> <a href="mailto:hello@makepact.co">hello@makepact.co</a></li>
+                <li><strong style="color: var(--text-light);">Website:</strong> <a href="https://makepact.co">makepact.co</a></li>
+            </ul>
+            <p>We aim to respond to all privacy-related inquiries within 5 business days.</p>
+        </div>
+    </main>
+
+    <footer aria-label="Site footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <a href="/" class="footer-logo">Pact<span class="logo-accent">.</span></a>
+                <span class="footer-tagline">makepact.co — Commitments that stick</span>
+            </div>
+            <div class="footer-links">
+                <a href="mailto:hello@makepact.co">Contact</a>
+                <a href="/">Home</a>
+                <a href="/privacy" aria-current="page">Privacy</a>
+                <a href="/terms">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

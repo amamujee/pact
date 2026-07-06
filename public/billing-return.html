@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Back to Pact — Billing Updated</title>
+    <link rel="icon" type="image/svg+xml" href="/logo.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo-36.png">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --accent: #F59E0B;
+            --bg: #09090B;
+            --text: #E4E4E7;
+            --text-muted: #71717A;
+            --border: rgba(255,255,255,0.08);
+            --green: #10B981;
+            --green-light: #34D399;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .card {
+            background: #111113;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 48px 40px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+        }
+        .wordmark {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: var(--text);
+            margin-bottom: 32px;
+            display: inline-block;
+        }
+        .wordmark span { color: var(--accent); }
+        .icon-wrap {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(16,185,129,0.1);
+            border: 1px solid rgba(16,185,129,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 1.8rem;
+        }
+        h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            background: var(--accent);
+            color: #09090B;
+            transition: opacity 0.15s;
+        }
+        .btn:hover { opacity: 0.85; }
+        .footer {
+            margin-top: 24px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .footer a { color: var(--accent); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="wordmark">Pact<span>.</span></div>
+        <div class="icon-wrap">✓</div>
+        <h1>Billing updated</h1>
+        <p class="subtitle">Your changes have been saved. If you cancelled, your workspace stays on Pro until the end of the billing period. Use <code style="background:rgba(255,255,255,0.07);padding:2px 6px;border-radius:4px;">/pact upgrade</code> in Slack to check your plan status.</p>
+        <a href="https://makepact.co" class="btn">Back to Pact</a>
+        <div class="footer">
+            <br>Questions? <a href="mailto:hello@makepact.co">hello@makepact.co</a>
+        </div>
+    </div>
+</body>
+</html>

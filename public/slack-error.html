@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pact — Installation failed</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #09090B;
+            color: #F4F4F5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .card {
+            background: #111827;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 48px 40px;
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+        }
+        .emoji {
+            font-size: 64px;
+            margin-bottom: 24px;
+            display: block;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 12px;
+        }
+        .message {
+            color: #A1A1AA;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.2);
+            border-radius: 10px;
+            padding: 16px 20px;
+        }
+        .message.error-detail {
+            color: #EF4444;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        a.btn {
+            display: inline-block;
+            background: #F59E0B;
+            color: #09090B;
+            font-weight: 700;
+            font-size: 15px;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 10px;
+            transition: background 0.15s, transform 0.1s;
+        }
+        a.btn:hover {
+            background: #D97706;
+            transform: translateY(-1px);
+        }
+        a.btn-secondary {
+            display: inline-block;
+            color: #A1A1AA;
+            font-size: 13px;
+            text-decoration: none;
+            margin-top: 16px;
+        }
+        a.btn-secondary:hover { color: #D4D4D8; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <span class="emoji">⚠️</span>
+        <h1>Installation failed</h1>
+        <p class="message">
+            <span id="user-message">Something went wrong during installation.</span>
+            <div class="message error-detail" id="error-detail"></div>
+        </p>
+        <a href="https://makepact.co" class="btn">Back to makepact.co</a><br>
+        <a href="https://makepact.co" class="btn-secondary">Try adding to Slack again</a>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(location.search);
+        document.getElementById('user-message').textContent =
+            params.get('message') || 'Something went wrong during installation.';
+        const err = params.get('error');
+        if (err && err !== 'access_denied') {
+            document.getElementById('error-detail').textContent = 'Error: ' + err;
+        }
+    </script>
+</body>
+</html>

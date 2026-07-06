@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support — Make Pact</title>
+    <meta name="description" content="Get help with Make Pact. Contact our team at hello@makepact.co and we'll get back to you within 24 hours.">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Support — Pact">
+    <meta property="og:description" content="Get help with Pact, the Slack accountability bot. Contact us at hello@makepact.co and we'll respond within 24 hours.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://makepact.co/support">
+    <meta property="og:site_name" content="Pact">
+    <meta property="og:image" content="https://makepact.co/og-hero.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Support — Pact">
+    <meta name="twitter:description" content="Get help with Pact. Email hello@makepact.co and we'll respond within 24 hours.">
+    <meta name="twitter:image" content="https://makepact.co/og-hero.png">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://makepact.co/support">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤝</text></svg>">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-dark: #09090B;
+            --bg-surface: #111113;
+            --bg-card: #18181B;
+            --text-light: #F4F4F5;
+            --text-secondary: #A1A1AA;
+            --text-muted: #71717A;
+            --accent: #F59E0B;
+            --border-dark: rgba(255, 255, 255, 0.06);
+            --border-subtle: rgba(255, 255, 255, 0.04);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ── Navigation ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(9, 9, 11, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-dark);
+            padding: 16px 0;
+        }
+
+        .nav-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-light);
+            text-decoration: none;
+            letter-spacing: -0.03em;
+        }
+
+        .logo-accent { color: var(--accent); }
+
+        .nav-back {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-back:hover { color: var(--text-light); }
+
+        .nav-back svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* ── Main Content ── */
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 64px 24px 96px;
+        }
+
+        .page-header {
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border-dark);
+        }
+
+        .page-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .page-header h1 {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        .page-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* ── Section styles ── */
+        .policy-section {
+            margin-bottom: 48px;
+        }
+
+        .policy-section h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            color: var(--text-light);
+            padding-top: 8px;
+        }
+
+        .policy-section p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            line-height: 1.75;
+        }
+
+        .policy-section p:last-child { margin-bottom: 0; }
+
+        .policy-section a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .policy-section a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── Contact card ── */
+        .contact-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dark);
+            border-left: 3px solid var(--accent);
+            border-radius: 8px;
+            padding: 28px 32px;
+            margin-bottom: 40px;
+        }
+
+        .contact-card h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .contact-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.75;
+            margin-bottom: 20px;
+        }
+
+        .contact-card p:last-child { margin-bottom: 0; }
+
+        .email-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent);
+            color: #09090B;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: opacity 0.2s;
+            letter-spacing: -0.01em;
+        }
+
+        .email-link:hover { opacity: 0.88; text-decoration: none; }
+
+        /* ── Divider ── */
+        .section-divider {
+            border: none;
+            border-top: 1px solid var(--border-dark);
+            margin: 0 0 48px;
+        }
+
+        /* ── Footer ── */
+        footer {
+            padding: 40px 0;
+            background: var(--bg-dark);
+            border-top: 1px solid var(--border-dark);
+        }
+
+        .footer-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-light);
+            letter-spacing: -0.03em;
+            text-decoration: none;
+        }
+
+        .footer-logo .logo-accent { color: var(--accent); }
+
+        .footer-tagline {
+            font-size: 0.82rem;
+            color: #52525B;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            font-size: 0.82rem;
+            color: #71717A;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--text-light); }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            main { padding: 48px 20px 72px; }
+            .footer-inner { flex-direction: column; text-align: center; }
+            .footer-brand { flex-direction: column; gap: 8px; }
+            .footer-links { gap: 16px; flex-wrap: wrap; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav aria-label="Site navigation">
+        <div class="nav-inner">
+            <a href="/" class="logo">Pact<span class="logo-accent">.</span></a>
+            <a href="/" class="nav-back">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Back to home
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="page-header">
+            <p class="page-label">Help</p>
+            <h1>Support</h1>
+            <p class="page-meta">We're here to help — usually within 24 hours.</p>
+        </div>
+
+        <div class="contact-card">
+            <h2>Get in touch</h2>
+            <p>Need help with Make Pact? Email us at <strong>hello@makepact.co</strong> and we'll get back to you within 24 hours.</p>
+            <a href="mailto:hello@makepact.co" class="email-link">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                hello@makepact.co
+            </a>
+        </div>
+
+        <div class="policy-section">
+            <h2>Common questions</h2>
+            <p><strong style="color: var(--text-light);">How do I create a pact?</strong><br>
+            Use the <code>/pact</code> command in any Slack channel, or react to a message with your workspace's trigger emoji. A modal will guide you through setting the commitment and due date.</p>
+
+            <p><strong style="color: var(--text-light);">How do I mark a pact as done?</strong><br>
+            Use the <code>/done</code> command in Slack. Make Pact will show your active pacts and let you complete one or more at once.</p>
+
+            <p><strong style="color: var(--text-light);">How do I manage my subscription?</strong><br>
+            Use the <code>/pact billing</code> command in Slack to access your billing portal, or email us at <a href="mailto:hello@makepact.co">hello@makepact.co</a>.</p>
+
+            <p><strong style="color: var(--text-light);">How do I uninstall Make Pact?</strong><br>
+            Go to your Slack workspace settings, find Make Pact under Installed Apps, and click Remove. You can also email us to request full data deletion.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="policy-section">
+            <h2>Other resources</h2>
+            <p>
+                <a href="/privacy">Privacy Policy</a> &nbsp;·&nbsp;
+                <a href="/terms">Terms of Service</a> &nbsp;·&nbsp;
+                <a href="/">Back to homepage</a>
+            </p>
+        </div>
+    </main>
+
+    <footer aria-label="Site footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <a href="/" class="footer-logo">Pact<span class="logo-accent">.</span></a>
+                <span class="footer-tagline">makepact.co — Commitments that stick</span>
+            </div>
+            <div class="footer-links">
+                <a href="mailto:hello@makepact.co">Contact</a>
+                <a href="/">Home</a>
+                <a href="/privacy">Privacy</a>
+                <a href="/terms">Terms</a>
+                <a href="/support" aria-current="page">Support</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
