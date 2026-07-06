@@ -22,7 +22,8 @@ Pact turns casual Slack promises into tracked commitments with automatic reminde
 
 ## Environment Variables
 
-- `DATABASE_URL` - PostgreSQL connection string (required)
+- `DATABASE_URL` - pooled PostgreSQL connection string for the app runtime (required)
+- `MIGRATE_DATABASE_URL` - direct PostgreSQL connection string for one-off migrations
 - `SLACK_BOT_TOKEN` - Slack bot token
 - `SLACK_SIGNING_SECRET` - Slack signing secret
 - `SLACK_CLIENT_ID` / `SLACK_CLIENT_SECRET` - OAuth app credentials
@@ -115,7 +116,8 @@ Neon, verify the live schema includes Pact's later tables and columns:
 \d workspace_admin_digest_prefs
 ```
 
-Run database migrations explicitly after setting `DATABASE_URL`:
+Run database migrations explicitly after setting `MIGRATE_DATABASE_URL` or
+`DATABASE_URL`:
 
 ```bash
 npm run migrate

@@ -2,6 +2,7 @@
  * Database Migration Runner
  *
  * Run explicitly with `npm run migrate` after DATABASE_URL is configured.
+ * If provided, MIGRATE_DATABASE_URL is used for direct migration connections.
  *
  * How it works:
  * 1. Creates core tables (users, _migrations) - always runs, idempotent
@@ -25,9 +26,16 @@ const { Pool } = require('pg');
 const fs = require('fs');
 const path = require('path');
 
+const migrationDatabaseUrl = process.env.MIGRATE_DATABASE_URL || process.env.DIRECT_DATABASE_URL || process.env.DATABASE_URL;
+
+if (!migrationDatabaseUrl) {
+  console.error('Migration failed: DATABASE_URL or MIGRATE_DATABASE_URL is required');
+  process.exit(1);
+}
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL?.includes('localhost') ? false : { rejectUnauthorized: false },
+  connectionString: migrationDatabaseUrl,
+  ssl: migrationDatabaseUrl.includes('localhost') ? false : { rejectUnauthorized: false },
   max: 1,
   idleTimeoutMillis: 10000,
   connectionTimeoutMillis: 10000
