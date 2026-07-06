@@ -99,7 +99,7 @@ Configure these Slack/Stripe URLs after deployment:
 - Slack Events API: `https://<deployment>/slack/events`
 - Slack Interactivity: `https://<deployment>/slack/actions`
 - Slack slash commands: `https://<deployment>/slack/commands`
-- Stripe webhook: `https://<deployment>/stripe/webhook`
+- Stripe webhook: `https://<deployment>/api/webhooks/stripe`
 
 For Vercel Hobby accounts, use the included GitHub Actions scheduler instead
 of Vercel Cron. Configure these GitHub repository secrets:
