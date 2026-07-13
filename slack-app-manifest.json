@@ -1,0 +1,84 @@
+{
+  "display_information": {
+    "name": "Pact",
+    "description": "Turn Slack promises into tracked commitments with reminders.",
+    "background_color": "#0f172a"
+  },
+  "features": {
+    "app_home": {
+      "home_tab_enabled": true,
+      "messages_tab_enabled": true,
+      "messages_tab_read_only_enabled": false
+    },
+    "bot_user": {
+      "display_name": "Pact",
+      "always_online": false
+    },
+    "shortcuts": [
+      {
+        "name": "Make this a Pact",
+        "type": "message",
+        "callback_id": "make_this_a_pact",
+        "description": "Turn this message into a tracked Pact"
+      }
+    ],
+    "slash_commands": [
+      {
+        "command": "/pact",
+        "url": "https://makepact.co/slack/commands",
+        "description": "Create or manage a Pact",
+        "usage_hint": "[commitment] by [date]",
+        "should_escape": false
+      },
+      {
+        "command": "/pacts",
+        "url": "https://makepact.co/slack/commands",
+        "description": "List your open Pacts",
+        "should_escape": false
+      },
+      {
+        "command": "/done",
+        "url": "https://makepact.co/slack/commands",
+        "description": "Mark a Pact complete",
+        "usage_hint": "[pact ID or description]",
+        "should_escape": false
+      }
+    ]
+  },
+  "oauth_config": {
+    "redirect_urls": [
+      "https://makepact.co/slack/oauth/callback"
+    ],
+    "scopes": {
+      "bot": [
+        "commands",
+        "chat:write",
+        "im:write",
+        "im:read",
+        "im:history",
+        "users:read",
+        "reactions:read",
+        "channels:history",
+        "groups:history",
+        "mpim:history"
+      ]
+    }
+  },
+  "settings": {
+    "event_subscriptions": {
+      "request_url": "https://makepact.co/slack/events",
+      "bot_events": [
+        "app_home_opened",
+        "message.im",
+        "reaction_added"
+      ]
+    },
+    "interactivity": {
+      "is_enabled": true,
+      "request_url": "https://makepact.co/slack/actions"
+    },
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": false,
+    "token_rotation_enabled": false
+  }
+}

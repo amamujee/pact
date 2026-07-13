@@ -43,6 +43,9 @@ router.get('/:token', async (req, res) => {
   // Build OAuth URL with invite token stamped in state
   const state = Buffer.from(JSON.stringify({ invite_token: token })).toString('base64url');
   const oauthUrl = buildOAuthUrl(state);
+  if (!oauthUrl) {
+    return res.status(503).send('Slack installation is not configured yet.');
+  }
 
   // Serve invite landing page
   const html = buildInviteLandingHtml({ oauthUrl, invite, baseUrl: appUrl('/invite') });
@@ -91,7 +94,8 @@ router.get('/count/:teamId/:userId', async (req, res) => {
 // ---------------------------------------------------------------------------
 
 function buildOAuthUrl(state) {
-  const clientId = process.env.SLACK_CLIENT_ID || '507133550992.10982980524448';
+  const clientId = process.env.SLACK_CLIENT_ID;
+  if (!clientId) return null;
   const redirectUri = encodeURIComponent(appUrl('/slack/oauth/callback'));
   const scopes = 'commands,chat:write,im:write,im:read,im:history,users:read,reactions:read,channels:history,groups:history,mpim:history';
 
