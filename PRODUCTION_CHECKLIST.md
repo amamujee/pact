@@ -62,11 +62,14 @@ self-service until their variables are configured:
 - [x] Authenticated production smoke confirms the Neon-stored Slack token is valid
 - [x] `/pact help`, `/pacts`, and `/done` return visible Slack responses
 - [x] A pact can be created in a teammate DM and completed
-- [ ] App Home loads
 - [x] A `message.im` event receives a bot response
-- [ ] Interactivity buttons reach `/slack/actions`
 - [x] Manual GitHub scheduled-jobs workflow succeeds
 - [x] Production logs contain no new fatal or unhandled errors
+
+## Deferred manual checks
+
+- App Home rendering and its Help-button interactivity were explicitly deferred
+  by the product owner on 2026-07-12 and are not release gates.
 
 ## Security follow-up
 
