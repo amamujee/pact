@@ -53,22 +53,22 @@ self-service until their variables are configured:
 
 ## Release QA
 
-- [ ] `npm test`
-- [ ] `npm run build`
-- [ ] `node verify-checkout-fix.js`
-- [ ] `GET /api/health` returns `200` with `slack:true`
-- [ ] `/`, `/privacy`, `/terms`, `/support`, `/llms.txt`, and `/sitemap.xml` return `200`
-- [ ] `/slack/reinstall` redirects to the correct Slack app and callback
+- [x] `npm test`
+- [x] `npm run build`
+- [x] `node verify-checkout-fix.js`
+- [x] `GET /api/health` returns `200` with `slack:true`
+- [x] `/`, `/privacy`, `/terms`, `/support`, `/llms.txt`, and `/sitemap.xml` return `200`
+- [x] `/slack/reinstall` redirects to the correct Slack app and callback
 - [ ] `/pact help`, `/pacts`, and `/done` return visible Slack responses
 - [ ] A pact can be created in a teammate DM and completed
 - [ ] App Home loads
 - [ ] A `message.im` event receives a bot response
 - [ ] Interactivity buttons reach `/slack/actions`
-- [ ] Manual GitHub scheduled-jobs workflow succeeds
-- [ ] Production logs contain no new fatal or unhandled errors
+- [x] Manual GitHub scheduled-jobs workflow succeeds
+- [x] Production logs contain no new fatal or unhandled errors
 
 ## Security follow-up
 
 - [ ] Confirm the previously exposed Neon credential has been rotated
-- [ ] Confirm legal pages identify the current independent operator
-- [ ] Confirm privacy subprocessors match the configured runtime providers
+- [x] Confirm legal pages identify the current independent operator
+- [x] Confirm privacy subprocessors match the configured runtime providers
