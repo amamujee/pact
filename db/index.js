@@ -1,13 +1,15 @@
 // Database connection singleton.
 // Only this file may construct Pool. All other modules import from here.
 const { Pool } = require('pg');
+const { buildPoolConfig } = require('./pool-config');
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL?.includes('localhost') ? false : { rejectUnauthorized: false },
-  max: parseInt(process.env.PG_POOL_MAX || '1', 10),
-  idleTimeoutMillis: parseInt(process.env.PG_IDLE_TIMEOUT_MS || '10000', 10),
-  connectionTimeoutMillis: parseInt(process.env.PG_CONNECTION_TIMEOUT_MS || '10000', 10)
+const pool = new Pool(buildPoolConfig());
+
+// Idle network errors should not become uncaught EventEmitter errors that tear
+// down an otherwise healthy serverless invocation. The next query will acquire
+// a fresh pooled connection automatically.
+pool.on('error', (err) => {
+  console.warn('[db] Idle client error; the pool will reconnect:', err.message);
 });
 
 module.exports = pool;
