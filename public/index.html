@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pact — Turn Your Team's Commitments Into Commitments You Actually Keep</title>
-    <meta name="description" content="Pact tracks every commitment your team makes — sends reminders, flags overdue items, and closes the loop when it's done. No chasing, no wondering, just accountability.">
+    <title>Pact — Slack commitments that get done</title>
+    <meta name="description" content="Turn Slack promises into shared commitments with owners, due dates, reminders, and a clear close. Pact is free for every workspace.">
     <meta name="keywords" content="slack bot, team accountability, commitment tracking, workplace commitments, slack productivity, team management">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#09090B">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Pact — Turn Your Team's Commitments Into Commitments You Actually Keep">
-    <meta property="og:description" content="Pact tracks every commitment your team makes — sends reminders, flags overdue items, and closes the loop when it's done. No chasing, no wondering, just accountability.">
+    <meta property="og:title" content="Pact — Slack commitments that get done">
+    <meta property="og:description" content="Turn Slack promises into shared commitments with owners, due dates, reminders, and a clear close. Free for every workspace.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://makepact.co">
     <meta property="og:site_name" content="Pact">
@@ -22,8 +22,8 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Pact — Turn Your Team's Commitments Into Commitments You Actually Keep">
-    <meta name="twitter:description" content="Pact tracks every commitment your team makes — sends reminders, flags overdue items, and closes the loop when it's done. No chasing, no wondering, just accountability.">
+    <meta name="twitter:title" content="Pact — Slack commitments that get done">
+    <meta name="twitter:description" content="Turn Slack promises into shared commitments with owners, due dates, reminders, and a clear close. Free for every workspace.">
     <meta name="twitter:image" content="https://makepact.co/og-hero.png">
     <meta name="twitter:image:alt" content="Pact — Shared commitments. Both people accountable.">
 
@@ -469,6 +469,13 @@
         }
         @keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            .reveal { opacity: 1; transform: none; transition: none; }
+            .hero-badge-dot, .demo-cursor { animation: none; }
+            .demo-msg { opacity: 1; transform: none; transition: none; }
+        }
+
         @media (max-width: 899px) {
             .hero { padding: 80px 0 52px; }
             .demo-window { max-width: 100%; }
@@ -624,12 +631,7 @@
             padding: 80px 0;
             border-top: 1px solid rgba(255,255,255,0.06);
         }
-        .stats-inner {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
+        .stats-inner { text-align: center; }
         .stat-card {
             display: flex;
             flex-direction: column;
@@ -880,10 +882,10 @@
             <div class="hero-copy">
                 <div class="hero-badge">
                     <span class="hero-badge-dot"></span>
-                    Free · No credit card · 2-minute install
+                    Free for every workspace · Unlimited pacts
                 </div>
-                <h1>Turn your team's commitments<br><span class="accent-word">into commitments you actually keep.</span></h1>
-                <p class="hero-sub">Pact tracks every commitment your team makes — sends reminders, flags overdue items, and closes the loop when it's done. No chasing. No wondering.</p>
+                <h1>Turn Slack promises into <span class="accent-word">commitments that get done.</span></h1>
+                <p class="hero-sub">Give every commitment an owner, a due date, and a shared record. Pact reminds both people and closes the loop — without adding another task tracker.</p>
 
                 <a href="/slack/reinstall" class="hero-slack-btn" aria-label="Add Pact to Slack">
                     <img src="https://platform.slack-edge.com/img/add_to_slack.png"
@@ -935,37 +937,37 @@
         <div class="container">
             <div class="how-section-header reveal">
                 <span class="eyebrow">How it works</span>
-                <h2>Three steps. Whole lifecycle handled.</h2>
+                <h2>From promise to done, without the chasing.</h2>
             </div>
             <div class="how-cards">
                 <div class="how-card reveal reveal-delay-1">
                     <span class="how-card-emoji">🤝</span>
-                    <h3>Make a commitment</h3>
+                    <h3>Make it explicit</h3>
                     <div class="how-card-cmds">
                         <span>/pact</span>
                         <span>🤝 emoji</span>
                         <span>message shortcut</span>
                     </div>
-                    <p>One command or one emoji reaction. Both sides get a confirmation instantly — no follow-up required.</p>
+                        <p>Use one command, reaction, or message shortcut. Both people get the same commitment and due date.</p>
                 </div>
                 <div class="how-card reveal reveal-delay-2">
                     <span class="how-card-emoji">🔔</span>
-                    <h3>Stay honest</h3>
+                        <h3>Get reminded</h3>
                     <div class="how-card-cmds">
                         <span>DM reminders</span>
                         <span>daily digest</span>
                     </div>
-                    <p>Reminders fire in the 24-hour window around the due date. A 9am digest covers everything still open. Nothing slips.</p>
+                        <p>Pact surfaces what is due soon or overdue in DMs, digests, and the Slack Home Tab.</p>
                 </div>
                 <div class="how-card reveal">
                     <span class="how-card-emoji">✅</span>
-                    <h3>Close the loop</h3>
+                        <h3>Finish or reschedule</h3>
                     <div class="how-card-cmds">
                         <span>/done</span>
                         <span>✅ emoji</span>
                         <span>thread reply</span>
                     </div>
-                    <p>Mark it complete. Both people see the 🎉. Accountability closed — no chasing, no wondering.</p>
+                        <p>Mark it done or propose a new date. Both people see the outcome, so the commitment never goes ambiguous.</p>
                 </div>
             </div>
         </div>
@@ -1121,13 +1123,11 @@
         </div>
     </section>
 
-    <!-- ═══ SECTION 4: STATS ═══ -->
-    <section class="stats-section" id="stats" aria-label="Accountability impact">
+    <!-- ═══ SECTION 4: SOCIAL PROOF ═══ -->
+    <section class="stats-section" id="stats" aria-label="Pact adoption">
         <div class="container">
             <div class="stats-inner reveal">
-                <div class="stat-card">
-                    <span class="stat-val" style="font-size:2rem;letter-spacing:-0.02em;line-height:1">doubles the number<br>of commitments met</span>
-                </div>
+                <!--SSR_STATS_START--><span class="stat-val" style="font-size:2rem;letter-spacing:-0.02em;line-height:1.3">Free for every workspace · Unlimited pacts · No credit card</span><!--SSR_STATS_END-->
             </div>
         </div>
     </section>

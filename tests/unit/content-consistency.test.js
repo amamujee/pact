@@ -71,6 +71,8 @@ describe('public content and runtime consistency', () => {
     assert.doesNotMatch(directory, paidLanguage);
     assert.doesNotMatch(llms, paidLanguage);
     assert.doesNotMatch(slackHandlers, paidLanguage);
+    assert.doesNotMatch(homepage, /doubles the number of commitments met/i);
+    assert.match(homepage, /<!--SSR_STATS_START-->[\s\S]*<!--SSR_STATS_END-->/);
   });
 
   it('uses the production domain and provider names across install and policy surfaces', () => {

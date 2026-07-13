@@ -1,130 +1,131 @@
-# Pact — Accountability Built Into Slack
+# Pact
 
-Pact turns casual Slack promises into tracked commitments with automatic reminders.
+Pact turns promises made in Slack into shared, trackable commitments. Each pact
+has an owner, a teammate, and a due date; Pact keeps both people informed with
+reminders, overdue nudges, and completion updates.
 
-## Features
+[Website](https://makepact.co) · [Support](https://makepact.co/support) ·
+[Privacy](https://makepact.co/privacy)
 
-- **`/pact [commitment] by [date]`** — Create a pact in any DM; both parties notified
-- **🤝 React to turn any message into a pact** — React with 🤝 on any message to capture it as a pact. Pact sends you a pre-filled confirmation (with promiser/recipient roles you can swap) right in your DMs.
-- **`/pacts`** — Traffic-light view of all open commitments (🟢 🟡 🔴)
-- **`/done [id]`** — Mark complete; both parties notified
-- **`/pact extend [id] to [date]`** — Renegotiate deadlines mutually
-- **`/pact edit [id] [new text]`** — Update commitment description
-- **Automatic reminders** — 24-hour window reminders + overdue nudges
-- **Daily digest** — 9am ET summary of all open pacts
-- **Conversational DM** — Message Pact in plain English to create pacts
-- **AI assistance, Workflow Builder, and tracker sync** — included for every workspace
+## What Pact does
 
-## Requirements
+- Creates pacts from `/pact`, a 🤝 reaction, a message shortcut, or a bot DM
+- Shows active, due-soon, and overdue commitments in Slack
+- Sends reminders and daily or weekly digests
+- Completes pacts with `/done`, a ✅ reaction, a thread reply, or bulk Home Tab actions
+- Supports recurring commitments and two-way deadline changes
+- Connects optional Linear, Notion, and Asana trackers
+- Includes AI-assisted commitment detection and Slack Workflow Builder steps
 
-- Node.js 18+
-- PostgreSQL database (Neon recommended)
+Pact is free for every workspace, with unlimited pacts and no credit card.
 
-## Environment Variables
+## Quick start
 
-- `DATABASE_URL` - pooled PostgreSQL connection string for the app runtime (required)
-- `MIGRATE_DATABASE_URL` - direct PostgreSQL connection string for one-off migrations
-- `SLACK_BOT_TOKEN` - optional single-workspace override; Production normally loads OAuth bot tokens from Neon
-- `SLACK_SIGNING_SECRET` - Slack signing secret
-- `SLACK_CLIENT_ID` / `SLACK_CLIENT_SECRET` - OAuth app credentials
-- `SLACK_APP_ID` - Slack app ID for App Home links
-- `CRON_SECRET` - bearer token for protected scheduler endpoints
-- `ANTHROPIC_API_KEY` - required for AI-assisted Pact features
-- `RESEND_API_KEY` / `EMAIL_FROM` - optional direct email sending via Resend
-- `APP_URL` / `APP_BASE_URL` - public app URL
-- `PORT` - Server port (default: 3000)
+### Prerequisites
 
-## Slack App Configuration
+- Node.js 20+
+- PostgreSQL (Neon works well)
+- A Slack app with the configuration described below
 
-Required bot token scopes:
+### Run locally
+
+```bash
+npm install
+cp .env.example .env
+# Add at least DATABASE_URL and the required Slack credentials to .env
+node --env-file=.env migrate.js
+node --env-file=.env scripts/dev.js
 ```
+
+The app starts on `http://localhost:3000` unless `PORT` is set.
+
+## Configuration
+
+| Variable | Purpose |
+| --- | --- |
+| `DATABASE_URL` | Pooled PostgreSQL connection used by the app |
+| `MIGRATE_DATABASE_URL` | Optional direct connection for migrations; falls back to `DATABASE_URL` |
+| `SLACK_SIGNING_SECRET` | Verifies requests from Slack |
+| `SLACK_CLIENT_ID` / `SLACK_CLIENT_SECRET` | Slack OAuth credentials |
+| `SLACK_APP_ID` | Slack app ID used for App Home links |
+| `SLACK_BOT_TOKEN` | Optional single-workspace development override |
+| `CRON_SECRET` | Bearer token for scheduled-job endpoints |
+| `ANTHROPIC_API_KEY` | Enables AI-assisted features |
+| `APP_URL` / `APP_BASE_URL` | Public base URL of the deployment |
+| `RESEND_API_KEY` / `EMAIL_FROM` | Optional email delivery through Resend |
+| `PORT` | Local HTTP port; defaults to `3000` |
+
+See [.env.example](.env.example) for the complete template.
+
+## Slack setup
+
+The checked-in [slack-app-manifest.json](slack-app-manifest.json) is the source of
+truth for scopes, commands, events, and interactivity. The primary bot scopes are:
+
+```text
 commands, chat:write, im:write, im:read, im:history, users:read,
 reactions:read, channels:history, groups:history, mpim:history
 ```
 
-Required event subscriptions:
-- `message.im` — conversational DM
-- `reaction_added` — emoji-reaction pact creation
+Pact subscribes to `message.im` for conversational bot DMs and `reaction_added`
+for reaction-based creation. Point these Slack surfaces at your deployment:
 
-## Local Development
+- Events: `https://<host>/slack/events`
+- Interactivity: `https://<host>/slack/actions`
+- Slash commands: `https://<host>/slack/commands`
+- OAuth redirect: `https://<host>/slack/oauth/callback`
 
-```bash
-npm install
-DATABASE_URL="postgresql://..." npm run dev
+## Commands
+
+```text
+/pact @person review the launch plan by Friday
+/pacts
+/done 42
+/pact edit 42 Review the final launch plan
+/pact extend 42 to next Tuesday
 ```
 
-## Testing
+Run `/pact help` in Slack for the full command reference.
 
-### Unit tests (no DB or Slack credentials required)
-
-```bash
-npm install
-npm test
-```
-
-Uses Node.js 20's built-in test runner (`node:test`) — no external test framework needed. Tests mock all DB queries and Slack API calls.
-
-Coverage includes fuzzy matching, `/done`, Slack command/event handlers, serverless acknowledgements,
-analytics privacy, recurrence, free access, and tracker synchronization.
-
-### E2E Slack tests (requires `SLACK_SIGNING_SECRET`)
+## Tests
 
 ```bash
-SLACK_SIGNING_SECRET=xxx PACT_SERVER_URL=https://makepact.co \
-  npm run test:slack
+npm test             # unit and consistency tests
+npm run test:slack   # signed HTTP E2E checks against a running deployment
 ```
 
-Sends signed HTTP requests directly to the server. Optional workspace tokens enable full DM-detection test coverage — see `tests/slack-e2e-runner.js` for full config options.
+Unit tests use Node's built-in test runner and do not require live Slack or
+database credentials. Slack E2E tests require `SLACK_SIGNING_SECRET`; optional
+workspace tokens unlock additional DM coverage. See
+[tests/slack-e2e-runner.js](tests/slack-e2e-runner.js) for supported settings.
 
-### CI
+## Architecture
 
-GitHub Actions runs unit tests on every PR and push to `main`. E2E tests run post-merge using the `SLACK_SIGNING_SECRET` secret configured in the repo.
+Pact is a Node.js/Express app using Slack Bolt and PostgreSQL. It runs as one
+Vercel handler, with scheduled work exposed through protected routes under
+`/api/crons/*`.
+
+- `server.js` wires the HTTP app and shared routes
+- `lib/slack-handlers.js` handles Slack commands, actions, and events
+- `db/` contains database queries; `schema.sql` defines the schema
+- `routes/` contains page and feature routes
+- `public/` contains the landing page, dashboard, and policy pages
+- `api/` contains Vercel and scheduled-job entry points
+
+For operational details, see [PRODUCTION_CHECKLIST.md](PRODUCTION_CHECKLIST.md).
+For database handoff and migration notes, see [MIGRATION.md](MIGRATION.md).
 
 ## Deployment
 
-### Vercel
+1. Configure the environment variables above in Vercel.
+2. Run `npm run migrate` with a direct database URL when available.
+3. Deploy the Express handler using the included `vercel.json`.
+4. Update the Slack Events, Interactivity, Commands, and OAuth URLs.
+5. Configure the GitHub Actions scheduler with `PACT_BASE_URL` and `CRON_SECRET`
+   when Vercel Cron is unavailable.
 
-Vercel hosts the HTTP app, Slack endpoints, static pages, and
-scheduler endpoints through the single exported Express handler in `server.js`.
-In-process timers are disabled in production; scheduled jobs run through
-protected routes under `/api/crons/*`.
-
-Configure these Slack URLs after deployment:
-
-- Slack Events API: `https://<deployment>/slack/events`
-- Slack Interactivity: `https://<deployment>/slack/actions`
-- Slack slash commands: `https://<deployment>/slack/commands`
-
-For Vercel Hobby accounts, use the included GitHub Actions scheduler instead
-of Vercel Cron. Configure these GitHub repository secrets:
-
-- `PACT_BASE_URL` - deployed app URL, for example `https://makepact.co`
-- `CRON_SECRET` - same value as the app's `CRON_SECRET` environment variable
-
-The migration runner applies the full checked-in `schema.sql`; after migrating
-Neon, verify the live schema includes Pact's later tables and columns:
-
-```sql
-\d pacts
-\d workspace_invites
-\d workspace_admin_digest_prefs
-```
-
-Run database migrations explicitly after setting `MIGRATE_DATABASE_URL` or
-`DATABASE_URL`:
-
-```bash
-npm run migrate
-```
-
-Production handoff checklist:
-
-- Maintain the existing Slack app under the current operator account and keep all
-  OAuth, command, event, and interactivity URLs pointed at `https://makepact.co`.
-- Turn off Slack Socket Mode. Do not copy `SLACK_APP_TOKEN` to Vercel.
-- If you use email digests or contact capture, set `RESEND_API_KEY` and
-  `EMAIL_FROM`, or provide compatible `EMAIL_SEND_URL` settings.
+Do not enable Slack Socket Mode for the Vercel deployment.
 
 ## License
 
-Pact is available under the [MIT License](LICENSE).
+[MIT](LICENSE)

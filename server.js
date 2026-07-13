@@ -88,8 +88,8 @@ async function serveHomepage(req, res) {
     const show = stats && stats.workspaces >= 10 && stats.pacts_kept >= 10;
     const statsHtml = show
       ? `<span class="stat-val">${stats.workspaces.toLocaleString()}</span> workspaces&ensp;·&ensp;<span class="stat-val">${stats.pacts_kept.toLocaleString()}</span> pacts kept&ensp;·&ensp;<span class="stat-val">${stats.on_time_pct}%</span> on-time rate`
-      : 'Just launched — be one of the first teams';
-    html = html.replace('<!--SSR_STATS-->', statsHtml);
+      : '<span class="stat-val" style="font-size:2rem;letter-spacing:-0.02em;line-height:1.3">Free for every workspace · Unlimited pacts · No credit card</span>';
+    html = html.replace(/<!--SSR_STATS_START-->[\s\S]*?<!--SSR_STATS_END-->/, statsHtml);
     res.setHeader('Content-Type', 'text/html');
     res.send(html);
   } catch {
