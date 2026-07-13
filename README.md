@@ -13,7 +13,7 @@ Pact turns casual Slack promises into tracked commitments with automatic reminde
 - **Automatic reminders** — 24-hour window reminders + overdue nudges
 - **Daily digest** — 9am ET summary of all open pacts
 - **Conversational DM** — Message Pact in plain English to create pacts
-- **Pro: Linear, Notion, Asana sync**
+- **Pro early access:** Anthropic-powered assistance, Workflow Builder, and Linear/Notion/Asana sync
 
 ## Requirements
 
@@ -24,7 +24,7 @@ Pact turns casual Slack promises into tracked commitments with automatic reminde
 
 - `DATABASE_URL` - pooled PostgreSQL connection string for the app runtime (required)
 - `MIGRATE_DATABASE_URL` - direct PostgreSQL connection string for one-off migrations
-- `SLACK_BOT_TOKEN` - Slack bot token
+- `SLACK_BOT_TOKEN` - optional single-workspace override; Production normally loads OAuth bot tokens from Neon
 - `SLACK_SIGNING_SECRET` - Slack signing secret
 - `SLACK_CLIENT_ID` / `SLACK_CLIENT_SECRET` - OAuth app credentials
 - `SLACK_APP_ID` - Slack app ID for App Home links
@@ -66,11 +66,8 @@ npm test
 
 Uses Node.js 20's built-in test runner (`node:test`) — no external test framework needed. Tests mock all DB queries and Slack API calls.
 
-Coverage:
-- **`tests/unit/fuzzy.test.js`** — Levenshtein, tokenization, fuzzy pact matching (28 tests)
-- **`tests/unit/done.test.js`** — `/done` command: empty, single pact, multi-select, ID completion, fuzzy match, multi-complete buttons (12 tests)
-- **`tests/unit/slack-handlers.test.js`** — `/pact` channel rejection, DM detection, `/pacts` listing, overdue pacts, cross-channel fallback, emoji reaction flow (14 tests)
-- **`tests/unit/tracker.test.js`** — token encryption, Pro-tier gating, Linear/tracker sync lifecycle, OAuth state (16 tests)
+Coverage includes fuzzy matching, `/done`, Slack command/event handlers, serverless acknowledgements,
+analytics privacy, recurrence, billing gates, and tracker synchronization.
 
 ### E2E Slack tests (requires `SLACK_SIGNING_SECRET`)
 
@@ -125,8 +122,8 @@ npm run migrate
 
 Production handoff checklist:
 
-- Create a Slack app in your own Slack developer account, copy the manifest,
-  and point all request URLs at the Vercel deployment.
+- Maintain the existing Slack app under the current operator account and keep all
+  OAuth, command, event, and interactivity URLs pointed at `https://makepact.co`.
 - Turn off Slack Socket Mode. Do not copy `SLACK_APP_TOKEN` to Vercel.
 - Create your own Stripe product, price, Payment Link, and webhook endpoint.
   Set the Payment Link as `STRIPE_PRO_PAYMENT_LINK`.

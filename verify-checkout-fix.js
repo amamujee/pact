@@ -3,7 +3,7 @@
  * Tests that:
  * 1. The Stripe checkout link is configured from this deployment's environment
  * 2. The success page auto-activation works with just the cookie (no sessionId required)
- * 3. The billing page upgrade link doesn't have target="_blank"
+ * 3. The public billing page reflects the current Pro early-access state
  * 4. The checkout.html skip link has skip_lookup=1
  */
 
@@ -62,21 +62,18 @@ test('Checkout fails closed when unconfigured', () => {
   );
 });
 
-console.log('\n2. Billing page upgrade link');
-test('Upgrade link goes to /api/checkout', () => {
+console.log('\n2. Public billing page');
+test('Pro access directs users to the support address while billing is unconfigured', () => {
   assert(
-    billingHtml.includes('href="/api/checkout"'),
-    'Upgrade link should point to /api/checkout'
+    billingHtml.includes('mailto:hello@makepact.co?subject=Pact%20Pro%20early%20access'),
+    'Early-access CTA should direct users to the Pact support address'
   );
 });
 
-test('Upgrade link does NOT have target="_blank"', () => {
-  const lines = billingHtml.split('\n');
-  const buttonLine = lines.find(l => l.includes('href="/api/checkout"'));
-  assert(buttonLine, 'Could not find the Upgrade to Pro anchor tag');
+test('Public billing page does not expose a broken self-service checkout link', () => {
   assert(
-    !buttonLine.includes('target="_blank"'),
-    'Upgrade link should NOT open in a new tab'
+    !billingHtml.includes('href="/api/checkout"'),
+    'Public billing page should not link to checkout until Stripe is configured'
   );
 });
 

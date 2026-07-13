@@ -1,7 +1,7 @@
 # Pact — Slack App Directory Submission Package
 
-> **Status:** Ready for submission
-> **Updated:** May 13, 2026
+> **Status:** Draft — complete final QA before submission
+> **Updated:** July 12, 2026
 > **App URL:** https://makepact.co
 > **Support email:** hello@makepact.co
 
@@ -27,9 +27,9 @@ What makes Pact different: accountability flows both ways. Counterparties can pr
 
 Track your streak, see your completion rate, spot overdue patterns — all from the App Home. Teams with 3+ users see a workspace pulse.
 
-Pro workspaces get AI commitment detection (Pact spots promises in conversation and offers to track them), recurring pacts, tracker sync with Linear/Notion/Asana, and the weekly standup digest.
+Free workspaces include recurring pacts, digests, bulk actions, rescheduling, Home, and streaks. Pro adds unlimited usage, AI commitment detection, Workflow Builder, and tracker sync with Linear/Notion/Asana.
 
-Free forever for teams getting started. Pro is $10/month flat — no per-seat pricing.
+Free forever for teams getting started. Pro is in early access; contact hello@makepact.co for availability.
 ```
 *(893 characters)*
 
@@ -55,23 +55,19 @@ Free forever for teams getting started. Pro is $10/month flat — no per-seat pr
 ### Pricing Tier Descriptions
 
 **Free**
-- Up to 5 active pacts per workspace
+- Up to 100 newly created active pacts per workspace each month
 - Core commands: `/pact`, `/pacts`, `/done`, `/pact extend`, `/pact edit`
 - Automatic reminders and due-date nudges
 - Counterparty accountability (both parties notified)
 - 🤝 emoji reaction creation
 - App Home with streak and personal stats
+- Recurring pacts, digests, bulk actions, and reschedule proposals
 
-**Pro — $10/month per workspace (not per seat)**
+**Pro — early access**
 - Unlimited active pacts
 - AI commitment detection in channels
-- Recurring pacts (daily / weekly / biweekly / monthly)
-- Weekly standup digest
-- Bulk complete and bulk snooze from App Home
-- Counterparty reschedule proposals with accept/decline/counter flow
 - Tracker sync: Linear, Notion, Asana
 - Workflow Builder steps (`pact_create`, `pact_summary`)
-- Team pulse (workspace-wide stats for 3+ users)
 - Priority support
 
 ---
@@ -90,8 +86,6 @@ Slack reviewers reject apps for over-scoping. One line per scope explaining nece
 | `chat:write` | Posts pact confirmations, reminders, and DM nudges on behalf of the bot |
 | `users:read` | Fetches display names and timezone data for readable notifications and timezone-aware reminder delivery |
 | `im:write` | Opens DM channels to send reminders and notifications to individual users |
-| `team:read` | Reads workspace name and domain for installation records and multi-workspace disambiguation |
-| `workflow.steps:execute` | Executes Workflow Builder steps (`pact_create`, `pact_summary`) when triggered by user-built workflows |
 
 **Scopes we intentionally do NOT request:**
 - `channels:read` / `groups:read` — not needed; we use `team.id` from events, not channel lists
@@ -106,19 +100,19 @@ Slack reviewers reject apps for over-scoping. One line per scope explaining nece
 Slack's standard security questionnaire pre-answered for reviewers.
 
 ### Data Retention
-- **Pact records** (commitment text, due dates, status, Slack user IDs) are retained for the lifetime of the installation. When a workspace uninstalls Pact, data is retained for 30 days then deleted on request.
+- **Pact records** (commitment text, due dates, status, Slack user IDs) are retained while needed to provide the service. Workspace admins and users may request deletion at hello@makepact.co.
 - **Website analytics** (anonymized IP hash, page path, UTM params) are retained for 90 days then purged.
-- **Bot tokens** are deleted immediately when a workspace uninstalls.
-- No backup retention beyond the hosting provider's standard 7-day automated backups (Neon / Render).
+- **Bot tokens** are removed when the corresponding installation record is deleted in response to an uninstall or deletion request.
+- Provider-managed backup retention follows Neon and Vercel account settings.
 
 ### Encryption at Rest and in Transit
-- **In transit:** All traffic is TLS 1.2+ via Render's managed TLS (Let's Encrypt). No unencrypted HTTP is accepted in production.
-- **At rest:** Database hosted on Neon (PostgreSQL); Neon encrypts volumes at rest using AES-256. Slack bot tokens are additionally encrypted at the application layer using AES-256-GCM before being stored in the database.
+- **In transit:** Production traffic uses HTTPS through Vercel, and database connections use TLS.
+- **At rest:** Neon provides database encryption at rest. Slack bot tokens are stored in the access-controlled database; tracker OAuth tokens use application-level AES-256-GCM encryption when `TRACKER_ENCRYPTION_KEY` is configured.
 
 ### Employee Access
-- Database access requires SSH key authentication to the Render environment; only Polsia engineering has access.
+- Database and deployment access is restricted to the current Pact operator through Neon, Vercel, and GitHub account controls.
 - No third-party support tooling with access to raw customer data.
-- Access logs maintained via Render's audit trail.
+- Runtime and deployment logs are maintained in Vercel.
 
 ### Incident Response
 - Security incidents are triaged within 24 hours of detection.
@@ -135,10 +129,11 @@ Slack's standard security questionnaire pre-answered for reviewers.
 | Sub-Processor | Purpose | Data Shared | Region |
 |--------------|---------|-------------|--------|
 | **Neon** | Managed PostgreSQL database | All pact data, user IDs, workspace metadata | US (AWS us-east-1) |
-| **Render** | Application hosting | Application logs, env vars (tokens encrypted) | US (Oregon) |
-| **Stripe** | Payment processing for Pro subscriptions | Workspace billing email, subscription status | US / Global |
-| **OpenAI** (Pro only) | AI commitment detection; `/done` context inference | Message snippets from channels where Pact is active; no storage by Pact after inference | US |
-| **Postmark** | Transactional email (billing receipts, support) | Email address of workspace admin | US |
+| **Vercel** | Application hosting | Application logs and encrypted environment configuration | Provider-managed |
+| **Stripe** (when enabled) | Payment processing for Pro subscriptions | Billing contact and subscription metadata | US / Global |
+| **Anthropic** (when enabled) | AI commitment detection and `/done` context inference | Limited message snippets needed for inference | Provider-managed |
+| **Resend** (when enabled) | Transactional email | Intended recipient email address and message content | Provider-managed |
+| **Linear, Notion, Asana** (when connected) | User-requested tracker synchronization | Pact and target project data required for sync | Provider-managed |
 
 **Not a sub-processor:** Slack itself (they are a platform provider and independent data controller).
 
@@ -208,7 +203,7 @@ Run through this in order before clicking Submit in the Slack App Config.
 
 - [ ] Data retention: use answers from Section 3 above
 - [ ] Encryption: TLS 1.2+ in transit, AES-256 at rest + AES-256-GCM for tokens
-- [ ] Sub-processors: Neon, Render, Stripe, OpenAI (Pro), Postmark
+- [ ] Sub-processors: Slack, Neon, Vercel, plus enabled optional providers listed above
 - [ ] GDPR/CCPA: no data sold, deletion requests honored at hello@makepact.co
 
 ### Final Checks
@@ -226,4 +221,4 @@ Run through this in order before clicking Submit in the Slack App Config.
 
 ---
 
-*Generated: May 13, 2026. Update the "Last updated" dates on privacy.html and terms.html if significant policy changes are made before submission.*
+*Updated: July 12, 2026. Re-run the full QA checklist before submission.*

@@ -110,10 +110,6 @@ function registerSharedRoutes(app, slackApp) {
   registerPageRoutes(app);
   app.use('/streak', streakRoutes);
   app.use('/admin/activation', activationRoutes);
-  if (process.env.ENABLE_ADMIN_MIGRATE === 'true') {
-    const adminMigrateRouter = require('./routes/admin-migrate');
-    app.use('/admin/migrate', adminMigrateRouter);
-  }
   app.use('/activate', activateRouter);
   app.use('/api/public-stats', publicStatsRouter);
   app.get('/api/digest/admin', async (req, res) => {

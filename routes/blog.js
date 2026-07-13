@@ -58,7 +58,7 @@ const ARTICLE_HTML = `
 
 <h2>Get Started</h2>
 <p>Pact is free to start. We're running a beta for engineering teams.</p>
-<p><strong><a href="https://makepact.co">Add Pact to Slack</a></strong> — takes 30 seconds. First 100 teams get Pro tier free for 3 months. No credit card.</p>
+<p><strong><a href="https://makepact.co">Add Pact to Slack</a></strong> — takes about two minutes. The Free plan requires no credit card.</p>
 `;
 
 function buildBlogHtml(slug) {

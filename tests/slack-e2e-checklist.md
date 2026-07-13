@@ -22,7 +22,7 @@ Before running tests, ensure the following are configured:
 | `SLACK_TEST_BOT_DM_CHANNEL_ID` | The DM channel ID between user 1 and the Pact bot |
 | `SLACK_TEST_GROUP_DM_CHANNEL_ID` | A group DM with 3+ people |
 
-Store these on the Pact Render service. **Never mix with production credentials.**
+Store these in the isolated QA environment. **Never mix QA credentials with Production.**
 
 ---
 
