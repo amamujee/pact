@@ -63,7 +63,7 @@ self-service until their variables are configured:
 - [x] `/pact help`, `/pacts`, and `/done` return visible Slack responses
 - [x] A pact can be created in a teammate DM and completed
 - [ ] App Home loads
-- [ ] A `message.im` event receives a bot response
+- [x] A `message.im` event receives a bot response
 - [ ] Interactivity buttons reach `/slack/actions`
 - [x] Manual GitHub scheduled-jobs workflow succeeds
 - [x] Production logs contain no new fatal or unhandled errors
