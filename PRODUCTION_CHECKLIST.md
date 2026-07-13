@@ -73,6 +73,7 @@ self-service until their variables are configured:
 
 ## Security follow-up
 
-- [ ] Confirm the previously exposed Neon credential has been rotated
+- [x] Previously exposed Neon credential rotated; post-rotation health, persisted
+  data, Slack token loading, and authenticated scheduled jobs verified
 - [x] Confirm legal pages identify the current independent operator
 - [x] Confirm privacy subprocessors match the configured runtime providers
