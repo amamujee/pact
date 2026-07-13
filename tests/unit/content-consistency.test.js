@@ -53,20 +53,24 @@ describe('public content and runtime consistency', () => {
     }
   });
 
-  it('describes the implemented Free and Pro feature model consistently', () => {
+  it('describes the unlimited free feature model consistently', () => {
     const homepage = read('public/index.html');
     const directory = read('public/slack-app-directory.html');
     const llms = read('public/llms.txt');
-    const billing = read('lib/billing-routes.js');
+    const access = read('lib/access.js');
     const slackHandlers = read('lib/slack-handlers.js');
 
-    assert.match(billing, /PLAN_MONTHLY_LIMITS = \{ free: 100, pro: null \}/);
-    assert.match(homepage, /Up to 100 new active pacts per month/);
-    assert.match(directory, /Up to 100 new active pacts per month/);
-    assert.match(llms, /100 newly created active pacts per workspace/);
-    assert.match(homepage, /Pro · Early access/);
-    assert.match(directory, /Pro · Early access/);
-    assert.match(slackHandlers, /Pro is currently in early access/);
+    assert.equal(fs.existsSync(path.join(root, 'lib/billing-routes.js')), false);
+    assert.match(access, /PLAN_MONTHLY_LIMITS = \{ free: null \}/);
+    assert.match(access, /getTeamTier\(\) \{ return 'free'; \}/);
+    assert.match(directory, /Unlimited active pacts/);
+    assert.match(llms, /Every feature is free, with unlimited pacts/);
+
+    const paidLanguage = /\/pact (?:upgrade|billing)|Pro · Early access|Stripe|billing portal|paid upgrade/i;
+    assert.doesNotMatch(homepage, paidLanguage);
+    assert.doesNotMatch(directory, paidLanguage);
+    assert.doesNotMatch(llms, paidLanguage);
+    assert.doesNotMatch(slackHandlers, paidLanguage);
   });
 
   it('uses the production domain and provider names across install and policy surfaces', () => {

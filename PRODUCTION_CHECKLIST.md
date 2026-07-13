@@ -46,7 +46,6 @@ Last updated: 2026-07-12
 These are not required for the free core product and must not be presented as
 self-service until their variables are configured:
 
-- [ ] Stripe self-service billing: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRO_PAYMENT_LINK`
 - [ ] Anthropic AI: `ANTHROPIC_API_KEY`
 - [ ] Transactional email: `RESEND_API_KEY`, `EMAIL_FROM`
 - [ ] Tracker OAuth credentials and `TRACKER_ENCRYPTION_KEY`
@@ -55,7 +54,6 @@ self-service until their variables are configured:
 
 - [x] `npm test`
 - [x] `npm run build`
-- [x] `node verify-checkout-fix.js`
 - [x] `GET /api/health` returns `200` with `slack:true`
 - [x] `/`, `/privacy`, `/terms`, `/support`, `/llms.txt`, and `/sitemap.xml` return `200`
 - [x] `/slack/reinstall` redirects to the correct Slack app and callback

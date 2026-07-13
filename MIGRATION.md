@@ -29,7 +29,6 @@ The OAuth install flow stores workspace bot tokens in Neon. Do not set a global
 Optional integrations:
 
 - `MIGRATE_DATABASE_URL` — direct Neon connection for schema migrations
-- `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRO_PAYMENT_LINK` — self-service Pro billing
 - `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL` — AI-assisted features
 - `RESEND_API_KEY`, `EMAIL_FROM` — transactional email
 - Linear, Asana, and Notion OAuth credentials — tracker sync
@@ -101,7 +100,6 @@ Minimum release gates:
 ```bash
 npm test
 npm run build
-node verify-checkout-fix.js
 ```
 
 Then verify the web routes, Slack commands/events/actions, OAuth reinstall, and the

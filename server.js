@@ -42,14 +42,13 @@ const { formatDate, getUserTimezone, parseDueDate, getUserName, getStatusEmoji, 
 const { BOT_DM, PEER_DM, getDMCounterparty, backfillCounterparty, resolveNullCounterparties } = require('./lib/counterparty');
 const slackHandlers = require('./lib/slack-handlers');
 const { registerMetricsRoutes } = require('./lib/metrics-routes');
-const { init: initBilling, registerBillingRoutes, getTeamTier, planBadge } = require('./lib/billing-routes');
+const { getTeamTier, planBadge } = require('./lib/access');
 const { registerTrackerRoutes } = require('./lib/tracker-routes');
 const { registerPageRoutes } = require('./lib/page-routes');
 const { registerSlackOAuthCallback } = require('./lib/slack-oauth');
 const { registerSlackDiagnostics } = require('./lib/slack-diagnostics');
 const workflowBuilder = require('./lib/workflow-builder');
 
-initBilling({ pool });
 doneRoutes.init({ getTeamTier, formatDate });
 
 slackHandlers.init({
@@ -104,7 +103,6 @@ function registerSharedRoutes(app, slackApp) {
   registerMetricsRoutes(app, pool);
   registerErrorRoutes(app, pool);
   registerContactRoutes(app, pool);
-  registerBillingRoutes(app, pool);
   void registerSlackOAuthCallback(app, pool, slackApp);
   void registerTrackerRoutes(app, pool);
   registerPageRoutes(app);

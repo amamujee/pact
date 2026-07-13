@@ -1,6 +1,6 @@
 // Unit tests for lib/slack-handlers.js — Slack command handlers.
 // Uses Node.js built-in test runner (node:test).
-// All external deps are mocked: pool, billing, tracker, counterparty, helpers.
+// All external deps are mocked: pool, access, tracker, counterparty, helpers.
 // Tests focus on exported handler behaviors without real DB or Slack API.
 'use strict';
 
@@ -29,7 +29,7 @@ Module._load = function(request, ...args) {
 // ---------------------------------------------------------------------------
 
 let mockPool;
-let mockBilling;
+let mockAccess;
 
 function makeClient(overrides = {}) {
   return {
@@ -65,18 +65,18 @@ function stubModules() {
     })
   };
 
-  mockBilling = {
+  mockAccess = {
     getTeamTier: mock.fn(async () => 'free'),
-    planBadge: mock.fn((tier) => tier === 'pro' ? '⭐ Pro' : 'Free'),
+    planBadge: mock.fn(() => 'Free · all features'),
     getMonthlyPactCount: mock.fn(async () => 0),
-    PLAN_MONTHLY_LIMITS: { free: 100, pro: null },
+    PLAN_MONTHLY_LIMITS: { free: null },
     init: mock.fn(() => {}),
   };
 
   // Stub all dependency modules
   const modules = {
     '../../db/index': mockPool,
-    '../../lib/billing-routes': mockBilling,
+    '../../lib/access': mockAccess,
     '../../lib/tracker-routes': { Router: () => ({ get: () => {}, post: () => {} }) },
     '../../tracker': {
       createPactInTracker: mock.fn(async () => {}),
@@ -355,6 +355,7 @@ describe('handleCreatePact — /pact command', () => {
     assert.ok(respondCalls.length > 0, 'Should respond to help');
     const text = JSON.stringify(respondCalls[0]);
     assert.ok(text.includes('pact') || text.includes('Usage') || text.includes('blocks'), `Expected help message, got: ${text.substring(0, 200)}`);
+    assert.doesNotMatch(text, /\/pact (?:upgrade|billing)|Pro subscription|30 days Pro/i);
   });
 });
 

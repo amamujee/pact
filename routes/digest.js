@@ -1,6 +1,6 @@
 // routes/digest.js
 // Owns: weekly standup digest — scheduled send, Block Kit builder, inline action handlers.
-// Does NOT own: pact creation, regular reminders, or Stripe billing.
+// Does NOT own: pact creation or regular reminders.
 
 const digestDb = require('../db/digest');
 const pactDb = require('../db/pacts');
@@ -35,7 +35,7 @@ function statusEmoji(dueDate) {
  * @param {Object} data - { activePacts, overduePacts, completedThisWeek }
  * @param {string} userId
  * @param {string} userTz  - IANA timezone string
- * @param {string} plan    - 'free' | 'pro'
+ * @param {string} plan    - access-plan label
  */
 function buildDigestBlocks(data, userId, userTz, plan) {
   const { activePacts, overduePacts, completedThisWeek } = data;
@@ -449,7 +449,7 @@ async function handleDigestSettingsEnable({ ack, body, client }) {
  * @param {Object} data - { pactsDueToday, overduePacts, upcomingPacts, allActive }
  * @param {string} userId
  * @param {string} userTz  - IANA timezone string
- * @param {string} plan    - 'free' | 'pro'
+ * @param {string} plan    - access-plan label
  */
 function buildDailyMorningBlocks(data, userId, userTz, plan) {
   const { pactsDueToday, overduePacts, upcomingPacts, allActive } = data;

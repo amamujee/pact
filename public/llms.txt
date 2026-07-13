@@ -22,13 +22,9 @@ Pact also provides automatic reminders, daily and weekly digests, recurring pact
 two-way reschedule proposals, bulk Home Tab actions, completion streaks, and a
 workspace pulse for eligible teams.
 
-## Plans
+## Access
 
-- Free — $0, no credit card. Up to 100 newly created active pacts per workspace
-  each calendar month, including the core commands and non-AI workflows above.
-- Pro — early access. Adds unlimited usage, Anthropic-powered commitment detection
-  and `/done` assistance, Slack Workflow Builder steps, and Linear/Notion/Asana sync.
-  Contact hello@makepact.co for availability.
+Pact is free. Every feature is included with unlimited pacts and no credit card.
 
 ## Installation
 
@@ -41,25 +37,25 @@ workspace pulse for eligible teams.
 
 Pact requests only the scopes listed in its Slack app configuration. It receives
 slash commands, direct messages sent to the bot, configured app events, and message
-content required for 🤝 reaction capture. When Pro AI is enabled, limited message
+content required for 🤝 reaction capture. When AI features are enabled, limited message
 snippets may be sent to Anthropic for inference as described in the Privacy Policy.
 
 ## Integrations
 
-Optional Pro tracker integrations support Linear, Notion, and Asana. Each connection
+Optional tracker integrations support Linear, Notion, and Asana. Each connection
 is user-initiated and can be disconnected from Pact settings.
 
 ## FAQ
 
 Q: Is Pact free?
-A: Yes. The Free plan supports up to 100 newly created active pacts per workspace per month.
+A: Yes. Every feature is free, with unlimited pacts.
 
 Q: Can Pact track solo commitments?
 A: The bot DM can track self-directed commitments; teammate DMs provide two-way accountability.
 
 Q: Does Pact read every Slack message?
 A: No. Pact receives content through its configured commands, direct messages, events,
-and reaction/shortcut workflows. Optional AI processing is limited to enabled Pro features.
+and reaction/shortcut workflows. Optional AI processing occurs only when those features are enabled.
 
 Q: Which AI provider does Pact use?
 A: The code integrates directly with Anthropic when `ANTHROPIC_API_KEY` is configured.

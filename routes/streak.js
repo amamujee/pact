@@ -5,9 +5,9 @@
 'use strict';
 
 const express = require('express');
-const crypto = require('crypto');
 const { getShareCard, logStreakAnalytics } = require('../db/streak-milestones');
 const { getAppUrl } = require('../lib/app-url');
+const { getClientIP, hashIP } = require('../lib/analytics');
 
 const router = express.Router();
 
@@ -47,8 +47,7 @@ function milestoneEmoji(days) {
 }
 
 function hashIp(req) {
-  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress || '';
-  return crypto.createHash('sha256').update(ip + 'pact-streak-salt').digest('hex').slice(0, 16);
+  return hashIP(getClientIP(req));
 }
 
 // ---------------------------------------------------------------------------

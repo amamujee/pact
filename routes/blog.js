@@ -48,7 +48,7 @@ const ARTICLE_HTML = `
   <li><strong>Overdue nudges:</strong> 9am reminder if something's due today and not marked complete.</li>
   <li><strong>Streaks:</strong> Track consecutive weeks of 100% completion.</li>
   <li><strong>Team pulse:</strong> Org-wide completion rates, most reliable teams, trending pacts.</li>
-  <li><strong>Pro AI feature:</strong> (Coming soon) Auto-detect commitments from Slack messages.</li>
+  <li><strong>AI feature:</strong> Auto-detect commitments from Slack messages.</li>
 </ul>
 
 <h2>Why We Built This</h2>
@@ -58,7 +58,7 @@ const ARTICLE_HTML = `
 
 <h2>Get Started</h2>
 <p>Pact is free to start. We're running a beta for engineering teams.</p>
-<p><strong><a href="https://makepact.co">Add Pact to Slack</a></strong> — takes about two minutes. The Free plan requires no credit card.</p>
+<p><strong><a href="https://makepact.co">Add Pact to Slack</a></strong> — takes 30 seconds. Every feature is free. No credit card.</p>
 `;
 
 function buildBlogHtml(slug) {

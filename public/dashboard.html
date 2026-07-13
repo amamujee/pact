@@ -596,6 +596,7 @@
       .header { flex-direction: column; align-items: flex-start; gap: 1rem; }
     }
   </style>
+    <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 
@@ -635,11 +636,6 @@
         <div class="glance-label">Active Users 7d</div>
         <div class="glance-value" id="g-users">—</div>
         <div class="glance-sub">distinct creators + completers</div>
-      </div>
-      <div class="glance-item gl-yellow">
-        <div class="glance-label">MRR</div>
-        <div class="glance-value" id="g-mrr">—</div>
-        <div class="glance-sub"><span id="g-pro-count">—</span> pro subscribers</div>
       </div>
     </div>
 
@@ -776,6 +772,11 @@
 </div>
 
 <script>
+  const adminSecret = new URLSearchParams(window.location.search).get('secret') || '';
+  const adminFetchOptions = adminSecret
+    ? { headers: { 'x-admin-secret': adminSecret } }
+    : {};
+
   function escapeHtml(str) {
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
@@ -800,11 +801,6 @@
       { name: 'Activated (≥1 pact)', count: cf.activated, dotClass: 'c-green', barClass: 'b-green', pctColor: 'var(--green)' },
       { name: 'First Completion', count: cf.first_completers, dotClass: 'c-yellow', barClass: 'b-yellow', pctColor: 'var(--yellow)' },
     ];
-
-    // Add Pro step if we have subscriber data
-    if (m.pro_subscribers !== undefined) {
-      steps.push({ name: 'Pro Upgrade', count: m.pro_subscribers, dotClass: 'c-purple', barClass: 'b-purple', pctColor: 'var(--purple)' });
-    }
 
     const maxCount = steps[0].count || 1;
     let html = '<div class="funnel-container">';
@@ -916,7 +912,7 @@
   // ─── System Health ───
   async function loadErrors() {
     try {
-      const res = await fetch('/health/errors');
+      const res = await fetch('/health/errors', adminFetchOptions);
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const e = await res.json();
 
@@ -982,7 +978,7 @@
     errEl.style.display = 'none';
 
     try {
-      const res = await fetch('/api/metrics');
+      const res = await fetch('/api/metrics', adminFetchOptions);
       if (!res.ok) throw new Error('Failed to load /api/metrics (HTTP ' + res.status + ')');
       const m = await res.json();
 
@@ -997,8 +993,6 @@
       document.getElementById('g-installs').textContent = m.total_installations;
       document.getElementById('g-installs-sub').textContent = m.activated_orgs + ' activated';
       document.getElementById('g-users').textContent = m.active_users_7d;
-      document.getElementById('g-mrr').textContent = '$' + m.mrr;
-      document.getElementById('g-pro-count').textContent = m.pro_subscribers;
 
       // ── North Star ──
       document.getElementById('ns-created').textContent = m.pacts_created.total;

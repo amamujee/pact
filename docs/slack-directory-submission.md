@@ -27,9 +27,7 @@ What makes Pact different: accountability flows both ways. Counterparties can pr
 
 Track your streak, see your completion rate, spot overdue patterns — all from the App Home. Teams with 3+ users see a workspace pulse.
 
-Free workspaces include recurring pacts, digests, bulk actions, rescheduling, Home, and streaks. Pro adds unlimited usage, AI commitment detection, Workflow Builder, and tracker sync with Linear/Notion/Asana.
-
-Free forever for teams getting started. Pro is in early access; contact hello@makepact.co for availability.
+Every feature is free: unlimited pacts, recurring commitments, digests, bulk actions, rescheduling, App Home, streaks, AI commitment detection, Workflow Builder, and tracker sync with Linear, Notion, and Asana.
 ```
 *(893 characters)*
 
@@ -43,8 +41,8 @@ Free forever for teams getting started. Pro is in early access; contact hello@ma
 - **Bulk actions** — Complete or snooze multiple overdue pacts at once from App Home
 - **Recurring pacts** — Daily, weekly, biweekly, or monthly repetition with auto-spawn on complete
 - **Weekly standup digest** — Auto-generated commitment summary delivered on your schedule
-- **AI commitment detection** — Pro: Pact spots promises in channel conversation and offers to track them
-- **Tracker sync** — Pro: Sync pacts with Linear, Notion, or Asana
+- **AI commitment detection** — Pact spots promises in channel conversation and offers to track them
+- **Tracker sync** — Sync pacts with Linear, Notion, or Asana
 
 ### Categories
 
@@ -52,19 +50,16 @@ Free forever for teams getting started. Pro is in early access; contact hello@ma
 - Project Management
 - Communication
 
-### Pricing Tier Descriptions
+### Access
 
-**Free**
-- Up to 100 newly created active pacts per workspace each month
+**Free — every feature included**
+- Unlimited pacts
 - Core commands: `/pact`, `/pacts`, `/done`, `/pact extend`, `/pact edit`
 - Automatic reminders and due-date nudges
 - Counterparty accountability (both parties notified)
 - 🤝 emoji reaction creation
 - App Home with streak and personal stats
 - Recurring pacts, digests, bulk actions, and reschedule proposals
-
-**Pro — early access**
-- Unlimited active pacts
 - AI commitment detection in channels
 - Tracker sync: Linear, Notion, Asana
 - Workflow Builder steps (`pact_create`, `pact_summary`)
@@ -79,7 +74,7 @@ Slack reviewers reject apps for over-scoping. One line per scope explaining nece
 | Scope | Why it's required |
 |-------|------------------|
 | `reactions:read` | Detects 🤝 emoji reactions on messages to create pacts without a slash command |
-| `channels:history` | Reads messages in public channels for 🤝 reactions and AI commitment detection (Pro); scoped to channels Pact is invited to |
+| `channels:history` | Reads messages in public channels for 🤝 reactions and AI commitment detection; scoped to channels Pact is invited to |
 | `groups:history` | Same as above for private channels where Pact has been invited |
 | `mpim:history` | Required to detect 🤝 reactions in multi-party DMs |
 | `im:history` | Reads DM messages for AI commitment detection and `/done` context inference when user interacts with Pact in DM |
@@ -130,7 +125,6 @@ Slack's standard security questionnaire pre-answered for reviewers.
 |--------------|---------|-------------|--------|
 | **Neon** | Managed PostgreSQL database | All pact data, user IDs, workspace metadata | US (AWS us-east-1) |
 | **Vercel** | Application hosting | Application logs and encrypted environment configuration | Provider-managed |
-| **Stripe** (when enabled) | Payment processing for Pro subscriptions | Billing contact and subscription metadata | US / Global |
 | **Anthropic** (when enabled) | AI commitment detection and `/done` context inference | Limited message snippets needed for inference | Provider-managed |
 | **Resend** (when enabled) | Transactional email | Intended recipient email address and message content | Provider-managed |
 | **Linear, Notion, Asana** (when connected) | User-requested tracker synchronization | Pact and target project data required for sync | Provider-managed |
@@ -143,7 +137,7 @@ Slack's standard security questionnaire pre-answered for reviewers.
 
 **Support contact:** [hello@makepact.co](mailto:hello@makepact.co)
 
-This address is live. Responses within 5 business days. For urgent billing issues, same address.
+This address is live. Responses within 5 business days.
 
 **Support URL for Slack directory form:** `mailto:hello@makepact.co`
 
