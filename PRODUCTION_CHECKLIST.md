@@ -111,5 +111,5 @@ After Slack environment variables are set and production is redeployed:
 ## Security Cleanup
 
 - [x] Rotate the exposed Neon role password. Completed July 12, 2026.
-- [ ] Confirm Vercel `DATABASE_URL` uses the rotated credential and rerun the
+- [x] Confirm Vercel `DATABASE_URL` uses the rotated credential and rerun the
   schema verification.
