@@ -725,6 +725,20 @@
         }
         .footer-logo img { width: 20px; height: 20px; flex-shrink: 0; }
         .footer-logo .logo-accent { color: var(--accent); }
+        .footer-credit {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+        .footer-credit a {
+            color: var(--text-light);
+            text-decoration-color: rgba(255,255,255,0.35);
+            text-underline-offset: 3px;
+            transition: color 0.2s, text-decoration-color 0.2s;
+        }
+        .footer-credit a:hover {
+            color: var(--accent);
+            text-decoration-color: var(--accent);
+        }
         .footer-links {
             display: flex;
             gap: 20px;
@@ -1138,6 +1152,10 @@
                     <img src="/logo.svg" alt="" width="20" height="20" aria-hidden="true">
                     Pact<span class="logo-accent">.</span>
                 </a>
+                <div class="footer-credit">
+                    Built by <a href="https://github.com/amamujee" target="_blank" rel="noopener noreferrer">@amamujee</a>
+                    · <a href="https://github.com/amamujee/pact" target="_blank" rel="noopener noreferrer">Source on GitHub</a>.
+                </div>
                 <div class="footer-links">
                     <a href="/privacy">Privacy</a>
                     <a href="/terms">Terms</a>
