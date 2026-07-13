@@ -358,6 +358,51 @@ describe('handleCreatePact — /pact command', () => {
   });
 });
 
+describe('serverlessSlashCommand', () => {
+  beforeEach(() => {
+    stubModules();
+  });
+
+  it('returns the first visible response through the original acknowledgement', async () => {
+    const handlers = loadSlackHandlers();
+    const ackCalls = [];
+    const respondCalls = [];
+    const visibleResponse = { response_type: 'ephemeral', text: 'Pact help' };
+    const wrapped = handlers.serverlessSlashCommand(async ({ ack, respond }) => {
+      await ack();
+      await respond(visibleResponse);
+    });
+
+    await wrapped({
+      ack: async (payload) => ackCalls.push(payload),
+      respond: async (payload) => respondCalls.push(payload),
+    });
+
+    assert.deepEqual(ackCalls, [visibleResponse]);
+    assert.deepEqual(respondCalls, []);
+  });
+
+  it('preserves an acknowledgement that already contains a response payload', async () => {
+    const handlers = loadSlackHandlers();
+    const ackCalls = [];
+    const respondCalls = [];
+    const immediateResponse = { response_type: 'ephemeral', text: 'Immediate' };
+    const followupResponse = { response_type: 'ephemeral', text: 'Follow-up' };
+    const wrapped = handlers.serverlessSlashCommand(async ({ ack, respond }) => {
+      await ack(immediateResponse);
+      await respond(followupResponse);
+    });
+
+    await wrapped({
+      ack: async (payload) => ackCalls.push(payload),
+      respond: async (payload) => respondCalls.push(payload),
+    });
+
+    assert.deepEqual(ackCalls, [immediateResponse]);
+    assert.deepEqual(respondCalls, [followupResponse]);
+  });
+});
+
 // ---------------------------------------------------------------------------
 // handleReactionAdded — emoji reaction flow
 // ---------------------------------------------------------------------------
