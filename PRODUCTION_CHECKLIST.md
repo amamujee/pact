@@ -59,8 +59,9 @@ self-service until their variables are configured:
 - [x] `GET /api/health` returns `200` with `slack:true`
 - [x] `/`, `/privacy`, `/terms`, `/support`, `/llms.txt`, and `/sitemap.xml` return `200`
 - [x] `/slack/reinstall` redirects to the correct Slack app and callback
-- [ ] `/pact help`, `/pacts`, and `/done` return visible Slack responses
-- [ ] A pact can be created in a teammate DM and completed
+- [x] Authenticated production smoke confirms the Neon-stored Slack token is valid
+- [x] `/pact help`, `/pacts`, and `/done` return visible Slack responses
+- [x] A pact can be created in a teammate DM and completed
 - [ ] App Home loads
 - [ ] A `message.im` event receives a bot response
 - [ ] Interactivity buttons reach `/slack/actions`
