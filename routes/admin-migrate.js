@@ -8,21 +8,15 @@
 'use strict';
 
 const express = require('express');
+const { requireAdminAuth } = require('../lib/admin-auth');
 
 const router = express.Router();
-
-function requireAuth(req, res, next) {
-  const secret = process.env.ADMIN_SECRET;
-  if (!secret) return res.status(403).json({ error: 'ADMIN_SECRET is required' });
-  if (req.query.secret === secret || req.headers['x-admin-secret'] === secret) return next();
-  res.status(401).json({ error: 'Unauthorized' });
-}
 
 // ---------------------------------------------------------------------------
 // GET /admin/migrate/tables
 // List all Neon tables with row counts
 // ---------------------------------------------------------------------------
-router.get('/tables', requireAuth, async (req, res) => {
+router.get('/tables', requireAdminAuth, async (req, res) => {
   const { Pool } = require('pg');
   const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
 
@@ -49,7 +43,7 @@ router.get('/tables', requireAuth, async (req, res) => {
 // POST /admin/migrate/export
 // Dump all Neon data to /tmp/neon-export.json on Render disk
 // ---------------------------------------------------------------------------
-router.post('/export', requireAuth, async (req, res) => {
+router.post('/export', requireAdminAuth, async (req, res) => {
   const { Pool } = require('pg');
   const fs = require('fs');
   const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
@@ -100,7 +94,7 @@ router.post('/export', requireAuth, async (req, res) => {
 // Import /tmp/neon-export.json into Render PostgreSQL
 // Body: { renderDatabaseUrl: string }
 // ---------------------------------------------------------------------------
-router.post('/import', requireAuth, async (req, res) => {
+router.post('/import', requireAdminAuth, async (req, res) => {
   const { renderDatabaseUrl } = req.body;
   if (!renderDatabaseUrl) {
     return res.status(400).json({ error: 'renderDatabaseUrl required in body' });
@@ -199,7 +193,7 @@ router.post('/import', requireAuth, async (req, res) => {
 // POST /admin/migrate/create-render-postgres
 // Create new Render PostgreSQL via Render API
 // ---------------------------------------------------------------------------
-router.post('/create-render-postgres', requireAuth, async (req, res) => {
+router.post('/create-render-postgres', requireAdminAuth, async (req, res) => {
   const RENDER_API_KEY = process.env.RENDER_API_KEY;
   if (!RENDER_API_KEY) {
     return res.status(500).json({ error: 'RENDER_API_KEY env var not set on this deployment' });

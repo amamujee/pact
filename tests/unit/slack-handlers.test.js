@@ -76,7 +76,7 @@ function stubModules() {
   // Stub all dependency modules
   const modules = {
     '../../db/index': mockPool,
-    '../../lib/billing-routes': mockBilling,
+    '../../lib/access': mockBilling,
     '../../lib/tracker-routes': { Router: () => ({ get: () => {}, post: () => {} }) },
     '../../tracker': {
       createPactInTracker: mock.fn(async () => {}),

@@ -285,6 +285,7 @@
             .footer-links { gap: 16px; flex-wrap: wrap; justify-content: center; }
         }
     </style>
+    <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 
@@ -359,7 +360,7 @@
                 <li>To send reminder notifications to the relevant Slack users before and after due dates</li>
                 <li>To allow users to list and complete their active pacts</li>
                 <li>To understand aggregate usage patterns and improve the product</li>
-                <li>Pro workspaces: to pass message snippets to our AI provider (OpenAI) for commitment detection and <code>/done</code> context inference — no message content is stored by Pact after inference completes</li>
+                <li>To pass message snippets to our AI provider (OpenAI) for commitment detection and <code>/done</code> context inference — no message content is stored by Pact after inference completes</li>
             </ul>
             <p>We do not use your data for advertising. We do not sell your data to any third party.</p>
         </div>
@@ -390,9 +391,7 @@
                 <li><strong style="color: var(--text-light);">Slack API</strong> — Pact is built on Slack. Your use of Pact is also governed by <a href="https://slack.com/trust/privacy/privacy-policy" target="_blank" rel="noopener noreferrer">Slack's Privacy Policy</a>.</li>
                 <li><strong style="color: var(--text-light);">Neon</strong> — Our managed PostgreSQL database provider. All pact data is stored in US-based (AWS us-east-1) data centers, encrypted at rest.</li>
                 <li><strong style="color: var(--text-light);">Render</strong> — Our application hosting provider. Processes application logs and environment variables (tokens are encrypted before storage). Data centers in US (Oregon).</li>
-                <li><strong style="color: var(--text-light);">Stripe</strong> — Payment processing for Pro subscriptions. Receives workspace billing email and subscription status. See <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer">Stripe's Privacy Policy</a>.</li>
-                <li><strong style="color: var(--text-light);">OpenAI</strong> (Pro workspaces only) — Powers AI commitment detection and <code>/done</code> context inference. Message snippets are sent to OpenAI's API for inference and are not stored by Pact afterward. See <a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener noreferrer">OpenAI's Privacy Policy</a>.</li>
-                <li><strong style="color: var(--text-light);">Postmark</strong> — Transactional email delivery (billing receipts). Receives the workspace admin's email address. See <a href="https://postmarkapp.com/privacy-policy" target="_blank" rel="noopener noreferrer">Postmark's Privacy Policy</a>.</li>
+                <li><strong style="color: var(--text-light);">OpenAI</strong> — Powers AI commitment detection and <code>/done</code> context inference. Message snippets are sent to OpenAI's API for inference and are not stored by Pact afterward. See <a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener noreferrer">OpenAI's Privacy Policy</a>.</li>
                 <li><strong style="color: var(--text-light);">Google Fonts</strong> — Used for typography on our marketing website. Google may log font requests; see <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a>.</li>
             </ul>
             <p>We do not use advertising networks, third-party analytics platforms (such as Google Analytics), or any marketing tracking services.</p>

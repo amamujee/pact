@@ -274,7 +274,7 @@ async function handleDoneCommand({ command, ack, respond, client }, tracker = nu
       return;
     }
 
-    // AI inference path (Pro only, no text input, multiple pacts)
+    // AI inference path (no text input, multiple pacts)
     // WHY: When user types bare /done, infer from recent channel activity which pact they likely finished.
     if (!text || text.trim().length === 0) {
       const teamTier = _getTeamTier ? await _getTeamTier(team_id) : 'free';

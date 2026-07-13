@@ -16,17 +16,14 @@ Last updated: 2026-07-05
 
 - Unit tests pass: `npm test`
 - Build passes: `npm run build`
-- Checkout verifier passes: `node verify-checkout-fix.js`
 - Neon schema verified: expected Pact tables and required `pacts` columns are present.
 - Production `GET /api/health` returns `200` with `{"ok":true,"slack":false,...}`.
 - Production `GET /health` returns `200` with `{"status":"healthy","slack":false}`.
 - Production landing page `/` returns `200`.
 - Production `GET /api/public-stats` returns `200` with fresh empty DB stats.
-- Production `GET /api/checkout` returns `503` until `STRIPE_PRO_PAYMENT_LINK` is set.
 - Production `GET /api/crons/hourly` returns `401` without `CRON_SECRET` auth.
 
-The current `slack:false`, zero stats, and checkout `503` are expected until
-Slack and Stripe are configured.
+The current `slack:false` and zero stats are expected until Slack is configured.
 
 ## Still Needed: Slack
 
@@ -85,35 +82,6 @@ After those are set and production is redeployed, install with:
 That install path saves the bot token into Neon. If needed later, `SLACK_BOT_TOKEN`
 can also be set directly in Vercel, but the OAuth install flow is the cleaner path.
 
-## Still Needed: Stripe
-
-In Stripe, create:
-
-- Product: `Pact Pro`
-- Recurring monthly price
-- Payment Link for that subscription
-
-Set the Payment Link success URL to:
-
-`https://pact-polsia.vercel.app/success?checkout_session_id={CHECKOUT_SESSION_ID}`
-
-Create a Stripe webhook endpoint:
-
-`https://pact-polsia.vercel.app/api/webhooks/stripe`
-
-Subscribe it to:
-
-- `checkout.session.completed`
-- `customer.subscription.updated`
-- `customer.subscription.deleted`
-- `invoice.payment_failed`
-
-Add these Vercel Production environment variables:
-
-- `STRIPE_SECRET_KEY`
-- `STRIPE_WEBHOOK_SECRET`
-- `STRIPE_PRO_PAYMENT_LINK`
-
 ## Optional Integrations
 
 Add later if you want these features:
@@ -128,7 +96,7 @@ Add later if you want these features:
 
 ## Final Test Plan
 
-After Slack and Stripe env vars are set and production is redeployed:
+After Slack environment variables are set and production is redeployed:
 
 1. Visit `https://pact-polsia.vercel.app/api/health`.
 2. Open `https://pact-polsia.vercel.app/slack/reinstall` and install Pact.
@@ -138,10 +106,7 @@ After Slack and Stripe env vars are set and production is redeployed:
 6. Test `/done`.
 7. React with `🤝` to a message and confirm the pact flow.
 8. Open the Pact App Home tab.
-9. Visit `/api/checkout` after setting `STRIPE_PRO_PAYMENT_LINK`.
-10. Create a small test subscription through Stripe test mode.
-11. Confirm Stripe webhook events show `2xx` delivery in Stripe.
-12. Trigger a protected cron manually with the GitHub/Vercel `CRON_SECRET`.
+9. Trigger a protected cron manually with the GitHub/Vercel `CRON_SECRET`.
 
 ## Security Cleanup
 

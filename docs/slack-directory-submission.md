@@ -27,9 +27,7 @@ What makes Pact different: accountability flows both ways. Counterparties can pr
 
 Track your streak, see your completion rate, spot overdue patterns — all from the App Home. Teams with 3+ users see a workspace pulse.
 
-Pro workspaces get AI commitment detection (Pact spots promises in conversation and offers to track them), recurring pacts, tracker sync with Linear/Notion/Asana, and the weekly standup digest.
-
-Free forever for teams getting started. Pro is $10/month flat — no per-seat pricing.
+Every workspace gets AI commitment detection, recurring pacts, tracker sync with Linear/Notion/Asana, and the weekly standup digest for free.
 ```
 *(893 characters)*
 
@@ -43,8 +41,8 @@ Free forever for teams getting started. Pro is $10/month flat — no per-seat pr
 - **Bulk actions** — Complete or snooze multiple overdue pacts at once from App Home
 - **Recurring pacts** — Daily, weekly, biweekly, or monthly repetition with auto-spawn on complete
 - **Weekly standup digest** — Auto-generated commitment summary delivered on your schedule
-- **AI commitment detection** — Pro: Pact spots promises in channel conversation and offers to track them
-- **Tracker sync** — Pro: Sync pacts with Linear, Notion, or Asana
+- **AI commitment detection** — Pact spots promises in channel conversation and offers to track them
+- **Tracker sync** — Sync pacts with Linear, Notion, or Asana
 
 ### Categories
 
@@ -52,18 +50,17 @@ Free forever for teams getting started. Pro is $10/month flat — no per-seat pr
 - Project Management
 - Communication
 
-### Pricing Tier Descriptions
+### Pricing
 
-**Free**
-- Up to 5 active pacts per workspace
+**Free forever**
+- Unlimited active pacts per workspace
 - Core commands: `/pact`, `/pacts`, `/done`, `/pact extend`, `/pact edit`
 - Automatic reminders and due-date nudges
 - Counterparty accountability (both parties notified)
 - 🤝 emoji reaction creation
 - App Home with streak and personal stats
 
-**Pro — $10/month per workspace (not per seat)**
-- Unlimited active pacts
+- AI commitment detection in channels
 - AI commitment detection in channels
 - Recurring pacts (daily / weekly / biweekly / monthly)
 - Weekly standup digest
@@ -136,9 +133,7 @@ Slack's standard security questionnaire pre-answered for reviewers.
 |--------------|---------|-------------|--------|
 | **Neon** | Managed PostgreSQL database | All pact data, user IDs, workspace metadata | US (AWS us-east-1) |
 | **Render** | Application hosting | Application logs, env vars (tokens encrypted) | US (Oregon) |
-| **Stripe** | Payment processing for Pro subscriptions | Workspace billing email, subscription status | US / Global |
-| **OpenAI** (Pro only) | AI commitment detection; `/done` context inference | Message snippets from channels where Pact is active; no storage by Pact after inference | US |
-| **Postmark** | Transactional email (billing receipts, support) | Email address of workspace admin | US |
+| **OpenAI** | AI commitment detection; `/done` context inference | Message snippets from channels where Pact is active; no storage by Pact after inference | US |
 
 **Not a sub-processor:** Slack itself (they are a platform provider and independent data controller).
 
@@ -148,7 +143,7 @@ Slack's standard security questionnaire pre-answered for reviewers.
 
 **Support contact:** [hello@makepact.co](mailto:hello@makepact.co)
 
-This address is live. Responses within 5 business days. For urgent billing issues, same address.
+This address is live. Responses within 5 business days.
 
 **Support URL for Slack directory form:** `mailto:hello@makepact.co`
 
@@ -208,7 +203,7 @@ Run through this in order before clicking Submit in the Slack App Config.
 
 - [ ] Data retention: use answers from Section 3 above
 - [ ] Encryption: TLS 1.2+ in transit, AES-256 at rest + AES-256-GCM for tokens
-- [ ] Sub-processors: Neon, Render, Stripe, OpenAI (Pro), Postmark
+- [ ] Sub-processors: Neon, Render, OpenAI
 - [ ] GDPR/CCPA: no data sold, deletion requests honored at hello@makepact.co
 
 ### Final Checks

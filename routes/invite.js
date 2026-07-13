@@ -9,6 +9,7 @@ const router = express.Router();
 const path = require('path');
 const fs = require('fs');
 const { appUrl } = require('../lib/app-url');
+const { getClientIP, hashIP } = require('../lib/analytics');
 
 const {
   createInvite,
@@ -36,7 +37,7 @@ router.get('/:token', async (req, res) => {
 
   // Record click event (non-blocking)
   recordInviteClicked(token, {
-    ip_hash: req.ip ? require('crypto').createHash('sha256').update(req.ip).digest('hex').slice(0, 16) : null,
+    ip_hash: hashIP(getClientIP(req)),
     user_agent: req.get('User-Agent') || '',
   }).catch(() => {});
 
@@ -212,7 +213,7 @@ function buildInviteLandingHtml({ oauthUrl, invite, baseUrl }) {
     </a>
 
     <p class="note">
-      No credit card required &nbsp;·&nbsp; Free plan available<br>
+      Free forever &nbsp;·&nbsp; Every feature included<br>
       Your team's data stays in Slack
     </p>
 

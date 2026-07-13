@@ -13,7 +13,7 @@ Pact turns casual Slack promises into tracked commitments with automatic reminde
 - **Automatic reminders** — 24-hour window reminders + overdue nudges
 - **Daily digest** — 9am ET summary of all open pacts
 - **Conversational DM** — Message Pact in plain English to create pacts
-- **Pro: Linear, Notion, Asana sync**
+- **Linear, Notion, Asana sync** — included for free
 
 ## Requirements
 
@@ -28,8 +28,6 @@ Pact turns casual Slack promises into tracked commitments with automatic reminde
 - `SLACK_SIGNING_SECRET` - Slack signing secret
 - `SLACK_CLIENT_ID` / `SLACK_CLIENT_SECRET` - OAuth app credentials
 - `SLACK_APP_ID` - Slack app ID for App Home links
-- `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` - Stripe billing credentials
-- `STRIPE_PRO_PAYMENT_LINK` - your Stripe Payment Link for the Pro subscription
 - `CRON_SECRET` - bearer token for protected scheduler endpoints
 - `ANTHROPIC_API_KEY` - required for AI-assisted Pact features
 - `RESEND_API_KEY` / `EMAIL_FROM` - optional direct email sending via Resend
@@ -70,7 +68,7 @@ Coverage:
 - **`tests/unit/fuzzy.test.js`** — Levenshtein, tokenization, fuzzy pact matching (28 tests)
 - **`tests/unit/done.test.js`** — `/done` command: empty, single pact, multi-select, ID completion, fuzzy match, multi-complete buttons (12 tests)
 - **`tests/unit/slack-handlers.test.js`** — `/pact` channel rejection, DM detection, `/pacts` listing, overdue pacts, cross-channel fallback, emoji reaction flow (14 tests)
-- **`tests/unit/tracker.test.js`** — token encryption, Pro-tier gating, Linear/tracker sync lifecycle, OAuth state (16 tests)
+- **`tests/unit/tracker.test.js`** — token encryption, Linear/tracker sync lifecycle, OAuth state
 
 ### E2E Slack tests (requires `SLACK_SIGNING_SECRET`)
 
@@ -89,17 +87,16 @@ GitHub Actions runs unit tests on every PR and push to `main`. E2E tests run pos
 
 ### Vercel
 
-Vercel hosts the HTTP app, Slack endpoints, Stripe webhook, static pages, and
+Vercel hosts the HTTP app, Slack endpoints, static pages, and
 scheduler endpoints through the single exported Express handler in `server.js`.
 In-process timers are disabled in production; scheduled jobs run through
 protected routes under `/api/crons/*`.
 
-Configure these Slack/Stripe URLs after deployment:
+Configure these Slack URLs after deployment:
 
 - Slack Events API: `https://<deployment>/slack/events`
 - Slack Interactivity: `https://<deployment>/slack/actions`
 - Slack slash commands: `https://<deployment>/slack/commands`
-- Stripe webhook: `https://<deployment>/api/webhooks/stripe`
 
 For Vercel Hobby accounts, use the included GitHub Actions scheduler instead
 of Vercel Cron. Configure these GitHub repository secrets:
@@ -128,7 +125,9 @@ Production handoff checklist:
 - Create a Slack app in your own Slack developer account, copy the manifest,
   and point all request URLs at the Vercel deployment.
 - Turn off Slack Socket Mode. Do not copy `SLACK_APP_TOKEN` to Vercel.
-- Create your own Stripe product, price, Payment Link, and webhook endpoint.
-  Set the Payment Link as `STRIPE_PRO_PAYMENT_LINK`.
 - If you use email digests or contact capture, set `RESEND_API_KEY` and
   `EMAIL_FROM`, or provide compatible `EMAIL_SEND_URL` settings.
+
+## License
+
+Pact is available under the [MIT License](LICENSE).

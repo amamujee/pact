@@ -50,22 +50,13 @@
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Slack",
         "description": "Pact is a Slack bot that turns casual workplace commitments into tracked, two-way records between two people. Both sides see it, both get reminded, nothing gets dropped.",
-        "offers": [
-          {
+        "offers": {
             "@type": "Offer",
             "name": "Free",
             "price": "0",
             "priceCurrency": "USD",
-            "description": "/pact, /pacts and /done commands, 🤝 emoji creation, automatic reminders, daily digest, Home Tab dashboard, and commitment streaks."
-          },
-          {
-            "@type": "Offer",
-            "name": "Pro",
-            "price": "10",
-            "priceCurrency": "USD",
-            "description": "Unlimited active pacts plus AI-powered /done, commitment detection in channels, Workflow Builder steps, and Linear / Notion / Asana sync. $10/month flat, no per-seat pricing."
-          }
-        ],
+            "description": "Every Pact feature is free, including unlimited pacts, AI assistance, Workflow Builder steps, and tracker sync."
+        },
         "provider": {
           "@type": "Organization",
           "name": "Pact",
@@ -981,6 +972,7 @@
         }
         .pricing-cta-note a:hover { text-decoration: underline; }
     </style>
+    <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 
@@ -1137,7 +1129,7 @@
                         <div class="feature-item">
                             <div class="feature-icon">🤖</div>
                             <div class="feature-text">
-                                <div class="feature-name">AI detection<span class="feature-pro-badge">Pro</span></div>
+                                <div class="feature-name">AI detection</div>
                                 <div class="feature-desc">AI spots commitments in conversation and suggests creating a pact.</div>
                             </div>
                         </div>
@@ -1205,7 +1197,7 @@
                         <div class="feature-item">
                             <div class="feature-icon">⚙️</div>
                             <div class="feature-text">
-                                <div class="feature-name">Workflow Builder steps<span class="feature-pro-badge">Pro</span></div>
+                                <div class="feature-name">Workflow Builder steps</div>
                                 <div class="feature-desc">Trigger pact creation from any Slack workflow automation.</div>
                             </div>
                         </div>
@@ -1255,7 +1247,7 @@
         <div class="container">
             <div class="pricing-section-header reveal">
                 <span class="eyebrow">Pricing</span>
-                <h2>Free vs Pro</h2>
+                <h2>Everything is free</h2>
             </div>
             <div class="pricing-grid reveal">
 
@@ -1272,28 +1264,16 @@
                         <li><span class="pricing-check on">✓</span> Commitment streaks &amp; milestones</li>
                         <li><span class="pricing-check on">✓</span> Recurring pacts</li>
                         <li><span class="pricing-check on">✓</span> Two-way reschedule proposals</li>
-                        <li><span class="pricing-check on">✓</span> 100 active pacts per workspace</li>
-                    </ul>
-                </div>
-
-                <div class="pricing-card pro">
-                    <div class="pricing-tier pro-label">Pro</div>
-                    <div class="pricing-price">$10</div>
-                    <div class="pricing-price-sub">per month, whole workspace</div>
-                    <ul class="pricing-features">
-                        <li><span class="pricing-check on">✓</span> Everything in Free</li>
                         <li><span class="pricing-check on">✓</span> Unlimited active pacts</li>
-                        <li><span class="pricing-check pro-only">★</span> AI commitment detection</li>
-                        <li><span class="pricing-check pro-only">★</span> Auto-suggest pacts from chat</li>
-                        <li><span class="pricing-check pro-only">★</span> Workflow Builder steps</li>
-                        <li><span class="pricing-check pro-only">★</span> Linear / Notion / Asana sync</li>
-                        <li><span class="pricing-check pro-only">★</span> Priority support</li>
+                        <li><span class="pricing-check on">✓</span> AI commitment detection and suggestions</li>
+                        <li><span class="pricing-check on">✓</span> Workflow Builder steps</li>
+                        <li><span class="pricing-check on">✓</span> Linear / Notion / Asana sync</li>
                     </ul>
                 </div>
 
             </div>
             <div class="pricing-cta-row reveal">
-                <p class="pricing-cta-note">Start free — upgrade with <code style="font-size:0.8rem;background:rgba(255,255,255,0.07);padding:1px 6px;border-radius:3px">/pact upgrade</code> any time.</p>
+                <p class="pricing-cta-note">No credit card, subscriptions, or paid upgrade path.</p>
             </div>
         </div>
     </section>
@@ -1319,9 +1299,6 @@
                          srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"
                          alt="Add to Slack" width="139" height="40">
                 </a>
-                <div class="footer-pro-upsell">
-                    <a href="#pricing" style="color:inherit;text-decoration:none"><strong>Pro:</strong> AI detects commitments and suggests pacts automatically. <strong style="color:var(--gold)">$10/mo →</strong></a>
-                </div>
             </div>
         </div>
 

@@ -65,7 +65,6 @@ install fresh when teams re-add the Slack app.
 |-------|----------------|
 | `pacts` | Core pact entity: description, due date, status, creator/counterparty, recurrence rule |
 | `installations` | Slack workspace installs: bot tokens, team IDs, config |
-| `subscriptions` | Stripe billing state per workspace |
 | `user_digest_prefs` | Per-user digest settings (frequency, timezone, opt-out) |
 | `workflow_step_executions` | Workflow Builder step execution log |
 | `pageviews` | Landing page analytics |
@@ -97,10 +96,6 @@ for the full reference with descriptions and where to get each value.
 - `SLACK_BOT_TOKEN` (or install a workspace via OAuth — the app loads it from the DB)
 - `SLACK_CLIENT_ID` + `SLACK_CLIENT_SECRET`
 
-**Required for billing:**
-- `STRIPE_SECRET_KEY`
-- `STRIPE_WEBHOOK_SECRET`
-
 **Required for AI features:**
 - `ANTHROPIC_API_KEY` — direct Anthropic API key used by `lib/ai-client.js`
 
@@ -118,7 +113,7 @@ It relies on:
 - **In-memory cron jobs** (`setInterval`) for reminders, digests, nudges,
   activation DMs, and streak milestones
 - **Persistent Bolt SDK WebSocket/polling** for Slack event handling
-- **Module-level state** (bot user ID, billing pool, error tracker)
+- **Module-level state** (bot user ID, error tracker)
 
 Deploying to Vercel serverless **as-is will not work** for these reasons.
 
@@ -183,7 +178,7 @@ These `setInterval` jobs in `server.js` **won't run** on serverless:
 
 **Options for replacing crons on Vercel:**
 
-1. **Vercel Cron** (Pro plan) — add `crons` to `vercel.json` and create
+1. **Vercel Cron** — add `crons` to `vercel.json` and create
    `/api/cron/nudge`, `/api/cron/overdue` etc. as thin HTTP routes that
    call the internal check functions. Protect with a `CRON_SECRET` header.
 
@@ -266,20 +261,6 @@ If you have Workflow Builder steps registered:
 
 ---
 
-## 6. Stripe Webhook
-
-After deploying, register your Stripe webhook:
-
-1. Go to https://dashboard.stripe.com → Developers → Webhooks → **Add endpoint**
-2. Endpoint URL: `https://yourdomain.com/api/webhooks/stripe`
-3. Events to listen to:
-   - `checkout.session.completed`
-   - `customer.subscription.deleted`
-   - `invoice.payment_failed`
-4. Copy the **Signing secret** → set `STRIPE_WEBHOOK_SECRET` env var
-
----
-
 ## 7. Checklist Before Going Live
 
 - [ ] Fork repo to `amamujee/pact`
@@ -291,7 +272,6 @@ After deploying, register your Stripe webhook:
 - [ ] Update slash command Request URLs in Slack portal
 - [ ] Update Event Subscriptions Request URL in Slack portal
 - [ ] Update Interactivity Request URL in Slack portal
-- [ ] Register Stripe webhook endpoint, set `STRIPE_WEBHOOK_SECRET`
 - [ ] Reinstall Slack app (`/slack/reinstall`) to get a fresh bot token
 - [ ] Set up cron jobs for hourly/daily/weekly scheduled tasks
 - [ ] Test: `/pact hello @someone tomorrow` in Slack

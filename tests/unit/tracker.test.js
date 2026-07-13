@@ -76,30 +76,10 @@ describe('tracker — token encryption', () => {
 });
 
 // ---------------------------------------------------------------------------
-// syncPactToTracker — skips non-Pro teams
+// syncPactToTracker
 // ---------------------------------------------------------------------------
 
 describe('syncPactToTracker', () => {
-  it('does nothing when team is not Pro', async () => {
-    const queryLog = [];
-    const pool = {
-      query: async (sql, params) => {
-        queryLog.push(sql);
-        if (sql.includes('installations')) {
-          // isProTeam check via installations.tier — return free tier
-          return { rows: [{ tier: 'free' }] };
-        }
-        return { rows: [] };
-      }
-    };
-
-    await tracker.syncPactToTracker(pool, makePact(), 'T_TEAM1');
-
-    // Should check isProTeam but not proceed to tracker_connections
-    const connectionQuery = queryLog.find(q => q.includes('tracker_connections'));
-    assert.ok(!connectionQuery, 'Should NOT query tracker_connections for non-Pro team');
-  });
-
   it('does nothing when no tracker connections configured', async () => {
     const queryLog = [];
     const pool = {

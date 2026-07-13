@@ -5,3 +5,7 @@ node_modules
 !.env.example
 npm-debug.log*
 .DS_Store
+/neon-export.json
+/data.sql
+*.dump
+*.backup

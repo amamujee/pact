@@ -23,12 +23,6 @@ function renderPool(url) {
   return new Pool({ connectionString: url, ssl: { rejectUnauthorized: false } });
 }
 
-function auth(req) {
-  const secret = process.env.ADMIN_SECRET;
-  if (!secret) return true;
-  return req.headers['x-admin-secret'] === secret;
-}
-
 // ---------------------------------------------------------------------------
 // Phase 1: Export schema + data from Neon
 // ---------------------------------------------------------------------------

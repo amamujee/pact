@@ -205,27 +205,6 @@ async function markInvitePactCreated(claimedTeamId) {
 }
 
 /**
- * Get qualifying successful invites for an inviter that haven't been granted Pro yet.
- * Returns rows that are: claimed, pact_created_within_7d=true, pro_grant_counted=false,
- * and claimed by a *different* workspace than the inviter.
- */
-async function getUncountedSuccessfulInvites(inviterUserId, inviterTeamId) {
-  const { rows } = await pool.query(
-    `SELECT id, claimed_team_id
-     FROM workspace_invites
-     WHERE inviter_user_id = $1
-       AND inviter_team_id = $2
-       AND claimed_at IS NOT NULL
-       AND pact_created_within_7d = TRUE
-       AND pro_grant_counted = FALSE
-       AND claimed_team_id IS NOT NULL
-       AND claimed_team_id != $2`,
-    [inviterUserId, inviterTeamId]
-  );
-  return rows;
-}
-
-/**
  * Get total count of successful invites for an inviter (including already-counted ones).
  * Used for progress display ("X / 2 workspaces invited").
  */
@@ -244,75 +223,6 @@ async function getSuccessfulInviteCount(inviterUserId, inviterTeamId) {
   return parseInt(rows[0]?.count || 0, 10);
 }
 
-/**
- * Mark invite rows as counted (pro_grant_counted=true) after a Pro grant is issued.
- * Idempotent — safe to call multiple times.
- */
-async function markInvitesGrantCounted(inviteIds) {
-  if (!inviteIds || inviteIds.length === 0) return;
-  await pool.query(
-    `UPDATE workspace_invites
-       SET pro_grant_counted = TRUE
-     WHERE id = ANY($1::uuid[])`,
-    [inviteIds]
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Pro grants (Stripe-less time-bounded Pro)
-// ---------------------------------------------------------------------------
-
-/**
- * Create a pro_grant row and upgrade the team's tier to 'pro'.
- * Idempotent if a grant already exists for the same reason + team.
- * Returns { granted: boolean, expiresAt: Date }.
- */
-async function grantProForInvites({ teamId, grantedToUserId, days = 30 }) {
-  // Idempotency: check if this team already has an active invite-incentive grant
-  const existing = await pool.query(
-    `SELECT id, expires_at FROM pro_grants
-     WHERE team_id = $1 AND granted_by = 'invite_incentive' AND expires_at > NOW()
-     LIMIT 1`,
-    [teamId]
-  );
-  if (existing.rows.length > 0) {
-    // Already granted — return existing
-    return { granted: false, expiresAt: existing.rows[0].expires_at };
-  }
-
-  const expiresAt = new Date();
-  expiresAt.setDate(expiresAt.getDate() + days);
-
-  await pool.query(
-    `INSERT INTO pro_grants (team_id, granted_by, granted_to, reason, days, expires_at, redeemed, redeemed_at)
-     VALUES ($1, 'invite_incentive', $2, 'Invited 2 workspaces to Pact', $3, $4, TRUE, NOW())`,
-    [teamId, grantedToUserId, days, expiresAt]
-  );
-
-  // Upgrade tier in installations
-  await pool.query(
-    `UPDATE installations SET tier = 'pro', updated_at = NOW() WHERE team_id = $1`,
-    [teamId]
-  );
-
-  console.log(`[INVITE-PRO] Pro granted to team=${teamId} user=${grantedToUserId} for ${days} days (expires ${expiresAt.toISOString()})`);
-  return { granted: true, expiresAt };
-}
-
-/**
- * Check if a pro_grant for invite_incentive exists and is still active.
- * Used to expire Pro when the grant period ends (future cron).
- */
-async function getActiveInviteGrant(teamId) {
-  const { rows } = await pool.query(
-    `SELECT id, expires_at, days FROM pro_grants
-     WHERE team_id = $1 AND granted_by = 'invite_incentive' AND expires_at > NOW()
-     LIMIT 1`,
-    [teamId]
-  );
-  return rows[0] || null;
-}
-
 // ---------------------------------------------------------------------------
 // Admin funnel metrics
 // ---------------------------------------------------------------------------
@@ -321,16 +231,14 @@ async function getActiveInviteGrant(teamId) {
  * Returns invite funnel totals for admin dashboard.
  * invite_sent_count = distinct invite links created
  * invite_claimed_count = invite links that resulted in a completed install
- * pro_granted_count = teams that received invite-incentive Pro grants
  */
 async function getInviteFunnelTotals() {
   const { rows } = await pool.query(`
     SELECT
       (SELECT COUNT(*) FROM workspace_invites) AS invite_sent_count,
-      (SELECT COUNT(*) FROM workspace_invites WHERE claimed_at IS NOT NULL) AS invite_claimed_count,
-      (SELECT COUNT(*) FROM pro_grants WHERE granted_by = 'invite_incentive') AS pro_granted_count
+      (SELECT COUNT(*) FROM workspace_invites WHERE claimed_at IS NOT NULL) AS invite_claimed_count
   `);
-  return rows[0] || { invite_sent_count: 0, invite_claimed_count: 0, pro_granted_count: 0 };
+  return rows[0] || { invite_sent_count: 0, invite_claimed_count: 0 };
 }
 
 module.exports = {
@@ -347,10 +255,6 @@ module.exports = {
   recordInviteInstalled,
   getInviteLeaderboard,
   markInvitePactCreated,
-  getUncountedSuccessfulInvites,
   getSuccessfulInviteCount,
-  markInvitesGrantCounted,
-  grantProForInvites,
-  getActiveInviteGrant,
   getInviteFunnelTotals,
 };

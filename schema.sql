@@ -22,20 +22,12 @@ CREATE TABLE IF NOT EXISTS users (
   name                     VARCHAR(255),
   password_hash            VARCHAR(255),
   created_at               TIMESTAMPTZ DEFAULT NOW(),
-  updated_at               TIMESTAMPTZ DEFAULT NOW(),
-  -- Subscription fields synced when a customer subscribes
-  stripe_subscription_id   VARCHAR(255),
-  subscription_status      VARCHAR(50),
-  subscription_plan        VARCHAR(255),
-  subscription_expires_at  TIMESTAMPTZ,
-  subscription_updated_at  TIMESTAMPTZ
+  updated_at               TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS users_email_unique_idx
   ON users (LOWER(email));
 
-CREATE INDEX IF NOT EXISTS users_stripe_subscription_id_idx
-  ON users (stripe_subscription_id);
 
 -- =============================================================================
 -- Migration: create_pacts  (001_create_pacts.js)
@@ -201,32 +193,6 @@ CREATE INDEX IF NOT EXISTS contact_submissions_created_at_idx
 CREATE INDEX IF NOT EXISTS contact_submissions_read_idx
   ON contact_submissions (read);
 
--- =============================================================================
--- Migration: create_subscriptions  (008_create_subscriptions.js)
--- =============================================================================
-
-CREATE TABLE IF NOT EXISTS subscriptions (
-  id                   SERIAL PRIMARY KEY,
-  team_id              VARCHAR(255) NOT NULL,
-  plan                 VARCHAR(20) NOT NULL,
-  seat_count           INTEGER NOT NULL DEFAULT 3,
-  status               VARCHAR(20) NOT NULL DEFAULT 'active',
-  stripe_session_id    VARCHAR(500),
-  billing_email        VARCHAR(255),
-  activated_at         TIMESTAMPTZ DEFAULT NOW(),
-  current_period_end   TIMESTAMPTZ,
-  cancelled_at         TIMESTAMPTZ,
-  created_at           TIMESTAMPTZ DEFAULT NOW(),
-  updated_at           TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS subscriptions_team_id_idx
-  ON subscriptions (team_id);
-
-CREATE UNIQUE INDEX IF NOT EXISTS subscriptions_stripe_session_idx
-  ON subscriptions (stripe_session_id)
-  WHERE stripe_session_id IS NOT NULL;
-
 -- Monthly pact counters — tracks usage per team per month for limit enforcement
 CREATE TABLE IF NOT EXISTS pact_monthly_counts (
   id          SERIAL PRIMARY KEY,
@@ -282,18 +248,6 @@ ALTER TABLE pacts
 -- Track when overdue nudge was sent so we only nudge once per pact.
 ALTER TABLE pacts
   ADD COLUMN IF NOT EXISTS overdue_nudge_sent_at TIMESTAMPTZ;
-
--- =============================================================================
--- Migration: subscriptions_stripe_customer  (011_subscriptions_stripe_customer.js)
--- =============================================================================
-
-ALTER TABLE subscriptions
-  ADD COLUMN IF NOT EXISTS stripe_customer_id VARCHAR(255),
-  ADD COLUMN IF NOT EXISTS purchaser_slack_id VARCHAR(255);
-
-CREATE INDEX IF NOT EXISTS subscriptions_stripe_customer_id_idx
-  ON subscriptions (stripe_customer_id)
-  WHERE stripe_customer_id IS NOT NULL;
 
 -- =============================================================================
 -- Migration: error_logs  (012_error_logs.js)
@@ -410,14 +364,6 @@ ALTER TABLE pacts
 CREATE INDEX IF NOT EXISTS pacts_reminder_ts_idx
   ON pacts (reminder_channel, reminder_ts)
   WHERE reminder_ts IS NOT NULL;
-
--- =============================================================================
--- Migration: subscriptions_payment_status  (020_subscriptions_payment_status.js)
--- =============================================================================
-
--- Add payment_status to subscriptions for past_due tracking.
-ALTER TABLE subscriptions
-  ADD COLUMN IF NOT EXISTS payment_status VARCHAR(20) DEFAULT 'ok';
 
 -- =============================================================================
 -- Migration: commitment_detection_snoozed  (021_commitment_detection_snoozed.js)
@@ -589,7 +535,6 @@ CREATE TABLE IF NOT EXISTS workspace_invites (
   claimed_team_id          VARCHAR(255),
   claimed_user_id          VARCHAR(255),
   pact_created_within_7d   BOOLEAN NOT NULL DEFAULT FALSE,
-  pro_grant_counted        BOOLEAN NOT NULL DEFAULT FALSE,
   created_at               TIMESTAMPTZ DEFAULT NOW(),
   updated_at               TIMESTAMPTZ DEFAULT NOW()
 );
@@ -614,22 +559,6 @@ CREATE INDEX IF NOT EXISTS invite_events_token_idx
 
 CREATE INDEX IF NOT EXISTS invite_events_type_created_idx
   ON invite_events (event_type, created_at DESC);
-
-CREATE TABLE IF NOT EXISTS pro_grants (
-  id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  team_id      VARCHAR(255) NOT NULL,
-  granted_by   VARCHAR(64) NOT NULL,
-  granted_to   VARCHAR(255),
-  reason       TEXT,
-  days         INTEGER NOT NULL DEFAULT 30,
-  expires_at   TIMESTAMPTZ NOT NULL,
-  redeemed     BOOLEAN NOT NULL DEFAULT FALSE,
-  redeemed_at  TIMESTAMPTZ,
-  created_at   TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS pro_grants_team_active_idx
-  ON pro_grants (team_id, expires_at DESC);
 
 -- =============================================================================
 -- Migration: workspace_admin_digest  (031_workspace_admin_digest.js)

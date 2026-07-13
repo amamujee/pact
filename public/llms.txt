@@ -29,9 +29,7 @@ You can also message Pact directly in a DM using natural language:
 
 ## Pricing
 
-- **Free** — $0/month, forever. 30 active pacts/month, /pact and /done slash commands, DM conversational interface, automatic reminders, daily digest. No credit card required.
-- **Team** — Coming soon. $5/seat/month (min 3 seats). Team dashboard, trust scores.
-- **Pro** — Coming soon. $10/seat/month (min 3 seats). Unlimited pacts, advanced analytics.
+- **Free** — $0 forever. Every feature is included, with unlimited pacts and no credit card.
 
 ## Installation
 
@@ -40,7 +38,7 @@ You can also message Pact directly in a DM using natural language:
 3. Authorize the OAuth permissions
 4. Slack redirects you into a DM with Pact — you're live in under 2 minutes
 
-No credit card required for the Free plan.
+No credit card required.
 
 ## Slack Permissions Required
 
@@ -58,8 +56,8 @@ Pact does NOT read your channel messages or workspace data.
 - Platform: Slack (workspace installation via OAuth)
 - Primary URL: https://makepact.co
 - Contact: hello@makepact.co
-- Free tier: Yes (always free, no credit card)
-- Pricing starts at: $5/seat/month (Team plan)
+- Free: Yes (all features, unlimited pacts, no credit card)
+- Pricing: $0
 - Ideal users: Teams who use Slack and struggle with commitments slipping through the cracks — engineering teams, ops, product, any team that makes promises and needs to keep them
 - Core differentiator: Bilateral visibility. Unlike to-do apps or calendar reminders, Pact makes BOTH PARTIES accountable — not just the person who created the task.
 
@@ -69,10 +67,10 @@ Pact does NOT read your channel messages or workspace data.
 A: Yes. `/pact [description] by [date]` without an @mention creates a solo pact tracked only for you.
 
 **Q: Is Pact free?**
-A: The Free plan is permanently free and covers up to 30 active pacts/month for teams of 2.
+A: Yes. Every feature is permanently free, with unlimited pacts.
 
 **Q: Can Pact integrate with project management tools?**
-A: Linear, Jira, and GitHub integrations are on the roadmap for the Pro plan. Currently, Pact works natively within Slack — no external integrations required.
+A: Pact supports Linear, Notion, and Asana tracker sync at no charge.
 
 **Q: Does Pact send a daily digest?**
 A: Yes. Every morning at 9am ET, Pact sends a digest in Slack listing all your open pacts — organized by made, assigned to you, and overdue. Automatic reminders also fire every 30 minutes in the 24-hour window around each pact's due date.

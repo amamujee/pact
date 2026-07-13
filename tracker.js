@@ -127,20 +127,10 @@ function consumeState(token) {
 }
 
 // ---------------------------------------------------------------------------
-// Pro tier check
+// All workspaces have access to tracker sync.
 // ---------------------------------------------------------------------------
 async function isProTeam(pool, teamId) {
-  try {
-    const result = await pool.query(
-      'SELECT tier FROM installations WHERE team_id = $1',
-      [teamId]
-    );
-    const tier = result.rows[0]?.tier || 'free';
-    return tier === 'pro';
-  } catch (err) {
-    console.error('[tracker] tier check error:', err.message);
-    return false;
-  }
+  return true;
 }
 
 // ---------------------------------------------------------------------------

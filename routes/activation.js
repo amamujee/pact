@@ -7,21 +7,11 @@
 const express = require('express');
 const { getActivationFunnel, getActivationTotals } = require('../db/user-activation');
 const { getInviteFunnelTotals } = require('../db/invites');
+const { requireAdminAuth } = require('../lib/admin-auth');
 
 const router = express.Router();
 
-// Simple admin secret via env var — avoids adding an auth dependency
-function isAuthorized(req) {
-  const secret = process.env.ADMIN_SECRET;
-  if (!secret) return true; // open if not configured
-  return req.query.secret === secret || req.headers['x-admin-secret'] === secret;
-}
-
-router.get('/', async (req, res) => {
-  if (!isAuthorized(req)) {
-    return res.status(401).send('Unauthorized');
-  }
-
+router.get('/', requireAdminAuth, async (req, res) => {
   try {
     const [funnel, totals, inviteTotals] = await Promise.all([
       getActivationFunnel(30),
@@ -36,7 +26,6 @@ router.get('/', async (req, res) => {
     const conversions = totals.total_conversions || 0;
     const inviteSent = parseInt(inviteTotals.invite_sent_count || 0, 10);
     const inviteClaimed = parseInt(inviteTotals.invite_claimed_count || 0, 10);
-    const proGranted = parseInt(inviteTotals.pro_granted_count || 0, 10);
 
     const deliveryRate = attempted > 0 ? Math.round((delivered / attempted) * 100) : 0;
     const clickRate = delivered > 0 ? Math.round((clicks / delivered) * 100) : 0;
@@ -130,11 +119,6 @@ router.get('/', async (req, res) => {
       <div class="stat-value">${inviteClaimed}</div>
       <div class="stat-sub">${inviteSent > 0 ? Math.round((inviteClaimed / inviteSent) * 100) : 0}% claim rate</div>
     </div>
-    <div class="stat">
-      <div class="stat-label">Pro Granted</div>
-      <div class="stat-value" style="color:${proGranted > 0 ? '#4ade80' : '#fff'}">${proGranted}</div>
-      <div class="stat-sub">30-day grants earned</div>
-    </div>
   </div>
 
   <div class="section-title">Daily Breakdown</div>
@@ -161,11 +145,7 @@ router.get('/', async (req, res) => {
 
 // JSON funnel endpoint — returns 7-day rollup for programmatic consumption.
 // Auth-gated same as HTML dashboard (ADMIN_SECRET env var or x-admin-secret header).
-router.get('/funnel', async (req, res) => {
-  if (!isAuthorized(req)) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
+router.get('/funnel', requireAdminAuth, async (req, res) => {
   try {
     const [funnel, totals, inviteTotals] = await Promise.all([
       getActivationFunnel(7),
@@ -180,7 +160,6 @@ router.get('/funnel', async (req, res) => {
     const conversions = parseInt(totals.total_conversions, 10) || 0;
     const inviteSent = parseInt(inviteTotals.invite_sent_count || 0, 10);
     const inviteClaimed = parseInt(inviteTotals.invite_claimed_count || 0, 10);
-    const proGranted = parseInt(inviteTotals.pro_granted_count || 0, 10);
 
     const deliveryRate = attempted > 0 ? +((delivered / attempted) * 100).toFixed(1) : null;
     const clickRate = delivered > 0 ? +((clicks / delivered) * 100).toFixed(1) : null;
@@ -205,7 +184,6 @@ router.get('/funnel', async (req, res) => {
       invite_loop: {
         invite_sent_count: inviteSent,
         invite_claimed_count: inviteClaimed,
-        pro_granted_count: proGranted,
         claim_rate_pct: inviteClaimRate,
       },
       daily: funnel.map((row) => ({
