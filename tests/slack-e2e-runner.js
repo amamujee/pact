@@ -39,6 +39,7 @@ const { URLSearchParams } = require('url');
 // ---------------------------------------------------------------------------
 
 const SIGNING_SECRET = process.env.SLACK_SIGNING_SECRET;
+const CRON_SECRET = process.env.CRON_SECRET;
 const PACT_SERVER_URL = process.env.PACT_SERVER_URL || 'https://makepact.co';
 const RESPONSE_CAPTURE_PORT = parseInt(process.env.RESPONSE_CAPTURE_PORT || '9123', 10);
 const TEST_TIMEOUT_MS = 8000;
@@ -217,6 +218,18 @@ async function runCommand(fields) {
     if (httpResp.status !== 200) {
       throw new Error(`Server returned HTTP ${httpResp.status}: ${httpResp.body.substring(0, 100)}`);
     }
+
+    // Vercel returns the first visible command response in the acknowledgement
+    // so Slack receives it before the serverless invocation freezes. Keep the
+    // response_url capture as a fallback for non-serverless deployments.
+    if (httpResp.body && httpResp.body.trim()) {
+      try {
+        return JSON.parse(httpResp.body);
+      } catch {
+        return { raw: httpResp.body };
+      }
+    }
+
     return await capture;
   } finally {
     cleanup();
@@ -342,10 +355,13 @@ async function runAll() {
   // ---
 
   await test('H1', 'GET /slack/status returns valid token info', async () => {
+    if (!CRON_SECRET) return 'SKIP';
     const url = new URL('/slack/status', PACT_SERVER_URL);
     const transport = url.protocol === 'https:' ? https : http;
     const resp = await new Promise((res, rej) => {
-      transport.get(url.toString(), (r) => {
+      transport.get(url.toString(), {
+        headers: { Authorization: `Bearer ${CRON_SECRET}` },
+      }, (r) => {
         let d = '';
         r.on('data', c => d += c);
         r.on('end', () => res({ status: r.statusCode, body: d }));

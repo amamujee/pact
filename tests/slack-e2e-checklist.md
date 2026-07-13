@@ -21,6 +21,8 @@ Before running tests, ensure the following are configured:
 | `SLACK_TEST_DM_CHANNEL_ID` | The DM channel ID between user 1 and user 2 |
 | `SLACK_TEST_BOT_DM_CHANNEL_ID` | The DM channel ID between user 1 and the Pact bot |
 | `SLACK_TEST_GROUP_DM_CHANNEL_ID` | A group DM with 3+ people |
+| `SLACK_SIGNING_SECRET` | Signs simulated Slack command requests |
+| `CRON_SECRET` | Authorizes the protected Slack diagnostic check |
 
 Store these in the isolated QA environment. **Never mix QA credentials with Production.**
 
@@ -40,7 +42,10 @@ Store these in the isolated QA environment. **Never mix QA credentials with Prod
 ## Automated Tests (run via `slack-e2e-runner.js`)
 
 These tests work by sending signed HTTP requests to the Pact server, simulating exactly
-what Slack sends for each slash command scenario. No real Slack workspace required.
+what Slack sends for each slash command scenario. The runner accepts Pact's inline
+serverless acknowledgement and retains `response_url` capture as a fallback. Basic
+routing scenarios do not need a real workspace; peer-DM scenarios require isolated QA
+workspace credentials.
 
 ### `/pact` Command
 
