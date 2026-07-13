@@ -1,18 +1,15 @@
 // /done command handler and pact completion flow.
-// Owns: /done slash command, pact picker UI, fuzzy matching, multi-complete, AI inference (Pro).
-// Does NOT own: pact creation, reminders, DM routing, tracker sync, or billing tier logic.
+// Owns: /done slash command, pact picker UI, fuzzy matching, multi-complete, AI inference.
+// Does NOT own: pact creation, reminders, DM routing, or tracker sync.
 const pactDb = require('../db/pacts');
 const { fuzzyMatchPacts } = require('../lib/fuzzy');
 const aiDone = require('../lib/ai-done');
 const { nextDueDate, recurrenceLabel } = require('../lib/recurrence');
 const { randomUUID } = require('crypto');
 
-// Injected via init() — getTeamTier requires billing module init; formatDate for recurrence msg
-let _getTeamTier = null;
 let _formatDate = null;
 
-function init({ getTeamTier, formatDate }) {
-  _getTeamTier = getTeamTier;
+function init({ formatDate }) {
   _formatDate = formatDate;
 }
 
@@ -210,9 +207,9 @@ async function completePact(pactId, userId, channelId, client, respond = null, t
 
 /**
  * Handle /done slash command.
- * Supports: direct ID, fuzzy text matching, multi-select picker, AI inference (Pro).
+ * Supports: direct ID, fuzzy text matching, multi-select picker, AI inference.
  *
- * AI inference runs when: no arguments given + team is Pro + more than 1 active pact.
+ * AI inference runs when no arguments are given and more than one pact is active.
  * Falls back to standard picker if AI returns no confident matches.
  */
 async function handleDoneCommand({ command, ack, respond, client }, tracker = null) {
@@ -277,28 +274,25 @@ async function handleDoneCommand({ command, ack, respond, client }, tracker = nu
     // AI inference path (no text input, multiple pacts)
     // WHY: When user types bare /done, infer from recent channel activity which pact they likely finished.
     if (!text || text.trim().length === 0) {
-      const teamTier = _getTeamTier ? await _getTeamTier(team_id) : 'free';
-      if (teamTier === 'pro') {
-        try {
-          const recentMessages = await aiDone.fetchRecentUserMessages(client, channel_id, user_id, 10);
-          const rankings = await aiDone.rankPactsByContext(pacts, {
-            channelId: channel_id,
-            userId: user_id,
-            recentMessages,
-            today: new Date(),
-          });
+      try {
+        const recentMessages = await aiDone.fetchRecentUserMessages(client, channel_id, user_id, 10);
+        const rankings = await aiDone.rankPactsByContext(pacts, {
+          channelId: channel_id,
+          userId: user_id,
+          recentMessages,
+          today: new Date(),
+        });
 
-          if (rankings.length > 0) {
-            const suggestion = aiDone.buildAISuggestionBlocks(rankings);
-            if (suggestion) {
-              await respond({ blocks: suggestion.blocks, text: suggestion.text });
-              return;
-            }
+        if (rankings.length > 0) {
+          const suggestion = aiDone.buildAISuggestionBlocks(rankings);
+          if (suggestion) {
+            await respond({ blocks: suggestion.blocks, text: suggestion.text });
+            return;
           }
-        } catch (aiErr) {
-          // AI inference failed — degrade gracefully to standard picker
-          console.error('[ai-done] inference error, falling back:', aiErr.message);
         }
+      } catch (aiErr) {
+        // AI inference failed — degrade gracefully to standard picker
+        console.error('[ai-done] inference error, falling back:', aiErr.message);
       }
     }
 

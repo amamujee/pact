@@ -85,10 +85,6 @@ describe('syncPactToTracker', () => {
     const pool = {
       query: async (sql, params) => {
         queryLog.push(sql);
-        if (sql.includes('installations')) {
-          // isProTeam check — installations with tier='pro'
-          return { rows: [{ tier: 'pro' }] };
-        }
         if (sql.includes('tracker_connections')) {
           // No connections
           return { rows: [] };
@@ -101,14 +97,13 @@ describe('syncPactToTracker', () => {
 
     // Should query tracker_connections but find none
     const connectionQuery = queryLog.find(q => q.includes('tracker_connections'));
-    assert.ok(connectionQuery, 'Should query tracker_connections for Pro team');
+    assert.ok(connectionQuery, 'Should query tracker_connections for every workspace');
   });
 
   it('skips connection when no default_project_id set', async () => {
     const insertLog = [];
     const pool = {
       query: async (sql, params) => {
-        if (sql.includes('installations') && !sql.includes('INSERT')) return { rows: [{ tier: 'pro' }] };
         if (sql.includes('tracker_connections') && !sql.includes('INSERT')) {
           return {
             rows: [{
@@ -134,7 +129,6 @@ describe('syncPactToTracker', () => {
   it('handles errors in individual connections gracefully (non-throwing)', async () => {
     const pool = {
       query: async (sql, params) => {
-        if (sql.includes('installations') && !sql.includes('INSERT')) return { rows: [{ tier: 'pro' }] };
         if (sql.includes('tracker_connections') && !sql.includes('INSERT')) {
           return {
             rows: [{

@@ -701,15 +701,6 @@
         .footer-cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
         .footer-cta-btn img { height: 60px; width: auto; display: block; margin: 0 auto; }
 
-        .footer-pro-upsell {
-            display: inline-block;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 48px;
-            line-height: 1.5;
-        }
-        .footer-pro-upsell strong { color: var(--gold); }
-
         /* Footer bar */
         .footer-bar {
             border-top: 1px solid rgba(255,255,255,0.06);
@@ -845,21 +836,6 @@
             color: var(--text-muted);
             line-height: 1.5;
         }
-        .feature-pro-badge {
-            display: inline-block;
-            font-size: 0.6rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: var(--gold);
-            background: rgba(212,165,116,0.12);
-            border: 1px solid rgba(212,165,116,0.25);
-            border-radius: 3px;
-            padding: 1px 5px;
-            margin-left: 5px;
-            vertical-align: middle;
-        }
-
         /* ══════════════════════════════════════════
            SECTION 4: PRICING
         ══════════════════════════════════════════ */
@@ -908,17 +884,6 @@
             overflow: hidden;
             transition: border-color 0.25s;
         }
-        .pricing-card.pro {
-            border-color: rgba(212,165,116,0.3);
-            background: rgba(212,165,116,0.04);
-        }
-        .pricing-card.pro::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--gold), transparent);
-        }
         .pricing-tier {
             font-size: 0.72rem;
             font-weight: 700;
@@ -927,7 +892,6 @@
             margin-bottom: 8px;
         }
         .pricing-tier.free { color: var(--text-muted); }
-        .pricing-tier.pro-label { color: var(--gold); }
         .pricing-price {
             font-size: 2.5rem;
             font-weight: 800;
@@ -956,7 +920,6 @@
             margin-top: 0px;
         }
         .pricing-check.on { color: var(--green); }
-        .pricing-check.pro-only { color: var(--gold); }
 
         .pricing-cta-row {
             text-align: center;

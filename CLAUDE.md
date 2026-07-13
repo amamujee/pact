@@ -49,7 +49,7 @@ Node.js + Express + PostgreSQL (Neon) + Slack Bolt SDK, deployed on Vercel.
 - `db/workspace-admin-digest.js` — workspace_admin_digest_prefs queries and workspace-level pact stats
 - `db/streak-milestones.js` — streak_milestones, streak_share_cards, streak_analytics queries
 - `db/user-activation.js` — user_activation state + activation_events analytics queries
-- `tracker.js` — Linear / Notion / Asana sync for Pro workspaces
+- `tracker.js` — Linear / Notion / Asana sync for all workspaces
 - `public/` — static HTML: landing page, dashboard, legal
 - `migrations/` — JS-based schema migrations (node-pg-migrate pattern via migrate.js)
 - `test-fixtures/` — test payloads for Slack events
@@ -82,4 +82,3 @@ Node.js + Express + PostgreSQL (Neon) + Slack Bolt SDK, deployed on Vercel.
 
 ## Recent changes
 - 2026-06-11: Weekly workspace admin email digest — sends HTML + plain-text email to workspace admins (installer email) summarizing pacts created/completed/overdue for the week; `workspace_admin_digest_prefs` table (migration 031); `db/workspace-admin-digest.js` for stats queries; `lib/workspace-admin-digest.js` for server startup trigger; `scripts/workspace-admin-digest.js` for scheduler runs; `GET /api/digest/admin` manual trigger endpoint guarded by `CRON_SECRET`.
-- 2026-05-24: In-Slack referral incentive — `/pact invite` command shows invite link + "0/2 workspaces" progress toward 30-day Pro; App Home updated with Pro incentive card (progress bar, free users only); backend auto-grants Pro on 2nd qualifying install (distinct workspace + pact within 7d); `pro_grants` table (migration 030) + `pact_created_within_7d`/`pro_grant_counted` columns on `workspace_invites`; inviter gets DM celebration; admin funnel extended with invite_sent_count/invite_claimed_count/pro_granted_count.

@@ -173,14 +173,13 @@ async function getInviteLeaderboard(limit = 10) {
 }
 
 // ---------------------------------------------------------------------------
-// Successful invite count (installs where new workspace created ≥1 pact in 7d,
-// and haven't been counted yet toward a Pro grant).
+// Successful invite count (installs where the new workspace created ≥1 pact in 7d).
 // Called from pact-creation hook to backfill pact_created_within_7d flag.
 // ---------------------------------------------------------------------------
 
 /**
  * Mark a claimed invite as "pact created within 7 days" so it counts
- * toward the inviter's Pro grant threshold. Only marks if:
+ * as a successful cross-workspace referral. Only marks if:
  *   1. Invite was claimed by claimedTeamId
  *   2. Claimed within last 7 days
  *   3. Not already marked

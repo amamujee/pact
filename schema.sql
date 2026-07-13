@@ -327,7 +327,7 @@ CREATE INDEX IF NOT EXISTS user_digest_prefs_team_idx
 -- Migration: workflow_steps  (017_workflow_steps.js)
 -- =============================================================================
 
--- Logs every Workflow Builder step execution for Pro-tier analytics.
+-- Logs every Workflow Builder step execution for operational analytics.
 CREATE TABLE IF NOT EXISTS workflow_step_executions (
   id                   SERIAL PRIMARY KEY,
   team_id              VARCHAR(255) NOT NULL,

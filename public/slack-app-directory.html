@@ -296,19 +296,6 @@
             overflow: hidden;
         }
 
-        .pricing-card.pro {
-            border-color: rgba(212, 165, 116, 0.3);
-            background: rgba(212, 165, 116, 0.04);
-        }
-
-        .pricing-card.pro::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--gold), transparent);
-        }
-
         .pricing-tier {
             font-size: 0.68rem;
             font-weight: 700;
@@ -318,7 +305,6 @@
         }
 
         .pricing-tier.free { color: var(--text-muted); }
-        .pricing-tier.pro-label { color: var(--gold); }
 
         .pricing-price {
             font-size: 2rem;
@@ -346,8 +332,6 @@
         }
 
         .pricing-check { color: var(--green); font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
-        .pricing-check.pro { color: var(--gold); }
-
         /* ── Permissions / Scopes ── */
         .permissions-table {
             background: var(--bg-card);

@@ -80,7 +80,7 @@ Slack reviewers reject apps for over-scoping. One line per scope explaining nece
 | Scope | Why it's required |
 |-------|------------------|
 | `reactions:read` | Detects 🤝 emoji reactions on messages to create pacts without a slash command |
-| `channels:history` | Reads messages in public channels for 🤝 reactions and AI commitment detection (Pro); scoped to channels Pact is invited to |
+| `channels:history` | Reads messages in public channels for 🤝 reactions and AI commitment detection; scoped to channels Pact is invited to |
 | `groups:history` | Same as above for private channels where Pact has been invited |
 | `mpim:history` | Required to detect 🤝 reactions in multi-party DMs |
 | `im:history` | Reads DM messages for AI commitment detection and `/done` context inference when user interacts with Pact in DM |

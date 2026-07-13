@@ -1,7 +1,7 @@
 /**
  * tracker.js — Tracker integration module (Linear, Asana, Notion)
  *
- * Pro-tier feature. Syncs pacts to connected trackers when created/completed.
+ * Syncs pacts to connected trackers when created/completed.
  */
 'use strict';
 
@@ -124,13 +124,6 @@ function consumeState(token) {
   oauthStates.delete(token);
   if (Date.now() > state.expiresAt) return null;
   return state;
-}
-
-// ---------------------------------------------------------------------------
-// All workspaces have access to tracker sync.
-// ---------------------------------------------------------------------------
-async function isProTeam(pool, teamId) {
-  return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -517,9 +510,6 @@ async function syncPactToTracker(pool, pact, teamId, options = {}) {
   const { creatorSlackId } = options;
 
   try {
-    const isPro = await isProTeam(pool, teamId);
-    if (!isPro) return;
-
     // Fix 1: Fetch ALL tracker connections (no LIMIT 1)
     const connResult = await pool.query(
       'SELECT * FROM tracker_connections WHERE slack_team_id = $1',
@@ -764,7 +754,6 @@ module.exports = {
   getAsanaWorkspacesAndProjects,
   getNotionDatabases,
   // DB helpers
-  isProTeam,
   saveTrackerConnection,
   setDefaultProject,
   getTrackerStatus,
