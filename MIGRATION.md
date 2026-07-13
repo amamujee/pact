@@ -143,10 +143,10 @@ separately.
 ```
 
 > **Timeout warning:** Vercel free tier enforces a **10-second function
-> timeout**. Vercel Pro raises this to 60 seconds. Slack slash commands
+> timeout**. Paid Vercel plans raise this to 60 seconds. Slack slash commands
 > require a response in **3 seconds** — Pact already handles this correctly
 > by responding immediately and doing work asynchronously. Long-running
-> operations (digest generation) may hit the 60s Pro limit.
+> operations (digest generation) may hit the paid-plan limit.
 
 #### Slack's 3-second requirement — how Pact handles it
 
