@@ -7,6 +7,25 @@ on:
   workflow_dispatch:
 
 jobs:
+  production-smoke:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify production health and Slack installation
+        env:
+          PACT_BASE_URL: ${{ secrets.PACT_BASE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+
+          health="$(curl --fail --show-error --silent "${PACT_BASE_URL}/api/health")"
+          jq -e '.ok == true and .slack == true' <<<"${health}"
+
+          slack_status="$(curl --fail --show-error --silent \
+            --header "Authorization: Bearer ${CRON_SECRET}" \
+            "${PACT_BASE_URL}/slack/status")"
+          jq -e '.slack_integration == true and .auth_test.ok == true' <<<"${slack_status}"
+
   regular-crons:
     if: github.event_name == 'workflow_dispatch' || github.event.schedule == '*/30 * * * *'
     runs-on: ubuntu-latest
