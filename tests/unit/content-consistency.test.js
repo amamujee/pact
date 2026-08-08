@@ -95,4 +95,27 @@ describe('public content and runtime consistency', () => {
     assert.match(privacy, />Resend</);
     assert.match(checklist, /https:\/\/makepact\.co/);
   });
+
+  it('uses a correctly sized PNG for social previews', () => {
+    const pages = [
+      'public/index.html',
+      'public/privacy.html',
+      'public/terms.html',
+      'public/support.html',
+      'public/slack-app-directory.html',
+    ];
+
+    for (const page of pages) {
+      const html = read(page);
+      assert.match(html, /property="og:image" content="https:\/\/makepact\.co\/og-image\.png"/);
+      assert.match(html, /property="og:image:type" content="image\/png"/);
+      assert.match(html, /name="twitter:image" content="https:\/\/makepact\.co\/og-image\.png"/);
+      assert.doesNotMatch(html, /og-hero\.png/);
+    }
+
+    const image = fs.readFileSync(path.join(root, 'public/og-image.png'));
+    assert.deepEqual([...image.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
+    assert.equal(image.readUInt32BE(16), 1200);
+    assert.equal(image.readUInt32BE(20), 630);
+  });
 });

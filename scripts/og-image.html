@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1200, initial-scale=1">
+  <title>Pact social image</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 1200px;
+      height: 630px;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    body {
+      position: relative;
+      display: grid;
+      grid-template-columns: 660px 1fr;
+      gap: 54px;
+      padding: 58px 64px 54px;
+      color: #f4f4f5;
+      background:
+        radial-gradient(circle at 13% 5%, rgba(245, 158, 11, 0.17), transparent 32%),
+        radial-gradient(circle at 91% 87%, rgba(99, 102, 241, 0.12), transparent 31%),
+        #09090b;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: linear-gradient(to bottom right, black, transparent 72%);
+      pointer-events: none;
+    }
+
+    .copy,
+    .product {
+      position: relative;
+      z-index: 1;
+    }
+
+    .copy {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 47px;
+      font-size: 31px;
+      font-weight: 800;
+      letter-spacing: -1.1px;
+    }
+
+    .brand-mark {
+      width: 54px;
+      height: 54px;
+      flex: 0 0 auto;
+    }
+
+    .brand-dot,
+    .accent {
+      color: #f59e0b;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      color: #a1a1aa;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 1.55px;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 8px;
+      height: 8px;
+      content: "";
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.1);
+    }
+
+    h1 {
+      max-width: 660px;
+      margin: 0;
+      font-size: 66px;
+      font-weight: 800;
+      letter-spacing: -3.3px;
+      line-height: 1.01;
+    }
+
+    .subhead {
+      max-width: 615px;
+      margin: 25px 0 0;
+      color: #a1a1aa;
+      font-size: 23px;
+      font-weight: 500;
+      letter-spacing: -0.35px;
+      line-height: 1.42;
+    }
+
+    .url {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin-top: auto;
+      color: #d4d4d8;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    .url-line {
+      width: 30px;
+      height: 2px;
+      background: #f59e0b;
+    }
+
+    .product {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slack-window {
+      width: 405px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 22px;
+      background: #151722;
+      box-shadow:
+        0 36px 90px rgba(0, 0, 0, 0.55),
+        0 0 100px rgba(245, 158, 11, 0.09);
+      transform: rotate(1.2deg);
+    }
+
+    .window-bar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      height: 49px;
+      padding: 0 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .window-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+
+    .window-dot:nth-child(1) { background: #ff5f57; }
+    .window-dot:nth-child(2) { background: #ffbd2e; }
+    .window-dot:nth-child(3) { background: #28ca42; }
+
+    .window-title {
+      margin-left: 7px;
+      color: #71717a;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .channel {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 19px 22px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .app-icon {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 9px;
+      background: #ffffff;
+    }
+
+    .app-icon svg {
+      width: 29px;
+      height: 29px;
+    }
+
+    .channel-name {
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .app-label {
+      display: inline-flex;
+      margin-left: 7px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #a1a1aa;
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.65px;
+      vertical-align: 2px;
+    }
+
+    .message {
+      padding: 24px 24px 27px;
+    }
+
+    .message-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #10b981;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .check {
+      display: grid;
+      width: 20px;
+      height: 20px;
+      place-items: center;
+      border-radius: 50%;
+      color: #061d15;
+      background: #10b981;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .commitment {
+      margin: 16px 0 17px;
+      padding: 17px 18px 18px;
+      border-left: 3px solid #f59e0b;
+      border-radius: 2px 12px 12px 2px;
+      background: rgba(245, 158, 11, 0.075);
+    }
+
+    .commitment-title {
+      color: #fafafa;
+      font-size: 20px;
+      font-weight: 750;
+      letter-spacing: -0.35px;
+      line-height: 1.3;
+    }
+
+    .commitment-meta {
+      margin-top: 11px;
+      color: #a1a1aa;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .commitment-meta strong {
+      color: #e4e4e7;
+      font-weight: 700;
+    }
+
+    .reminder {
+      color: #71717a;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .free-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 23px;
+      padding: 10px 13px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      color: #d4d4d8;
+      background: rgba(255, 255, 255, 0.045);
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: 0.15px;
+    }
+
+    .free-pill span {
+      color: #f59e0b;
+    }
+  </style>
+</head>
+<body>
+  <section class="copy">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+        <circle cx="35" cy="50" r="27" stroke="#E6B87A" stroke-width="8"/>
+        <circle cx="65" cy="50" r="27" stroke="#24345C" stroke-width="8"/>
+        <path d="M43 51 49 57.5 59 43" stroke="#FFF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M43 51 49 57.5 59 43" stroke="#0F172E" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Pact<span class="brand-dot">.</span></span>
+    </div>
+
+    <div class="eyebrow">Built for Slack</div>
+    <h1>Promises become <span class="accent">commitments.</span></h1>
+    <p class="subhead">Owners, due dates, reminders, and a clear close — without another task tracker.</p>
+
+    <div class="url">
+      <span class="url-line"></span>
+      makepact.co
+    </div>
+  </section>
+
+  <section class="product" aria-hidden="true">
+    <div>
+      <div class="slack-window">
+        <div class="window-bar">
+          <span class="window-dot"></span>
+          <span class="window-dot"></span>
+          <span class="window-dot"></span>
+          <span class="window-title">Pact in Slack</span>
+        </div>
+        <div class="channel">
+          <span class="app-icon">
+            <svg viewBox="0 0 100 100" fill="none">
+              <circle cx="35" cy="50" r="27" stroke="#E6B87A" stroke-width="8"/>
+              <circle cx="65" cy="50" r="27" stroke="#0F172E" stroke-width="8"/>
+              <path d="M43 51 49 57.5 59 43" stroke="#FFF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M43 51 49 57.5 59 43" stroke="#0F172E" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="channel-name">Pact <span class="app-label">APP</span></span>
+        </div>
+        <div class="message">
+          <div class="message-label"><span class="check">✓</span> Pact created</div>
+          <div class="commitment">
+            <div class="commitment-title">Send the launch plan</div>
+            <div class="commitment-meta">Owner: <strong>Alex</strong> &nbsp;·&nbsp; Due <strong>Friday</strong></div>
+          </div>
+          <div class="reminder">Both people see it. Pact follows up until it’s done.</div>
+        </div>
+      </div>
+      <div class="free-pill">Free for every workspace <span>·</span> Unlimited pacts</div>
+    </div>
+  </section>
+</body>
+</html>
